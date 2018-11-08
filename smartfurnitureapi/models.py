@@ -28,22 +28,16 @@ class Furniture(models.Model):
                             )])
     manufacturer = models.SlugField(max_length=64)
     type = models.CharField(max_length=32,
-                            choices=types.FURNITURE_TYPES)
+                            choices=types.SOLO_FURNITURE_TYPES + types.MULT_FURNITURE_TYPES)
     is_public = models.BooleanField()
     owner = models.ForeignKey('User',
                               on_delete=models.CASCADE,
                               related_name='owned_furniture')
-    current_user = models.ForeignKey('User',
-                                     on_delete=models.SET_NULL,
-                                     null=True,
-                                     blank=True,
-                                     related_name='current_furniture')
+    current_users = models.ManyToManyField('User',
+                                           related_name='current_furniture')
     allowed_users = models.ManyToManyField('User',
                                            related_name='allowed_furniture')
-    current_options = models.OneToOneField('Options',
-                                           on_delete=models.SET_NULL,
-                                           null=True,
-                                           blank=True)
+    current_options = models.ManyToManyField('Options')
 
     def __str__(self):
         return f'{self.type} - {self.code}'
@@ -51,7 +45,7 @@ class Furniture(models.Model):
 
 class Options(models.Model):
     type = models.CharField(max_length=32,
-                            choices=types.FURNITURE_TYPES)
+                            choices=types.SOLO_FURNITURE_TYPES + types.MULT_FURNITURE_TYPES)
     name = models.CharField(max_length=32)
     height = models.FloatField(validators=[MinValueValidator(0.0)])
     length = models.FloatField(validators=[MinValueValidator(0.0)])
