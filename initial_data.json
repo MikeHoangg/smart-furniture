@@ -1,0 +1,22 @@
+[
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$A6KNkUK1s0kt$Yt8+acvuDCumR51i4y6Au48xPns4QIqff3n/utZX1wU=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-11-08T11:11:05.177Z",
+    "email": "admin@gmail.com",
+    "image": "",
+    "height": null,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
