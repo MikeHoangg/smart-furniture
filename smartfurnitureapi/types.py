@@ -15,3 +15,9 @@ RIGIDITY = (
     ('medium', _('Medium')),
     ('solid', _('Solid')),
 )
+MASSAGE = (
+    ('none', _('None')),
+    ('slow', _('Slow')),
+    ('medium', _('Medium')),
+    ('rapid', _('Rapid')),
+)

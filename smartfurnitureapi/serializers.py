@@ -30,7 +30,8 @@ class FurnitureSerializer(serializers.ModelSerializer):
 class OptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Options
-        fields = ['pk', 'type', 'name', 'height', 'length', 'width', 'incline', 'rigidity', 'creator']
+        fields = ['pk', 'type', 'name', 'height', 'length', 'width', 'incline', 'temperature', 'massage', 'rigidity',
+                  'creator']
 
 
 class ReportSerializer(serializers.ModelSerializer):
