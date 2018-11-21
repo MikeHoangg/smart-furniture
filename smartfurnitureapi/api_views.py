@@ -1,8 +1,15 @@
+import calendar
+import datetime
+
+import stripe
+from django.conf import settings
+
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
-from smartfurnitureapi import models, serializers
+from smartfurnitureapi import models, serializers, types
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -17,6 +24,34 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return obj.user == request.user
         if hasattr(obj, 'sender'):
             return obj.sender == request.user or obj.receiver == request.user
+
+
+class FurnitureTypeList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = serializers.FurnitureTypeSerializer
+
+    @staticmethod
+    def get_types_info(types_arr, type_name):
+        return [{'name': i[0], 'type': type_name, 'prime_actions': i[0] in types.PRIME_FURNITURE_TYPES} for i in
+                types_arr]
+
+    def get_queryset(self):
+        self.queryset = self.get_types_info(types.MULTI_FURNITURE_TYPES, 'multi') + self.get_types_info(
+            types.SOLO_FURNITURE_TYPES, 'solo')
+        return super().get_queryset()
+
+
+class MassageAndRigidityTypeList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = serializers.MassageAndRigidityTypeSerializer
+
+    @staticmethod
+    def get_types_info(types_arr, type_name):
+        return [{'name': i[0], 'type': type_name} for i in types_arr]
+
+    def get_queryset(self):
+        self.queryset = self.get_types_info(types.MASSAGE, 'massage') + self.get_types_info(types.RIGIDITY, 'rigidity')
+        return super().get_queryset()
 
 
 class UserList(generics.ListAPIView):
@@ -100,7 +135,7 @@ class ApplyOptions(generics.CreateAPIView):
         furniture.current_users.add(options.creator)
         furniture.current_options.add(options)
         furniture.save()
-        return Response({"detail": "Options applied."}, status=status.HTTP_202_ACCEPTED)
+        return Response({_('detail'): _('Options applied.')}, status=status.HTTP_202_ACCEPTED)
 
 
 class DiscardOptions(generics.CreateAPIView):
@@ -116,4 +151,41 @@ class DiscardOptions(generics.CreateAPIView):
                 furniture.current_options.remove(options)
                 break
         furniture.save()
-        return Response({"detail": "Options discarded."}, status=status.HTTP_202_ACCEPTED)
+        return Response({_('detail'): _('Options discarded.')}, status=status.HTTP_202_ACCEPTED)
+
+
+class SetPrimeAccount(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = serializers.PrimeAccountSerializer
+
+    @staticmethod
+    def create_charge(user, stripe_token, price, expiration_date):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+            stripe.Charge.create(
+                amount=price,
+                currency="usd",
+                source=stripe_token,
+                description=f"{user.username} - {user.email} has prime access until {expiration_date}",
+            )
+        except stripe.error.CardError:
+            return False
+        else:
+            user.prime_expiration_date = expiration_date
+            user.save()
+            return True
+
+    def create(self, request, *args, **kwargs):
+        user = models.User.objects.get(id=request.POST.get('user'))
+        stripe_token = request.POST.get('stripe_token')
+        price = request.POST.get('price')
+        now = timezone.now()
+        expiration_date = now + datetime.timedelta(days=calendar.monthrange(now.year, now.month)[1])
+        result = self.create_charge(user, stripe_token, price, expiration_date)
+        if result:
+            msg = _(f'Successfully upgraded to prime account till {expiration_date}.')
+            stat = status.HTTP_201_CREATED
+        else:
+            msg = _(f'Your card was declined.')
+            stat = status.HTTP_406_NOT_ACCEPTABLE
+        return Response({_('detail'): msg}, status=stat)

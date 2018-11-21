@@ -11,11 +11,42 @@ class CustomRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField(required=True)
 
 
+class FurnitureTypeSerializer(serializers.Serializer):
+    name = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    prime_actions = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_type(obj):
+        return obj['type']
+
+    @staticmethod
+    def get_name(obj):
+        return obj['name']
+
+    @staticmethod
+    def get_prime_actions(obj):
+        return obj['prime_actions']
+
+
+class MassageAndRigidityTypeSerializer(serializers.Serializer):
+    name = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_type(obj):
+        return obj['type']
+
+    @staticmethod
+    def get_name(obj):
+        return obj['name']
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['pk', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
-                  'current_furniture', 'options_set']
+                  'current_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
         read_only_fields = ['owned_furniture', 'current_furniture', 'options_set']
 
 
@@ -44,7 +75,7 @@ class ReportSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['pk', 'content', 'date', 'receiver', 'sender']
+        fields = ['pk', 'content', 'date', 'pending', 'receiver', 'sender']
         read_only_fields = ['date']
 
 
@@ -56,3 +87,9 @@ class ApplyOptionsSerializer(serializers.Serializer):
 class DiscardOptionsSerializer(serializers.Serializer):
     furniture = serializers.PrimaryKeyRelatedField(queryset=Furniture.objects.all())
     user = serializers.PrimaryKeyRelatedField(queryset=UserModel.objects.all())
+
+
+class PrimeAccountSerializer(serializers.Serializer):
+    stripe_token = serializers.CharField(required=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=UserModel.objects.all())
+    price = serializers.IntegerField(required=True)

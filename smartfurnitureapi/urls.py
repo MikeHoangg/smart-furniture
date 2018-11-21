@@ -18,5 +18,7 @@ urlpatterns = [
     path('reports/<slug:manufacturer>/', api_views.ManufacturerReportList.as_view(), name='manufacturer-reports'),
     path('apply-options/', api_views.ApplyOptions.as_view(), name='apply-options'),
     path('discard-options/', api_views.DiscardOptions.as_view(), name='discard-options'),
-
+    path('furniture-types/', api_views.FurnitureTypeList.as_view(), name='furniture-types'),
+    path('massage-rigidity-types/', api_views.MassageAndRigidityTypeList.as_view(), name='massage-rigidity-types'),
+    path('set-prime/', api_views.SetPrimeAccount.as_view(), name='set-prime'),
 ]
