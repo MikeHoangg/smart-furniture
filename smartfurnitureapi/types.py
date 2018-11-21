@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-MULT_FURNITURE_TYPES = [
+MULTI_FURNITURE_TYPES = [
     ('sofa', _('Sofa')),
     ('table', _('Table')),
     ('bed', _('Bed')),
@@ -21,3 +21,8 @@ MASSAGE = (
     ('medium', _('Medium')),
     ('rapid', _('Rapid')),
 )
+PRIME_FURNITURE_TYPES = [
+    'sofa',
+    'bed',
+    'chair',
+]
