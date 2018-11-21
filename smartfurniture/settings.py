@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h%crto0c5%!od0@cw&9!!$04c^!s11wxqnasdtxb5c*w=l736='
+SECRET_KEY = os.environ.get('SECRET_KEY', 'h%crto0c5%!od0@cw&9!!$04c^!s11wxqnasdtxb5c*w=l736=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -141,6 +141,11 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'smartfurnitureapi.serializers.CustomRegisterSerializer',
 }
+
+# Stripe
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_v8wWUdop2kxCHBzLZEUYKJXP')
+
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', 'pk_test_0iZ2ciCzQWinzLyvzEzkuWiE')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
