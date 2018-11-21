@@ -132,10 +132,28 @@ class ApplyOptions(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
         options = models.Options.objects.get(id=request.POST.get('options'))
-        furniture.current_users.add(options.creator)
-        furniture.current_options.add(options)
-        furniture.save()
-        return Response({_('detail'): _('Options applied.')}, status=status.HTTP_202_ACCEPTED)
+        if options.creator in furniture.current_users:
+            for options in furniture.current_options.all():
+                if options.creator == options.creator:
+                    furniture.current_options.remove(options)
+                    furniture.current_options.add(options)
+                    break
+            furniture.save()
+            msg = _('Options applied.')
+            stat = status.HTTP_202_ACCEPTED
+        elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
+            msg = _('Couldn\'t apply options because user %s is using it.' % (furniture.current_users.first()))
+            stat = status.HTTP_406_NOT_ACCEPTABLE
+        elif not furniture.is_public and options.creator not in furniture.allowed_users:
+            msg = _('Couldn\'t apply options because you have no access to it.')
+            stat = status.HTTP_405_METHOD_NOT_ALLOWED
+        else:
+            furniture.current_users.add(options.creator)
+            furniture.current_options.add(options)
+            furniture.save()
+            msg = _('Options applied.')
+            stat = status.HTTP_202_ACCEPTED
+        return Response({_('detail'): msg}, status=stat)
 
 
 class DiscardOptions(generics.CreateAPIView):
