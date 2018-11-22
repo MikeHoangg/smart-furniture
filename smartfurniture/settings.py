@@ -14,7 +14,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'h%crto0c5%!od0@cw&9!!$04c^!s11wxqnasd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# CORS
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -149,9 +153,6 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_v8wWUdop2kxCHBz
 
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', 'pk_test_0iZ2ciCzQWinzLyvzEzkuWiE')
 
-# CORS
-
-CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

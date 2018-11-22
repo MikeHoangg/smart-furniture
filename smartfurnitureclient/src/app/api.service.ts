@@ -7,7 +7,7 @@ import {Observable, of} from "rxjs";
   providedIn: 'root'
 })
 export class ApiService {
-  apiUrl: string = 'http://127.0.0.1:8000/api/v1/';
+  apiUrl: string = 'http://127.0.0.1:8000/en/api/v1/';
   errorLog: Array<object> = [];
 
   constructor(private httpClient: HttpClient) {
