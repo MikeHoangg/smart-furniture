@@ -27,8 +27,8 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
-      cookieName: 'My-Xsrf-Cookie',
-      headerName: 'My-Xsrf-Header',
+      cookieName: 'csrftoken',
+      headerName: 'X-CSRFTOKEN',
     }),
     FormsModule,
     BrowserAnimationsModule,

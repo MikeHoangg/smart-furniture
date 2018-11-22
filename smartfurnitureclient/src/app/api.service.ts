@@ -23,14 +23,12 @@ export class ApiService {
 
   private getHttpOptions() {
     let res = {};
-    const cookies = document.cookie.split(';');
-    const authRegex = new RegExp('^auth_token=');
-    const csrfRegex = new RegExp('^csrftoken=');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (authRegex.test(cookie))
-        res['Authorization'] = cookie.substr(11, cookie.length);
-    }
+    let authCookie = document.cookie.match(/auth_token=(Token \w+)/);
+    let csrfCookie = document.cookie.match(/csrftoken=(w+)/);
+    if (authCookie)
+      res['Authorization'] = authCookie[1];
+    // if (csrfCookie)
+    //   res['X-CSRFTOKEN'] = csrfCookie[1];
     return {headers: new HttpHeaders(res)}
   }
 

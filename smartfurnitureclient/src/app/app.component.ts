@@ -17,8 +17,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    const re = new RegExp('^auth_token=');
-    if (re.test(document.cookie)) {
+    if (document.cookie.match(/auth_token=(Token \w+)/)) {
       this.api.getCurrentUser().subscribe((response: any) => {
         console.log(response);
         if (response) {
