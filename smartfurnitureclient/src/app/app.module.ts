@@ -3,13 +3,15 @@ import {NgModule} from '@angular/core';
 import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ApiService} from "./api.service";
-import {NgxStripeModule} from "ngx-stripe";
+import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule, MatInputModule} from "@angular/material";
+import {MatFormFieldModule} from '@angular/material/form-field';
+
+import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
-import {MatButtonModule} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -24,11 +26,13 @@ import {MatButtonModule} from "@angular/material";
       cookieName: 'My-Xsrf-Cookie',
       headerName: 'My-Xsrf-Header',
     }),
+    FormsModule,
     BrowserAnimationsModule,
-    NgxStripeModule.forRoot('pk_test_0iZ2ciCzQWinzLyvzEzkuWiE'),
     MatToolbarModule,
     MatDialogModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [
     LoginComponent,
