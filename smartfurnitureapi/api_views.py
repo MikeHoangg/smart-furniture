@@ -144,7 +144,7 @@ class ApplyOptions(generics.CreateAPIView):
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
             msg = _('Couldn\'t apply options because user %s is using it.' % (furniture.current_users.first()))
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        elif not furniture.is_public and options.creator not in furniture.allowed_users:
+        elif not furniture.is_public and options.creator not in furniture.allowed_users and options.creator != furniture.owner:
             msg = _('Couldn\'t apply options because you have no access to it.')
             stat = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
