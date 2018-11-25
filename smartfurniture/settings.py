@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth.registration',
     'corsheaders',
+    'channels',
 
     # apps
     'smartfurnitureapi.apps.SmartfurnitureapiConfig',
@@ -149,9 +150,14 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 # Stripe
+
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_v8wWUdop2kxCHBzLZEUYKJXP')
 
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', 'pk_test_0iZ2ciCzQWinzLyvzEzkuWiE')
+
+# ASGI
+
+ASGI_APPLICATION = "smartfurniture.routing.application"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
