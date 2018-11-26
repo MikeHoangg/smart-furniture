@@ -13,14 +13,30 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
-import { HomeComponent } from './home/home.component';
+import {HomeComponent} from './home/home.component';
+import {ProfileComponent} from './profile/profile.component';
+import {NotificationsComponent} from './notifications/notifications.component';
+import {EditProfileComponent} from './edit-profile/edit-profile.component';
+import {FurnitureListComponent} from './furniture-list/furniture-list.component';
+import {FurnitureDetailComponent} from './furniture-detail/furniture-detail.component';
+import {FurnitureComponent} from './furniture/furniture.component';
+import {OptionsComponent} from './options/options.component';
+import {StripeComponent} from './stripe/stripe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent,
+    NotificationsComponent,
+    EditProfileComponent,
+    FurnitureListComponent,
+    FurnitureDetailComponent,
+    FurnitureComponent,
+    OptionsComponent,
+    StripeComponent
   ],
   imports: [
     BrowserModule,
@@ -40,11 +56,15 @@ import { HomeComponent } from './home/home.component';
   ],
   exports: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    StripeComponent,
+    EditProfileComponent,
   ],
   entryComponents: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    StripeComponent,
+    EditProfileComponent,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]
