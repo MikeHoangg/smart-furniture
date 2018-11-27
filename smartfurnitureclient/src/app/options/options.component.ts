@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {ApiService} from "../api.service";
+import {AppRoutingModule} from "../app-routing.module";
 
 @Component({
   selector: 'app-options',
@@ -6,10 +9,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./options.component.css']
 })
 export class OptionsComponent implements OnInit {
+  public error: object;
 
-  constructor() { }
+  constructor(private dialogRef: MatDialogRef<OptionsComponent>,
+              @Inject(MAT_DIALOG_DATA) public data,
+              private api: ApiService,
+              private router: AppRoutingModule) {
+  }
 
   ngOnInit() {
   }
 
+  save(): void {
+    if (this.data.title === "Add") {
+      // TODO add options
+    } else {
+      // TODO edit options
+    }
+  }
 }
