@@ -1,19 +1,39 @@
 <div class="dialog">
   <h1 mat-dialog-title>Edit profile</h1>
   <div mat-dialog-content class="dialog-content">
-{#    <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>#}
-{#    <mat-form-field>#}
-{#      <mat-label>Username</mat-label>#}
-{#      <input matInput [(ngModel)]="username" required>#}
-{#      <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>#}
-{#    </mat-form-field>#}
-{#    <mat-form-field>#}
-{#      <mat-label>Password</mat-label>#}
-{#      <input matInput type='password' [(ngModel)]="password" required>#}
-{#      <mat-error *ngIf="error && error.password">{{ error.password }}</mat-error>#}
-{#    </mat-form-field>#}
+    <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+    <mat-form-field>
+      <mat-label>Image</mat-label>
+      <input matInput type="image" [(ngModel)]="data.image">
+      <mat-error *ngIf="error && error.image">{{ error.image }}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="data.username">
+      <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput type="email" [(ngModel)]="data.email">
+      <mat-error *ngIf="error && error.email">{{ error.email }}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>First name</mat-label>
+      <input matInput [(ngModel)]="data.first_name">
+      <mat-error *ngIf="error && error.first_name">{{ error.first_name }}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last name</mat-label>
+      <input matInput [(ngModel)]="data.last_name">
+      <mat-error *ngIf="error && error.last_name">{{ error.last_name }}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Height</mat-label>
+      <input matInput type="number" [(ngModel)]="data.height">
+      <mat-error *ngIf="error && error.height">{{ error.height }}</mat-error>
+    </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-flat-button color="primary" (click)="edit()">Save</button>
+    <button mat-flat-button color="primary" (click)="save()">Save</button>
   </div>
 </div>
