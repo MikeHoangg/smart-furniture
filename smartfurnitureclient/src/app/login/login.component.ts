@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from "../api.service";
-import {AppRoutingModule} from "../app-routing.module";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<LoginComponent>,
               private api: ApiService,
-              private router: AppRoutingModule) {
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
-            // this.router.navigateByUrl(`/profile/${response.id}`);
+            this.router.navigateByUrl(`/profile/${this.api.currentUser.pk}`);
           }
         });
       } else

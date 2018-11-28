@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
-import {AppRoutingModule} from "../app-routing.module";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -17,13 +17,13 @@ export class RegisterComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<RegisterComponent>,
               private api: ApiService,
-              private router: AppRoutingModule) {
+              private router: Router) {
   }
 
   ngOnInit() {
   }
 
-  login(): void {
+  register(): void {
     this.api.register({
       'username': this.username,
       'email': this.email,
@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
-            // this.router.navigateByUrl(`/profile/${response.id}`);
+            this.router.navigateByUrl(`/profile/${this.api.currentUser.pk}`);
           }
         });
       } else
