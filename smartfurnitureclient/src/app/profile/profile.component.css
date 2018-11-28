@@ -1,0 +1,20 @@
+.profile-content {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.tables-content {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.avatar {
+  background-size: cover;
+  height: 6rem;
+  width: 6rem;
+}
+.profile-card{
+  margin-right: 2rem;
+}
