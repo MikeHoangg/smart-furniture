@@ -3,6 +3,9 @@
   font-size: 1.5rem;
   color: #FFFFFF;
 }
+.brand span:hover{
+  cursor: pointer;
+}
 .nav-item{
   margin: 0.5rem;
   color: #FFFFFF;

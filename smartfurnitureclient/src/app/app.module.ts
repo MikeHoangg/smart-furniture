@@ -9,6 +9,12 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule, MatInputModule} from "@angular/material";
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTableModule} from '@angular/material/table';
+import {MatListModule} from '@angular/material/list';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
@@ -53,6 +59,12 @@ import {StripeComponent} from './stripe/stripe.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCardModule,
+    MatIconModule,
+    MatTableModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatExpansionModule,
   ],
   exports: [
     LoginComponent,

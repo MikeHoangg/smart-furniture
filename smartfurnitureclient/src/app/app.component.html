@@ -1,9 +1,18 @@
 <mat-toolbar color="primary">
-  <span class="brand" routerLink="/">Smart furniture</span>
-  <button *ngIf="!loggedIn" mat-button color="primary" (click)="openDialog('login')" class="nav-item">Login</button>
-  <button *ngIf="!loggedIn" mat-button color="primary" (click)="openDialog('register')" class="nav-item">Register
+  <div class="brand">
+    <span routerLink="/">Smart furniture</span>
+  </div>
+  <button *ngIf="!loggedIn" mat-button color="primary" (click)="openDialog('login')" class="nav-item">
+    Login
   </button>
-  <button *ngIf="loggedIn" mat-button color="primary" (click)="logout()" class="nav-item" routerLink="/">Logout
+  <button *ngIf="!loggedIn" mat-button color="primary" (click)="openDialog('register')" class="nav-item">
+    Register
+  </button>
+  <button *ngIf="loggedIn" mat-button color="primary" class="nav-item" routerLink="/profile/{{ currentUserId }}">
+    Profile
+  </button>
+  <button *ngIf="loggedIn" mat-button color="primary" (click)="logout()" class="nav-item" routerLink="/">
+    Logout
   </button>
 </mat-toolbar>
 <router-outlet></router-outlet>

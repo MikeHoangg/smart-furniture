@@ -11,6 +11,7 @@ import {RegisterComponent} from "./register/register.component";
 })
 export class AppComponent implements OnInit {
   loggedIn: boolean;
+  currentUserId: number;
 
   constructor(private dialog: MatDialog,
               private api: ApiService) {
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
         if (response) {
           this.loggedIn = true;
           this.api.currentUser = response;
+          this.currentUserId = this.api.currentUser.pk;
         }
       });
     }
@@ -36,8 +38,9 @@ export class AppComponent implements OnInit {
       dialogRef = this.dialog.open(RegisterComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.loggedIn = result;
+      if (this.loggedIn)
+        this.currentUserId = this.api.currentUser.pk;
     });
-
   }
 
   logout(): void {
