@@ -21,4 +21,6 @@ urlpatterns = [
     path('furniture-types/', api_views.FurnitureTypeList.as_view(), name='furniture-types'),
     path('massage-rigidity-types/', api_views.MassageAndRigidityTypeList.as_view(), name='massage-rigidity-types'),
     path('set-prime/', api_views.SetPrimeAccount.as_view(), name='set-prime'),
+    path('disallow/', api_views.DisallowUser.as_view(), name='disallow'),
+    path('allow/', api_views.AllowUser.as_view(), name='allow'),
 ]

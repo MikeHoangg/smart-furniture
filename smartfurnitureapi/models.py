@@ -114,7 +114,7 @@ class Notification(models.Model):
     content = models.TextField(verbose_name=_("Content"))
     date = models.DateTimeField(default=timezone.now,
                                 verbose_name=_("Date"))
-    pending = models.BooleanField(default=False,
+    pending = models.BooleanField(default=True,
                                   verbose_name=_("Pending"))
     receiver = models.ForeignKey('User',
                                  on_delete=models.CASCADE,

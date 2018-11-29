@@ -127,7 +127,7 @@ class ManufacturerReportList(generics.ListAPIView):
 
 class ApplyOptions(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = serializers.ApplyOptionsSerializer
+    serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
@@ -138,27 +138,25 @@ class ApplyOptions(generics.CreateAPIView):
                     furniture.current_options.remove(options)
                     furniture.current_options.add(options)
                     break
-            furniture.save()
-            msg = _('Options applied.')
+            msg = _('Options applied to %s.' % furniture)
             stat = status.HTTP_202_ACCEPTED
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
             msg = _('Couldn\'t apply options because user %s is using it.' % (furniture.current_users.first()))
             stat = status.HTTP_406_NOT_ACCEPTABLE
         elif not furniture.is_public and options.creator not in furniture.allowed_users and options.creator != furniture.owner:
-            msg = _('Couldn\'t apply options because you have no access to it.')
+            msg = _('Couldn\'t apply options to %s because you have no access to it.' % furniture)
             stat = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
             furniture.current_users.add(options.creator)
             furniture.current_options.add(options)
-            furniture.save()
-            msg = _('Options applied.')
+            msg = _('Options applied to %s.' % furniture)
             stat = status.HTTP_202_ACCEPTED
         return Response({_('detail'): msg}, status=stat)
 
 
 class DiscardOptions(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = serializers.DiscardOptionsSerializer
+    serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
@@ -168,8 +166,33 @@ class DiscardOptions(generics.CreateAPIView):
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        furniture.save()
-        return Response({_('detail'): _('Options discarded.')}, status=status.HTTP_202_ACCEPTED)
+        return Response({_('detail'): _('Options discarded from %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+
+
+class DisallowUser(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = serializers.FurnitureUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
+        user = models.User.objects.get(id=request.POST.get('user'))
+        furniture.allowed_users.remove(user)
+        for options in furniture.current_options.all():
+            if options.creator == user:
+                furniture.current_options.remove(options)
+                break
+        return Response({_('detail'): _('User disallowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+
+
+class AllowUser(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = serializers.FurnitureUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
+        user = models.User.objects.get(id=request.POST.get('user'))
+        furniture.allowed_users.add(user)
+        return Response({_('detail'): _('User allowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
 
 
 class SetPrimeAccount(generics.CreateAPIView):

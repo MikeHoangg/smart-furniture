@@ -3,8 +3,8 @@
   "model": "smartfurnitureapi.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$120000$gLM9SMRciRYR$uhBaWekVuc1OGQwwYDlJLomNIKg1JENzhyFNugkcOsw=",
-    "last_login": "2018-11-19T08:10:55.783Z",
+    "password": "pbkdf2_sha256$120000$7WMOAQEekspR$2lfDWSCCJDW7Bc7s5FF5YSiUp0PAsxtdWXclCA7jVX8=",
+    "last_login": "2018-11-28T20:23:45.828Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -15,8 +15,405 @@
     "email": "admin@gmail.com",
     "image": "",
     "height": null,
+    "prime_expiration_date": null,
     "groups": [],
     "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$kmunlWLzUYF0$cXWkfBU0xxAbBLVVSF8nm+AjK01v6gqtcftcsE0r4+8=",
+    "last_login": "2018-11-29T19:00:16.190Z",
+    "is_superuser": false,
+    "username": "testuser1",
+    "first_name": "test first name",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-11-28T21:49:45.997Z",
+    "email": "testuser1@gmail.com",
+    "image": "",
+    "height": null,
+    "prime_expiration_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$FLCGUCFWMwxH$f9LOB5XvnWWOOlcb2uxZobHJ1biYCju33ZNpRuWr6+A=",
+    "last_login": "2018-11-29T18:58:44.119Z",
+    "is_superuser": false,
+    "username": "testuser2",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-11-29T18:58:43.515Z",
+    "email": "testuser2@gmail.com",
+    "image": "",
+    "height": null,
+    "prime_expiration_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$QiB5bIeToC2k$wGRtt1eUgUfSU2s72Z4LNMLLpnCQme35K5Xy6emfWsY=",
+    "last_login": "2018-11-29T18:59:03.675Z",
+    "is_superuser": false,
+    "username": "testuser3",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-11-29T18:59:03.340Z",
+    "email": "testuser3@gmail.com",
+    "image": "",
+    "height": null,
+    "prime_expiration_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$VthTcNr0lrc2$6M2vTuCMCq9MyVSAmcS4MC7DAD97rpScaQWh/tI4OCg=",
+    "last_login": "2018-11-29T18:59:25.686Z",
+    "is_superuser": false,
+    "username": "testuser4",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-11-29T18:59:25.414Z",
+    "email": "testuser4@gmail.com",
+    "image": "",
+    "height": null,
+    "prime_expiration_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$oz7H5whixQsT$Gv0OrbbDyLv0pcjyUhS+k7+o7JOnGwsfqmIzhMM+RAE=",
+    "last_login": "2018-11-29T18:59:42.331Z",
+    "is_superuser": false,
+    "username": "testuser5",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-11-29T18:59:42.030Z",
+    "email": "testuser5@gmail.com",
+    "image": "",
+    "height": null,
+    "prime_expiration_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 1,
+  "fields": {
+    "code": "0002",
+    "manufacturer": "Baker",
+    "type": "cupboard",
+    "is_public": false,
+    "owner": 2,
+    "current_users": [],
+    "allowed_users": [
+      4,
+      6
+    ],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 2,
+  "fields": {
+    "code": "0000",
+    "manufacturer": "IKEA",
+    "type": "chair",
+    "is_public": true,
+    "owner": 2,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 3,
+  "fields": {
+    "code": "0001",
+    "manufacturer": "Baker",
+    "type": "bed",
+    "is_public": false,
+    "owner": 4,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 4,
+  "fields": {
+    "code": "0003",
+    "manufacturer": "IKEA",
+    "type": "sofa",
+    "is_public": true,
+    "owner": 6,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 5,
+  "fields": {
+    "code": "0004",
+    "manufacturer": "IKEA",
+    "type": "cupboard",
+    "is_public": true,
+    "owner": 6,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 6,
+  "fields": {
+    "code": "0005",
+    "manufacturer": "IKEA",
+    "type": "desk",
+    "is_public": true,
+    "owner": 4,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 7,
+  "fields": {
+    "code": "0006",
+    "manufacturer": "Bernhardt",
+    "type": "desk",
+    "is_public": false,
+    "owner": 2,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 8,
+  "fields": {
+    "code": "0007",
+    "manufacturer": "Kincaid",
+    "type": "chair",
+    "is_public": false,
+    "owner": 3,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 9,
+  "fields": {
+    "code": "0008",
+    "manufacturer": "Kincaid",
+    "type": "chair",
+    "is_public": false,
+    "owner": 3,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 10,
+  "fields": {
+    "code": "0009",
+    "manufacturer": "Kincaid",
+    "type": "desk",
+    "is_public": false,
+    "owner": 3,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 11,
+  "fields": {
+    "code": "0010",
+    "manufacturer": "Broyhill",
+    "type": "bed",
+    "is_public": false,
+    "owner": 4,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 12,
+  "fields": {
+    "code": "0011",
+    "manufacturer": "Broyhill",
+    "type": "desk",
+    "is_public": false,
+    "owner": 4,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 13,
+  "fields": {
+    "code": "0012",
+    "manufacturer": "Broyhill",
+    "type": "desk",
+    "is_public": false,
+    "owner": 6,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 14,
+  "fields": {
+    "code": "0013",
+    "manufacturer": "Coaster",
+    "type": "bed",
+    "is_public": false,
+    "owner": 2,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 15,
+  "fields": {
+    "code": "0014",
+    "manufacturer": "Coaster",
+    "type": "sofa",
+    "is_public": false,
+    "owner": 2,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.furniture",
+  "pk": 16,
+  "fields": {
+    "code": "0015",
+    "manufacturer": "Coaster",
+    "type": "sofa",
+    "is_public": true,
+    "owner": 4,
+    "current_users": [],
+    "allowed_users": [],
+    "current_options": []
+  }
+},
+{
+  "model": "smartfurnitureapi.options",
+  "pk": 1,
+  "fields": {
+    "type": "chair",
+    "name": "chairoptions1",
+    "height": 75.0,
+    "length": 50.0,
+    "width": 50.0,
+    "incline": 95.0,
+    "rigidity": "soft",
+    "temperature": 36.6,
+    "massage": "none",
+    "creator": 2
+  }
+},
+{
+  "model": "smartfurnitureapi.options",
+  "pk": 2,
+  "fields": {
+    "type": "chair",
+    "name": "chairoptions2",
+    "height": 60.0,
+    "length": 50.0,
+    "width": 50.0,
+    "incline": 70.0,
+    "rigidity": "medium",
+    "temperature": 36.6,
+    "massage": "none",
+    "creator": 2
+  }
+},
+{
+  "model": "smartfurnitureapi.options",
+  "pk": 3,
+  "fields": {
+    "type": "desk",
+    "name": "deskoptions1",
+    "height": 100.0,
+    "length": 120.0,
+    "width": 59.0,
+    "incline": 0.0,
+    "rigidity": "solid",
+    "temperature": 20.0,
+    "massage": "none",
+    "creator": 2
+  }
+},
+{
+  "model": "smartfurnitureapi.options",
+  "pk": 4,
+  "fields": {
+    "type": "sofa",
+    "name": "deskoptions1",
+    "height": 70.0,
+    "length": 200.0,
+    "width": 60.0,
+    "incline": 0.0,
+    "rigidity": "soft",
+    "temperature": 35.0,
+    "massage": "none",
+    "creator": 2
   }
 }
 ]

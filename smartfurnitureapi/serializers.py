@@ -44,7 +44,6 @@ class MassageAndRigidityTypeSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
         model = UserModel
         fields = ['pk', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
                   'current_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
@@ -53,7 +52,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class FurnitureSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
         model = Furniture
         fields = ['pk', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
                   'current_options']
@@ -62,7 +60,6 @@ class FurnitureSerializer(serializers.ModelSerializer):
 
 class OptionsSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
         model = Options
         fields = ['pk', 'type', 'name', 'height', 'length', 'width', 'incline', 'temperature', 'massage', 'rigidity',
                   'creator']
@@ -70,7 +67,6 @@ class OptionsSerializer(serializers.ModelSerializer):
 
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
         model = Report
         fields = ['pk', 'content', 'rating', 'date', 'user', 'furniture']
         read_only_fields = ['date']
@@ -78,20 +74,14 @@ class ReportSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
         model = Notification
         fields = ['pk', 'content', 'date', 'pending', 'receiver', 'sender']
         read_only_fields = ['date']
 
 
-class ApplyOptionsSerializer(serializers.Serializer):
+class FurnitureUserSerializer(serializers.Serializer):
     furniture = serializers.PrimaryKeyRelatedField(queryset=Furniture.objects.all())
     options = serializers.PrimaryKeyRelatedField(queryset=Options.objects.all())
-
-
-class DiscardOptionsSerializer(serializers.Serializer):
-    furniture = serializers.PrimaryKeyRelatedField(queryset=Furniture.objects.all())
-    user = serializers.PrimaryKeyRelatedField(queryset=UserModel.objects.all())
 
 
 class PrimeAccountSerializer(serializers.Serializer):
