@@ -44,10 +44,11 @@ class MassageAndRigidityTypeSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
+        depth = 1
         model = UserModel
         fields = ['pk', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
-                  'current_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
-        read_only_fields = ['owned_furniture', 'current_furniture', 'options_set']
+                  'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
+        read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser']
 
 
 class FurnitureSerializer(serializers.ModelSerializer):
