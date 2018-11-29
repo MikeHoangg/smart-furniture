@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
-import {AppRoutingModule} from "../app-routing.module";
 
 @Component({
   selector: 'app-furniture',
@@ -13,8 +12,7 @@ export class FurnitureComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<FurnitureComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
-              private api: ApiService,
-              private router: AppRoutingModule) {
+              private api: ApiService) {
   }
 
   ngOnInit() {

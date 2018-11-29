@@ -2,11 +2,30 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatIconRegistry, MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
 import {ApiService} from "../api.service";
 import {DomSanitizer} from "@angular/platform-browser";
-import {LoginComponent} from "../login/login.component";
-import {RegisterComponent} from "../register/register.component";
 import {EditProfileComponent} from "../edit-profile/edit-profile.component";
 import {OptionsComponent} from "../options/options.component";
 import {FurnitureComponent} from "../furniture/furniture.component";
+import {ActivatedRoute, Router} from "@angular/router";
+
+export interface furniture {
+  id: number;
+  code: string;
+  manufacturer: string;
+  type: string;
+}
+
+export interface options {
+  id: number;
+  type: string;
+  name: string;
+  height: number;
+  length: number;
+  width: number;
+  incline: number;
+  rigidity: string;
+  temperature: number;
+  massage: string;
+}
 
 @Component({
   selector: 'app-profile',
@@ -14,41 +33,74 @@ import {FurnitureComponent} from "../furniture/furniture.component";
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  public data: any;
+  owner: boolean;
+  data: any;
   furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type'];
   optionsDisplayedColumns: string[] = ['id', 'type', 'name', 'height', 'length',
     'width', 'incline', 'rigidity', 'temperature', 'massage'];
-  ownedFurnitureDataSource: any;
-  optionsDataSource: any;
+  ownedFurnitureDataSource: MatTableDataSource<furniture>;
+  optionsDataSource: MatTableDataSource<options>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
+              private router: Router,
+              private route: ActivatedRoute,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    this.data = api.currentUser;
+    // TODO this doesn't work
+    let id = this.route.snapshot.paramMap.get('id');
+    console.log(id);
+    console.log(api.currentUser);
+
+    if (id === api.currentUser.pk) {
+      this.owner = true;
+      this.data = api.currentUser;
+    } else
+      this.getUser(id);
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
     iconRegistry.addSvgIcon('add',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-add-24px.svg'));
-    console.log(this.api.currentUser);
-    this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
     this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
-    console.log(this.api.currentUser.owned_furniture);
+    this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
   }
 
   ngOnInit() {
+    // TODO this doesn't work
+    // if (!this.data) {
+    //   this.router.navigateByUrl('/home');
+    // }
+    console.log(this.ownedFurnitureDataSource);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
+    console.log(this.optionsDataSource);
+    this.optionsDataSource.paginator = this.paginator;
+    this.optionsDataSource.sort = this.sort;
   }
 
-  applyFilter(filterValue: string) {
-    this.ownedFurnitureDataSource.filter = filterValue.trim().toLowerCase();
+  getUser(id) {
+    this.api.getObj('users', id).subscribe((response: any) => {
+      console.log(response);
+      if (response)
+        this.data = response;
+    });
+  }
 
+  applyFurnitureFilter(filterValue: string) {
+    this.ownedFurnitureDataSource.filter = filterValue.trim().toLowerCase();
     if (this.ownedFurnitureDataSource.paginator) {
       this.ownedFurnitureDataSource.paginator.firstPage();
     }
   }
+
+  applyOptionsFilter(filterValue: string) {
+    this.optionsDataSource.filter = filterValue.trim().toLowerCase();
+    if (this.optionsDataSource.paginator) {
+      this.optionsDataSource.paginator.firstPage();
+    }
+  }
+
   //TODO add/edit options + furniture, stripe dialog
   openDialog(name: string): void {
     let dialogRef;
@@ -59,14 +111,16 @@ export class ProfileComponent implements OnInit {
     else if (name === 'addFurniture')
       dialogRef = this.dialog.open(FurnitureComponent);
     dialogRef.afterClosed().subscribe(result => {
-      this.api.getCurrentUser().subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          this.api.currentUser = response;
-          this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
-          this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
-        }
-      });
+      if (result) {
+        this.api.getCurrentUser().subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            this.api.currentUser = response;
+            this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
+            this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
+          }
+        });
+      }
     });
   }
 }

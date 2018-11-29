@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-    this.api.register({
+    this.api.authorize('register', {
       'username': this.username,
       'email': this.email,
       'password1': this.password1,
@@ -33,12 +33,12 @@ export class RegisterComponent implements OnInit {
       console.log(response);
       if (response) {
         document.cookie = `auth_token=Token ${response.key};path=/`;
-        this.dialogRef.close(true);
         this.error = null;
         this.api.getCurrentUser().subscribe((response: any) => {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
+            this.dialogRef.close(true);
             this.router.navigateByUrl(`/profile/${this.api.currentUser.pk}`);
           }
         });

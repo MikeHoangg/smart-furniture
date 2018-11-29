@@ -22,19 +22,19 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.api.login({
+    this.api.authorize('login',{
       'username': this.username,
       'password': this.password
     }).subscribe((response: any) => {
       console.log(response);
       if (response) {
-        this.dialogRef.close(true);
         this.error = null;
         document.cookie = `auth_token=Token ${response.key};path=/`;
         this.api.getCurrentUser().subscribe((response: any) => {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
+            this.dialogRef.close(true);
             this.router.navigateByUrl(`/profile/${this.api.currentUser.pk}`);
           }
         });

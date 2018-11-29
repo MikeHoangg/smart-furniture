@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -28,6 +28,7 @@ import {FurnitureDetailComponent} from './furniture-detail/furniture-detail.comp
 import {FurnitureComponent} from './furniture/furniture.component';
 import {OptionsComponent} from './options/options.component';
 import {StripeComponent} from './stripe/stripe.component';
+import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserProvider} from "./api_load";
 
 @NgModule({
   declarations: [
@@ -78,7 +79,11 @@ import {StripeComponent} from './stripe/stripe.component';
     StripeComponent,
     EditProfileComponent,
   ],
-  providers: [ApiService],
+  providers: [ApiService,
+    {provide: APP_INITIALIZER, useFactory: loadUserProvider, deps: [ApiService], multi: true},
+    {provide: APP_INITIALIZER, useFactory: loadFurnitureTypesProvider, deps: [ApiService], multi: true},
+    {provide: APP_INITIALIZER, useFactory: loadMassageRigidityTypesProvider, deps: [ApiService], multi: true},
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

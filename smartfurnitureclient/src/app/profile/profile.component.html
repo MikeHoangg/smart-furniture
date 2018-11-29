@@ -23,7 +23,7 @@
       </mat-list>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button>
+      <button mat-button *ngIf="owner">
         <mat-icon svgIcon="edit" (click)="openDialog('editProfile')"></mat-icon>
         Edit profile
       </button>
@@ -36,17 +36,17 @@
           Furniture
         </mat-panel-title>
         <mat-panel-description>
-          All of your furniture
+          All {{ data.username }}'s furniture
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addFurniture')">
+      <button mat-button (click)="openDialog('addFurniture')" *ngIf="owner">
         <mat-icon svgIcon="add"></mat-icon>
         Add furniture
       </button>
 
-      <div *ngIf="ownedFurnitureDataSource.length">
+      <div *ngIf="ownedFurnitureDataSource.filteredData.length">
         <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter furniture">
+          <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
 
         <div class="mat-elevation-z8">
@@ -87,17 +87,17 @@
           Options
         </mat-panel-title>
         <mat-panel-description>
-          All of your options
+          All {{ data.username }}'s options
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addOptions')">
+      <button mat-button (click)="openDialog('addOptions')" *ngIf="owner">
         <mat-icon svgIcon="add"></mat-icon>
         Add options
       </button>
 
-      <div *ngIf="optionsDataSource.length">
+      <div *ngIf="optionsDataSource.filteredData.length">
         <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter options">
+          <input matInput (keyup)="applyOptionsFilter($event.target.value)" placeholder="Filter options">
         </mat-form-field>
 
         <div class="mat-elevation-z8">

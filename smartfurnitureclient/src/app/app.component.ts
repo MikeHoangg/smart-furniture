@@ -10,24 +10,16 @@ import {RegisterComponent} from "./register/register.component";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  loggedIn: boolean;
   currentUserId: number;
 
   constructor(private dialog: MatDialog,
               private api: ApiService) {
+    if (this.api.currentUser)
+      this.currentUserId = this.api.currentUser.pk;
+    console.log(this.api.currentUser.pk);
   }
 
   ngOnInit() {
-    if (document.cookie.match(/auth_token=(Token \w+)/)) {
-      this.api.getCurrentUser().subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          this.loggedIn = true;
-          this.api.currentUser = response;
-          this.currentUserId = this.api.currentUser.pk;
-        }
-      });
-    }
   }
 
   openDialog(name: string): void {
@@ -37,19 +29,18 @@ export class AppComponent implements OnInit {
     else if (name === 'register')
       dialogRef = this.dialog.open(RegisterComponent);
     dialogRef.afterClosed().subscribe(result => {
-      this.loggedIn = result;
-      if (this.loggedIn)
-        this.currentUserId = this.api.currentUser.pk;
+        if (result)
+          this.currentUserId = this.api.currentUser.pk;
     });
   }
 
   logout(): void {
-    this.api.logout().subscribe((response: object) => {
+    this.api.authorize('logout').subscribe((response: object) => {
       console.log(response);
       if (response) {
         document.cookie = "auth_token=;path=/";
         this.api.currentUser = null;
-        this.loggedIn = false;
+        this.currentUserId = null
       }
     });
   }
