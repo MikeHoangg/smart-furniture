@@ -22,7 +22,8 @@ export class ApiService {
           if (response)
             this.currentUser = response;
         });
-      }
+      } else
+        resolve();
     })
   }
 

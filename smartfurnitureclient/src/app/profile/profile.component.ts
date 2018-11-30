@@ -51,13 +51,12 @@ export class ProfileComponent implements OnInit {
     // TODO this doesn't work
     let id = this.route.snapshot.paramMap.get('id');
     console.log(id);
-    console.log(api.currentUser);
 
-    if (id === api.currentUser.pk) {
+    if (api.currentUser != null && id === api.currentUser.pk) {
       this.owner = true;
       this.data = api.currentUser;
-    } else
-      this.getUser(id);
+    }
+
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
     iconRegistry.addSvgIcon('add',
@@ -71,6 +70,9 @@ export class ProfileComponent implements OnInit {
     // if (!this.data) {
     //   this.router.navigateByUrl('/home');
     // }
+    let id = this.route.snapshot.paramMap.get('id');
+    if (!this.data)
+      this.getUser(id);
     console.log(this.ownedFurnitureDataSource);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
