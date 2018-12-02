@@ -1,4 +1,4 @@
-<div class="profile-content">
+<div class="profile-content" *ngIf="!error && data">
   <mat-card class="profile-card">
     <mat-card-header>
       <div mat-card-avatar *ngIf="data.image" class="avatar" [style.backgroundImage]="'url('+ data.image +')'"></div>
@@ -10,21 +10,23 @@
     <mat-card-content>
       <mat-list>
         <div *ngIf="data.first_name">
-          <mat-list-item>{{ data.firstname }}</mat-list-item>
           <mat-divider></mat-divider>
+          <mat-list-item>first name: {{ data.first_name }}</mat-list-item>
         </div>
         <div *ngIf="data.last_name">
-          <mat-list-item>{{ data.lastname }}</mat-list-item>
           <mat-divider></mat-divider>
+          <mat-list-item>last name: {{ data.last_name }}</mat-list-item>
         </div>
         <div *ngIf="data.height">
-          <mat-list-item>Item 3</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>height: {{ data.height }}</mat-list-item>
+          <mat-divider></mat-divider>
         </div>
       </mat-list>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button *ngIf="owner">
-        <mat-icon svgIcon="edit" (click)="openDialog('editProfile')"></mat-icon>
+      <button mat-button *ngIf="isOwner()" (click)="openDialog('editProfile')">
+        <mat-icon svgIcon="edit"></mat-icon>
         Edit profile
       </button>
     </mat-card-actions>
@@ -39,7 +41,7 @@
           All {{ data.username }}'s furniture
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addFurniture')" *ngIf="owner">
+      <button mat-button (click)="openDialog('addFurniture')" *ngIf="isOwner()">
         <mat-icon svgIcon="add"></mat-icon>
         Add furniture
       </button>
@@ -90,11 +92,13 @@
           All {{ data.username }}'s options
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addOptions')" *ngIf="owner">
+      <button mat-button (click)="openDialog('addOptions')" *ngIf="isOwner() && data.height">
         <mat-icon svgIcon="add"></mat-icon>
         Add options
       </button>
-
+      <span *ngIf="!isOwner() && !data.heigth">
+        You need to add your height before you can create options
+      </span>
       <div *ngIf="optionsDataSource.filteredData.length">
         <mat-form-field>
           <input matInput (keyup)="applyOptionsFilter($event.target.value)" placeholder="Filter options">
@@ -161,4 +165,7 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+</div>
+<div *ngIf="error" class="profile-content">
+  {{ error.detail }}
 </div>

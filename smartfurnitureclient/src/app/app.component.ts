@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   }
 
   logout(): void {
-    this.api.authorize('logout').subscribe((response: object) => {
+    this.api.authorize('logout').subscribe((response: any) => {
       console.log(response);
       if (response) {
         document.cookie = "auth_token=;path=/";

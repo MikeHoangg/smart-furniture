@@ -3,7 +3,7 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {FormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -21,13 +21,16 @@ import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
-import {NotificationsComponent} from './notifications/notifications.component';
 import {EditProfileComponent} from './edit-profile/edit-profile.component';
 import {FurnitureListComponent} from './furniture-list/furniture-list.component';
 import {FurnitureDetailComponent} from './furniture-detail/furniture-detail.component';
 import {FurnitureComponent} from './furniture/furniture.component';
 import {OptionsComponent} from './options/options.component';
 import {StripeComponent} from './stripe/stripe.component';
+import {ApplyOptionsComponent} from './apply-options/apply-options.component';
+import {AllowDisallowComponent} from './allow-disallow/allow-disallow.component';
+import {ManufacturerComponent} from './manufacturer/manufacturer.component';
+
 import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserProvider} from "./api_load";
 
 @NgModule({
@@ -37,13 +40,15 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    NotificationsComponent,
     EditProfileComponent,
     FurnitureListComponent,
     FurnitureDetailComponent,
     FurnitureComponent,
     OptionsComponent,
-    StripeComponent
+    StripeComponent,
+    ApplyOptionsComponent,
+    AllowDisallowComponent,
+    ManufacturerComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +58,7 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
       cookieName: 'csrftoken',
       headerName: 'X-CSRFTOKEN',
     }),
-    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatDialogModule,
@@ -83,7 +88,7 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
     {provide: APP_INITIALIZER, useFactory: loadUserProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadFurnitureTypesProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadMassageRigidityTypesProvider, deps: [ApiService], multi: true},
-    ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
