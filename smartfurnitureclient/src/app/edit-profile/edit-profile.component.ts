@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from "../api.service";
 import {MatDialogRef} from "@angular/material";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-edit-profile',
@@ -8,25 +9,33 @@ import {MatDialogRef} from "@angular/material";
   styleUrls: ['./edit-profile.component.css']
 })
 export class EditProfileComponent implements OnInit {
-  public error: object;
-  public data: any;
+  error: any;
+  data: any;
+  fileToUpload: File;
+  editProfileForm: FormGroup;
 
   constructor(private api: ApiService,
               private dialogRef: MatDialogRef<EditProfileComponent>) {
-    this.data = this.api.currentUser
+    this.data = this.api.currentUser;
+    this.editProfileForm = new FormGroup({
+      username: new FormControl(this.data.username),
+      email: new FormControl(this.data.email),
+      first_name: new FormControl(this.data.first_name),
+      last_name: new FormControl(this.data.last_name),
+      height: new FormControl(this.data.height || 0),
+    })
   }
 
   ngOnInit() {
   }
-  //TODO send image change all dialog to forms
+
   save(): void {
-    this.api.editCurrentUser({
-      'username': this.data.username,
-      'email': this.data.email,
-      'first_name': this.data.first_name,
-      'last_name': this.data.last_name,
-      'height': this.data.height,
-    }).subscribe((response: any) => {
+    let formData: FormData = new FormData();
+    for (let key in this.editProfileForm.value)
+      formData.append(key, this.editProfileForm.value[key]);
+    if (this.fileToUpload)
+      formData.append('image', this.fileToUpload);
+    this.api.editCurrentUser(formData).subscribe((response: any) => {
       console.log(response);
       if (response) {
         this.dialogRef.close(true);
@@ -38,5 +47,9 @@ export class EditProfileComponent implements OnInit {
       } else
         this.error = this.api.errorLog.pop();
     });
+  }
+
+  public handleFileInput(file: FileList) {
+    this.fileToUpload = file.item(0);
   }
 }

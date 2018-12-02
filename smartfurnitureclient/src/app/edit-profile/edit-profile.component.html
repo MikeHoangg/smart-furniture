@@ -1,39 +1,41 @@
 <div class="dialog">
   <h1 mat-dialog-title>Edit profile</h1>
-  <div mat-dialog-content class="dialog-content">
-    <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
-    <mat-form-field>
-      <mat-label>Image</mat-label>
-      <input matInput type="image" [(ngModel)]="data.image">
-      <mat-error *ngIf="error && error.image">{{ error.image }}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="data.username">
-      <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input matInput type="email" [(ngModel)]="data.email">
-      <mat-error *ngIf="error && error.email">{{ error.email }}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>First name</mat-label>
-      <input matInput [(ngModel)]="data.first_name">
-      <mat-error *ngIf="error && error.first_name">{{ error.first_name }}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Last name</mat-label>
-      <input matInput [(ngModel)]="data.last_name">
-      <mat-error *ngIf="error && error.last_name">{{ error.last_name }}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Height</mat-label>
-      <input matInput type="number" [(ngModel)]="data.height">
-      <mat-error *ngIf="error && error.height">{{ error.height }}</mat-error>
-    </mat-form-field>
+  <div mat-dialog-content>
+    <form [formGroup]="editProfileForm" (ngSubmit)="save()" id="editProfileForm" class="dialog-content">
+      <div class="dialog-content image-form-group">
+        <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+        <mat-label>Image</mat-label>
+        <input type="file" (change)="handleFileInput($event.target.files)">
+        <mat-error *ngIf="error && error.image">{{ error.image }}</mat-error>
+      </div>
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username">
+        <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email">
+        <mat-error *ngIf="error && error.email">{{ error.email }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="first_name">
+        <mat-error *ngIf="error && error.first_name">{{ error.first_name }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="last_name">
+        <mat-error *ngIf="error && error.last_name">{{ error.last_name }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Height</mat-label>
+        <input matInput type="number" formControlName="height">
+        <mat-error *ngIf="error && error.height">{{ error.height }}</mat-error>
+      </mat-form-field>
+    </form>
   </div>
   <div mat-dialog-actions>
-    <button mat-flat-button color="primary" (click)="save()">Save</button>
+    <button mat-flat-button color="primary" type="submit" form="editProfileForm">Save</button>
   </div>
 </div>
