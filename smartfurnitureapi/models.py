@@ -25,6 +25,10 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+
 
 class Furniture(models.Model):
     code = models.CharField(unique=True,
@@ -55,6 +59,10 @@ class Furniture(models.Model):
 
     def __str__(self):
         return f'{self.type} - {self.code}'
+
+    class Meta:
+        verbose_name = _("Furniture")
+        verbose_name_plural = _("Furniture")
 
 
 class Options(models.Model):
@@ -95,6 +103,10 @@ class Options(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Options")
+        verbose_name_plural = _("Options")
+
 
 class Report(models.Model):
     content = models.TextField(verbose_name=_("Content"))
@@ -108,6 +120,10 @@ class Report(models.Model):
     furniture = models.ForeignKey('Furniture',
                                   on_delete=models.CASCADE,
                                   verbose_name=_("Furniture"))
+
+    class Meta:
+        verbose_name = _("Report")
+        verbose_name_plural = _("Reports")
 
 
 class Notification(models.Model):
@@ -124,3 +140,7 @@ class Notification(models.Model):
                                on_delete=models.CASCADE,
                                related_name='sent_notifications',
                                verbose_name=_("Sender"))
+
+    class Meta:
+        verbose_name = _("Notification")
+        verbose_name_plural = _("Notifications")
