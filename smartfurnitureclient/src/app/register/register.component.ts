@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
 import {Router} from "@angular/router";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -9,11 +10,13 @@ import {Router} from "@angular/router";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  public username: string;
-  public email: string;
-  public password1: string;
-  public password2: string;
-  public error: object;
+  registerForm = new FormGroup({
+    username: new FormControl(),
+    email: new FormControl(),
+    password1: new FormControl(),
+    password2: new FormControl(),
+  });
+  error: any;
 
   constructor(private dialogRef: MatDialogRef<RegisterComponent>,
               private api: ApiService,
@@ -24,12 +27,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-    this.api.authorize('register', {
-      'username': this.username,
-      'email': this.email,
-      'password1': this.password1,
-      'password2': this.password2,
-    }).subscribe((response: any) => {
+    this.api.authorize('register', this.registerForm.value).subscribe((response: any) => {
       console.log(response);
       if (response) {
         document.cookie = `auth_token=Token ${response.key};path=/`;

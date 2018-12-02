@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from "../api.service";
 import {Router} from "@angular/router";
+import {FormGroup, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -9,9 +10,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public username: string;
-  public password: string;
-  public error: object;
+  error: any;
+  loginForm = new FormGroup({
+    username: new FormControl(),
+    password: new FormControl(),
+  });
 
   constructor(private dialogRef: MatDialogRef<LoginComponent>,
               private api: ApiService,
@@ -22,10 +25,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.api.authorize('login',{
-      'username': this.username,
-      'password': this.password
-    }).subscribe((response: any) => {
+    this.api.authorize('login', this.loginForm.value).subscribe((response: any) => {
       console.log(response);
       if (response) {
         this.error = null;
