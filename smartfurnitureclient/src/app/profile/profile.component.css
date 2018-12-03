@@ -15,6 +15,15 @@
   height: 6rem;
   width: 6rem;
 }
-.profile-card{
+
+.profile-card {
   margin-right: 2rem;
+}
+
+table {
+  width: 100%
+}
+
+.profile-card{
+  height: 300px;
 }

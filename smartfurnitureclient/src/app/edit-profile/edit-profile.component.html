@@ -10,12 +10,12 @@
       </div>
       <mat-form-field>
         <mat-label>Username</mat-label>
-        <input matInput formControlName="username">
+        <input matInput formControlName="username" required>
         <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email">
+        <input matInput type="email" formControlName="email" required>
         <mat-error *ngIf="error && error.email">{{ error.email }}</mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -30,7 +30,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Height</mat-label>
-        <input matInput type="number" formControlName="height">
+        <input matInput type="number" formControlName="height" required>
         <mat-error *ngIf="error && error.height">{{ error.height }}</mat-error>
       </mat-form-field>
     </form>
