@@ -6,6 +6,7 @@ import {EditProfileComponent} from "../edit-profile/edit-profile.component";
 import {OptionsComponent} from "../options/options.component";
 import {FurnitureComponent} from "../furniture/furniture.component";
 import {ActivatedRoute} from "@angular/router";
+import {StripeComponent} from "../stripe/stripe.component";
 
 export interface furniture {
   id: number;
@@ -27,6 +28,15 @@ export interface options {
   massage: string;
 }
 
+export interface notification {
+  id: number;
+  content: string;
+  date: string;
+  pending: boolean;
+  receiver: number;
+  sender: number;
+}
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -40,6 +50,9 @@ export class ProfileComponent implements OnInit {
     'width', 'incline', 'rigidity', 'temperature', 'massage'];
   ownedFurnitureDataSource: MatTableDataSource<furniture>;
   optionsDataSource: MatTableDataSource<options>;
+  notificationsDataSource: MatTableDataSource<notification>;
+  allowedFurnitureDataSource: MatTableDataSource<furniture>;
+  currentFurnitureDataSource: MatTableDataSource<furniture>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -47,11 +60,22 @@ export class ProfileComponent implements OnInit {
               private api: ApiService,
               private route: ActivatedRoute,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
     iconRegistry.addSvgIcon('add',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-add-24px.svg'));
+    iconRegistry.addSvgIcon('prime',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-stars-24px.svg'));
+    iconRegistry.addSvgIcon('rate',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-24px.svg'));
+    iconRegistry.addSvgIcon('allow',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-check_circle-24px.svg'));
+    iconRegistry.addSvgIcon('disallow',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-cancel-24px.svg'));
+    iconRegistry.addSvgIcon('settings',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-24px.svg'));
+    iconRegistry.addSvgIcon('delete',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
   }
 
   ngOnInit() {
@@ -89,6 +113,18 @@ export class ProfileComponent implements OnInit {
     this.ownedFurnitureDataSource = new MatTableDataSource(this.data.owned_furniture);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
+
+    this.notificationsDataSource = new MatTableDataSource(this.data.notification_set);
+    this.notificationsDataSource.paginator = this.paginator;
+    this.notificationsDataSource.sort = this.sort;
+
+    this.allowedFurnitureDataSource = new MatTableDataSource(this.data.allowed_furniture);
+    this.allowedFurnitureDataSource.paginator = this.paginator;
+    this.allowedFurnitureDataSource.sort = this.sort;
+
+    this.currentFurnitureDataSource = new MatTableDataSource(this.data.current_furniture);
+    this.currentFurnitureDataSource.paginator = this.paginator;
+    this.currentFurnitureDataSource.sort = this.sort;
   }
 
   applyFurnitureFilter(filterValue: string) {
@@ -103,6 +139,10 @@ export class ProfileComponent implements OnInit {
       this.optionsDataSource.paginator.firstPage();
   }
 
+  isNotPrime() {
+    return true;
+  }
+
   //TODO add/edit options + furniture, stripe dialog
   openDialog(name: string): void {
     console.log(name);
@@ -113,6 +153,8 @@ export class ProfileComponent implements OnInit {
       dialogRef = this.dialog.open(OptionsComponent);
     else if (name === 'addFurniture')
       dialogRef = this.dialog.open(FurnitureComponent);
+    else if (name === 'upgradePrime')
+      dialogRef = this.dialog.open(StripeComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.api.getCurrentUser().subscribe((response: any) => {
