@@ -1,0 +1,13 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Upgrade to prime account</h1>
+  <div mat-dialog-content class="dialog-content">
+      <mat-error *ngIf="error && error.detail">{{ error.detail }}</mat-error>
+      <stripe-card #stripeCard (catch)="onStripeError($event)" (invalid)="onStripeError($event)" (tokenChange)="setStripeToken($event)">
+      </stripe-card>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button color="primary" (click)="stripeCard.createToken()">Pay ${{ price }}</button>
+  </div>
+</div>
+
+

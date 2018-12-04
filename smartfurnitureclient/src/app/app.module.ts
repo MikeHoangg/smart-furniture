@@ -15,6 +15,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatListModule} from '@angular/material/list';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {Module as StripeModule} from "stripe-angular"
 
 import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
@@ -30,7 +31,6 @@ import {StripeComponent} from './stripe/stripe.component';
 import {ApplyOptionsComponent} from './apply-options/apply-options.component';
 import {AllowDisallowComponent} from './allow-disallow/allow-disallow.component';
 import {ManufacturerComponent} from './manufacturer/manufacturer.component';
-
 import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserProvider} from "./api_load";
 
 @NgModule({
@@ -58,6 +58,7 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
       cookieName: 'csrftoken',
       headerName: 'X-CSRFTOKEN',
     }),
+    StripeModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,

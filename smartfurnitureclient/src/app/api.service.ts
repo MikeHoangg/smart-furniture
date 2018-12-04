@@ -94,4 +94,9 @@ export class ApiService {
     return this.httpClient.get(`${this.apiUrl}/${list}/${pk}/`, this.getHttpOptions())
       .pipe(catchError(this.handleError()));
   }
+
+  createObj(list, data) {
+    return this.httpClient.post(`${this.apiUrl}/${list}/`, data, this.getHttpOptions())
+      .pipe(catchError(this.handleError()));
+  }
 }
