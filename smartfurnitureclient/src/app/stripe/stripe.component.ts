@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {StripeScriptTag} from "stripe-angular";
 import {StripeToken} from "stripe-angular"
 import {ApiService} from "../api.service";
 import {MatDialogRef} from "@angular/material";
@@ -10,14 +9,11 @@ import {MatDialogRef} from "@angular/material";
   styleUrls: ['./stripe.component.css']
 })
 export class StripeComponent implements OnInit {
-  private publishableKey: string = "pk_test_0iZ2ciCzQWinzLyvzEzkuWiE";
   error: any;
   price: number = 3.99;
 
-  constructor(public StripeScriptTag: StripeScriptTag,
-              private api: ApiService,
+  constructor(private api: ApiService,
               private dialogRef: MatDialogRef<StripeComponent>) {
-    this.StripeScriptTag.setPublishableKey(this.publishableKey)
   }
 
   ngOnInit() {

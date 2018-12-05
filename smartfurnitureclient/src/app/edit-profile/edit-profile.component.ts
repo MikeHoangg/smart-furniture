@@ -38,12 +38,8 @@ export class EditProfileComponent implements OnInit {
     this.api.editCurrentUser(formData).subscribe((response: any) => {
       console.log(response);
       if (response) {
-        this.dialogRef.close(true);
         this.error = null;
-        this.api.getCurrentUser().subscribe((response: any) => {
-          if (response)
-            this.api.currentUser = response;
-        });
+        this.dialogRef.close(true);
       } else
         this.error = this.api.errorLog.pop();
     });

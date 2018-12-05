@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   error: any;
   loginForm = new FormGroup({
     username: new FormControl(),
+    email: new FormControl(),
     password: new FormControl(),
   });
 
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    this.loginForm.value['email'] = this.loginForm.value['username'];
     this.api.authorize('login', this.loginForm.value).subscribe((response: any) => {
       console.log(response);
       if (response) {

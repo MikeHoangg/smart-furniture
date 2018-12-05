@@ -24,14 +24,18 @@ import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
 import {EditProfileComponent} from './edit-profile/edit-profile.component';
 import {FurnitureListComponent} from './furniture-list/furniture-list.component';
-import {FurnitureDetailComponent} from './furniture-detail/furniture-detail.component';
 import {FurnitureComponent} from './furniture/furniture.component';
 import {OptionsComponent} from './options/options.component';
 import {StripeComponent} from './stripe/stripe.component';
 import {ApplyOptionsComponent} from './apply-options/apply-options.component';
 import {AllowDisallowComponent} from './allow-disallow/allow-disallow.component';
 import {ManufacturerComponent} from './manufacturer/manufacturer.component';
-import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserProvider} from "./api_load";
+import {
+  loadFurnitureTypesProvider,
+  loadMassageRigidityTypesProvider,
+  loadUserProvider,
+  registerStripeProvider
+} from "./api_load";
 
 @NgModule({
   declarations: [
@@ -42,7 +46,6 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
     ProfileComponent,
     EditProfileComponent,
     FurnitureListComponent,
-    FurnitureDetailComponent,
     FurnitureComponent,
     OptionsComponent,
     StripeComponent,
@@ -89,6 +92,7 @@ import {loadFurnitureTypesProvider, loadMassageRigidityTypesProvider, loadUserPr
     {provide: APP_INITIALIZER, useFactory: loadUserProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadFurnitureTypesProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadMassageRigidityTypesProvider, deps: [ApiService], multi: true},
+    {provide: APP_INITIALIZER, useFactory: registerStripeProvider, deps: [ApiService], multi: true},
   ],
   bootstrap: [AppComponent]
 })

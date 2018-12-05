@@ -14,13 +14,13 @@
         <mat-error *ngIf="error && error.manufacturer">{{ error.manufacturer }}</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Type</mat-label>
-        <!-- TODO select type -->
+        <mat-select placeholder="Type" formControlName="type" required>
+          <mat-option *ngFor="let type of types" value="type.name">{{ type.verbose_name }}</mat-option>
+        </mat-select>
         <mat-error *ngIf="error && error.type">{{ error.type }}</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Is public</mat-label>
-        <!-- TODO checkbox is_public -->
+        <mat-checkbox formControlName="is_public">Is public</mat-checkbox>
         <mat-error *ngIf="error && error.is_public">{{ error.is_public }}</mat-error>
       </mat-form-field>
     </form>

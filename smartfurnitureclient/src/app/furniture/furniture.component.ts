@@ -13,6 +13,7 @@ export class FurnitureComponent implements OnInit {
   title: string;
   error: any;
   furnitureForm: FormGroup;
+  types: any;
 
   constructor(private dialogRef: MatDialogRef<FurnitureComponent>,
               private api: ApiService) {
@@ -21,8 +22,10 @@ export class FurnitureComponent implements OnInit {
       manufacturer: new FormControl(this.data ? this.data.manufacturer : null),
       type: new FormControl(this.data ? this.data.type : null),
       is_public: new FormControl(this.data ? this.data.is_public : false),
+      owner: new FormControl(api.currentUser.pk),
     });
     this.title = this.data ? "Add furniture" : "Edit furniture";
+    this.types = api.furnitureTypes
   }
 
   ngOnInit() {
@@ -30,9 +33,23 @@ export class FurnitureComponent implements OnInit {
 
   save(): void {
     if (this.title === "Add furniture") {
-      // TODO add furniture
+      this.api.createObj('furniture', this.furnitureForm.value).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.error = null;
+          this.dialogRef.close(true);
+        } else
+          this.error = this.api.errorLog.pop();
+      });
     } else {
-      // TODO edit furniture
+      this.api.editObj('furniture', this.data.pk, this.furnitureForm.value).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.error = null;
+          this.dialogRef.close(true);
+        } else
+          this.error = this.api.errorLog.pop();
+      });
     }
   }
 }
