@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
-from smartfurnitureapi.models import Furniture, Options, Report, Notification
+from smartfurnitureapi.models import Furniture, Options, Review, Notification
 
 UserModel = get_user_model()
 
@@ -13,6 +13,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 class FurnitureTypeSerializer(serializers.Serializer):
     name = serializers.SerializerMethodField()
+    verbose_name = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     prime_actions = serializers.SerializerMethodField()
 
@@ -25,12 +26,17 @@ class FurnitureTypeSerializer(serializers.Serializer):
         return obj['name']
 
     @staticmethod
+    def get_verbose_name(obj):
+        return obj['verbose_name']
+
+    @staticmethod
     def get_prime_actions(obj):
         return obj['prime_actions']
 
 
 class MassageAndRigidityTypeSerializer(serializers.Serializer):
     name = serializers.SerializerMethodField()
+    verbose_name = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
 
     @staticmethod
@@ -40,6 +46,10 @@ class MassageAndRigidityTypeSerializer(serializers.Serializer):
     @staticmethod
     def get_name(obj):
         return obj['name']
+
+    @staticmethod
+    def get_verbose_name(obj):
+        return obj['verbose_name']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -66,9 +76,9 @@ class OptionsSerializer(serializers.ModelSerializer):
                   'creator']
 
 
-class ReportSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Report
+        model = Review
         fields = ['pk', 'content', 'rating', 'date', 'user', 'furniture']
         read_only_fields = ['date']
 

@@ -3,13 +3,13 @@ import datetime
 
 import stripe
 from django.conf import settings
-
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from smartfurnitureapi import models, serializers, types
+from smartfurnitureapi.models import Furniture
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -32,7 +32,8 @@ class FurnitureTypeList(generics.ListAPIView):
 
     @staticmethod
     def get_types_info(types_arr, type_name):
-        return [{'name': i[0], 'type': type_name, 'prime_actions': i[0] in types.PRIME_FURNITURE_TYPES} for i in
+        return [{'name': i[0], 'verbose_name': i[1], 'type': type_name,
+                 'prime_actions': i[0] in types.PRIME_FURNITURE_TYPES} for i in
                 types_arr]
 
     def get_queryset(self):
@@ -47,7 +48,7 @@ class MassageAndRigidityTypeList(generics.ListAPIView):
 
     @staticmethod
     def get_types_info(types_arr, type_name):
-        return [{'name': i[0], 'type': type_name} for i in types_arr]
+        return [{'name': i[0], 'verbose_name': i[1], 'type': type_name} for i in types_arr]
 
     def get_queryset(self):
         self.queryset = self.get_types_info(types.MASSAGE, 'massage') + self.get_types_info(types.RIGIDITY, 'rigidity')
@@ -90,16 +91,16 @@ class OptionsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.OptionsSerializer
 
 
-class ReportList(generics.ListCreateAPIView):
+class LeaveReview(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = models.Report.objects.all()
-    serializer_class = serializers.ReportSerializer
+    queryset = models.Review.objects.all()
+    serializer_class = serializers.ReviewSerializer
 
 
-class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-    queryset = models.Report.objects.all()
-    serializer_class = serializers.ReportSerializer
+    queryset = models.Review.objects.all()
+    serializer_class = serializers.ReviewSerializer
 
     def perform_update(self, serializer):
         serializer.save(date=timezone.now())
@@ -117,12 +118,18 @@ class NotificationDetail(generics.RetrieveDestroyAPIView):
     serializer_class = serializers.NotificationSerializer
 
 
-class ManufacturerReportList(generics.ListAPIView):
+class ManufacturerReviewList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = serializers.ReportSerializer
+    serializer_class = serializers.ReviewSerializer
+
+    def get(self, request, *args, **kwargs):
+        if not Furniture.objects.filter(manufacturer=self.kwargs.get('manufacturer')).exists():
+            return Response({'detail': _('Not found.')}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return models.Report.objects.filter(furniture__manufacturer=self.kwargs.get('manufacturer'))
+        return models.Review.objects.filter(furniture__manufacturer=self.kwargs.get('manufacturer'))
 
 
 class ApplyOptions(generics.CreateAPIView):
@@ -151,7 +158,7 @@ class ApplyOptions(generics.CreateAPIView):
             furniture.current_options.add(options)
             msg = _('Options applied to %s.' % furniture)
             stat = status.HTTP_202_ACCEPTED
-        return Response({_('detail'): msg}, status=stat)
+        return Response({'detail': msg}, status=stat)
 
 
 class DiscardOptions(generics.CreateAPIView):
@@ -166,7 +173,7 @@ class DiscardOptions(generics.CreateAPIView):
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        return Response({_('detail'): _('Options discarded from %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': _('Options discarded from %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
 
 
 class DisallowUser(generics.CreateAPIView):
@@ -181,7 +188,7 @@ class DisallowUser(generics.CreateAPIView):
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        return Response({_('detail'): _('User disallowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': _('User disallowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
 
 
 class AllowUser(generics.CreateAPIView):
@@ -192,7 +199,7 @@ class AllowUser(generics.CreateAPIView):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
         user = models.User.objects.get(id=request.POST.get('user'))
         furniture.allowed_users.add(user)
-        return Response({_('detail'): _('User allowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': _('User allowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
 
 
 class SetPrimeAccount(generics.CreateAPIView):
@@ -229,4 +236,4 @@ class SetPrimeAccount(generics.CreateAPIView):
         else:
             msg = _(f'Your card was declined.')
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        return Response({_('detail'): msg}, status=stat)
+        return Response({'detail': msg}, status=stat)

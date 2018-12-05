@@ -108,7 +108,7 @@ class Options(models.Model):
         verbose_name_plural = _("Options")
 
 
-class Report(models.Model):
+class Review(models.Model):
     content = models.TextField(verbose_name=_("Content"))
     rating = models.IntegerField(default=1,
                                  validators=[MaxValueValidator(5), MinValueValidator(1)],
@@ -122,8 +122,8 @@ class Report(models.Model):
                                   verbose_name=_("Furniture"))
 
     class Meta:
-        verbose_name = _("Report")
-        verbose_name_plural = _("Reports")
+        verbose_name = _("Review")
+        verbose_name_plural = _("Reviews")
 
 
 class Notification(models.Model):
