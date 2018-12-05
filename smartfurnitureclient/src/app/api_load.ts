@@ -9,3 +9,6 @@ export function loadFurnitureTypesProvider(provider: ApiService) {
 export function loadMassageRigidityTypesProvider(provider: ApiService) {
   return () => provider.loadMassageRigidityTypes();
 }
+export function registerStripeProvider(provider: ApiService) {
+  return () => provider.registerStripe();
+}

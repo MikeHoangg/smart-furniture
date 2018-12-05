@@ -2,16 +2,26 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, of} from "rxjs";
+import {StripeScriptTag} from "stripe-angular";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private stripeTag: StripeScriptTag;
   apiUrl: string = 'http://127.0.0.1:8000/en/api/v1';
   errorLog: Array<object> = [];
   currentUser: any;
   massageRigidityTypes: any;
   furnitureTypes: any;
+
+
+  registerStripe() {
+    return new Promise((resolve, reject) => {
+      this.stripeTag.setPublishableKey("pk_test_0iZ2ciCzQWinzLyvzEzkuWiE");
+      resolve();
+    })
+  }
 
   loadUser() {
     return new Promise((resolve, reject) => {
@@ -92,6 +102,11 @@ export class ApiService {
 
   getObj(list, pk) {
     return this.httpClient.get(`${this.apiUrl}/${list}/${pk}/`, this.getHttpOptions())
+      .pipe(catchError(this.handleError()));
+  }
+
+  editObj(list, pk, data) {
+    return this.httpClient.put(`${this.apiUrl}/${list}/${pk}/`, data, this.getHttpOptions())
       .pipe(catchError(this.handleError()));
   }
 
