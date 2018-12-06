@@ -8,7 +8,7 @@
   <button *ngIf="!currentUserId" mat-button color="primary" (click)="openDialog('register')" class="nav-item">
     Register
   </button>
-  <button *ngIf="currentUserId" mat-button color="primary" class="nav-item" routerLink="/profile/{{ currentUserId }}">
+  <button *ngIf="currentUserId" mat-button color="primary" class="nav-item" routerLink="/profile">
     Profile
   </button>
   <button *ngIf="currentUserId" mat-button color="primary" (click)="logout()" class="nav-item" routerLink="/">

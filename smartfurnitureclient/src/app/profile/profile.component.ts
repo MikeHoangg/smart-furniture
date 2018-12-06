@@ -5,7 +5,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {EditProfileComponent} from "../edit-profile/edit-profile.component";
 import {OptionsComponent} from "../options/options.component";
 import {FurnitureComponent} from "../furniture/furniture.component";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {StripeComponent} from "../stripe/stripe.component";
 
 export interface furniture {
@@ -59,6 +59,7 @@ export class ProfileComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private api: ApiService,
               private route: ActivatedRoute,
+              private router: Router,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
@@ -84,9 +85,11 @@ export class ProfileComponent implements OnInit {
 
   getUser() {
     let id = this.route.snapshot.paramMap.get('id');
-    if (this.api.currentUser != null && id === this.api.currentUser.pk) {
+    if (this.api.currentUser != null && id == null) {
       this.data = this.api.currentUser;
       this.getTables();
+    } else if (this.api.currentUser != null && id == this.api.currentUser.pk) {
+      this.router.navigateByUrl(`/profile`);
     } else {
       this.api.getObj('users', id).subscribe((response: any) => {
         console.log(response);
@@ -145,7 +148,6 @@ export class ProfileComponent implements OnInit {
 
   //TODO add/edit options + furniture, stripe dialog
   openDialog(name: string): void {
-    console.log(name);
     let dialogRef;
     if (name === 'editProfile')
       dialogRef = this.dialog.open(EditProfileComponent);

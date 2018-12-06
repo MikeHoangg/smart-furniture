@@ -15,6 +15,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatListModule} from '@angular/material/list';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {Module as StripeModule} from "stripe-angular"
 
 import {ApiService} from "./api.service";
@@ -34,7 +36,6 @@ import {
   loadFurnitureTypesProvider,
   loadMassageRigidityTypesProvider,
   loadUserProvider,
-  registerStripeProvider
 } from "./api_load";
 
 @NgModule({
@@ -75,24 +76,29 @@ import {
     MatListModule,
     MatPaginatorModule,
     MatExpansionModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   exports: [
     LoginComponent,
     RegisterComponent,
     StripeComponent,
     EditProfileComponent,
+    FurnitureComponent,
+    OptionsComponent,
   ],
   entryComponents: [
     LoginComponent,
     RegisterComponent,
     StripeComponent,
     EditProfileComponent,
+    FurnitureComponent,
+    OptionsComponent,
   ],
   providers: [ApiService,
     {provide: APP_INITIALIZER, useFactory: loadUserProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadFurnitureTypesProvider, deps: [ApiService], multi: true},
     {provide: APP_INITIALIZER, useFactory: loadMassageRigidityTypesProvider, deps: [ApiService], multi: true},
-    {provide: APP_INITIALIZER, useFactory: registerStripeProvider, deps: [ApiService], multi: true},
   ],
   bootstrap: [AppComponent]
 })

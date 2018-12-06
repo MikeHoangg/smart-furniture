@@ -8,20 +8,12 @@ import {StripeScriptTag} from "stripe-angular";
   providedIn: 'root'
 })
 export class ApiService {
-  private stripeTag: StripeScriptTag;
   apiUrl: string = 'http://127.0.0.1:8000/en/api/v1';
   errorLog: Array<object> = [];
   currentUser: any;
   massageRigidityTypes: any;
   furnitureTypes: any;
 
-
-  registerStripe() {
-    return new Promise((resolve, reject) => {
-      this.stripeTag.setPublishableKey("pk_test_0iZ2ciCzQWinzLyvzEzkuWiE");
-      resolve();
-    })
-  }
 
   loadUser() {
     return new Promise((resolve, reject) => {
@@ -59,8 +51,11 @@ export class ApiService {
     })
   }
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              public stripeTag: StripeScriptTag) {
+    this.stripeTag.setPublishableKey("pk_test_0iZ2ciCzQWinzLyvzEzkuWiE")
   }
+
 
   private handleError<T>(result?: T) {
     return (response: any): Observable<T> => {

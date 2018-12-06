@@ -15,14 +15,14 @@
       </mat-form-field>
       <mat-form-field>
         <mat-select placeholder="Type" formControlName="type" required>
-          <mat-option *ngFor="let type of types" value="type.name">{{ type.verbose_name }}</mat-option>
+          <mat-option *ngFor="let type of types" [value]="type.name" >{{ type.verbose_name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="error && error.type">{{ error.type }}</mat-error>
       </mat-form-field>
-      <mat-form-field>
-        <mat-checkbox formControlName="is_public">Is public</mat-checkbox>
-        <mat-error *ngIf="error && error.is_public">{{ error.is_public }}</mat-error>
-      </mat-form-field>
+      <div style="padding-bottom: 20px">
+        <mat-checkbox formControlName="is_public" color="primary">Is public</mat-checkbox>
+        <mat-error *ngIf="error && error.is_public" style="font-size: 75%">{{ error.is_public }}</mat-error>
+      </div>
     </form>
   </div>
   <div mat-dialog-actions>

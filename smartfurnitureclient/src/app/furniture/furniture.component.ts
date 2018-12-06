@@ -20,11 +20,11 @@ export class FurnitureComponent implements OnInit {
     this.furnitureForm = new FormGroup({
       code: new FormControl(this.data ? this.data.code : null),
       manufacturer: new FormControl(this.data ? this.data.manufacturer : null),
-      type: new FormControl(this.data ? this.data.type : null),
+      type: new FormControl(this.data ? this.data.type : "chair"),
       is_public: new FormControl(this.data ? this.data.is_public : false),
       owner: new FormControl(api.currentUser.pk),
     });
-    this.title = this.data ? "Add furniture" : "Edit furniture";
+    this.title = this.data ? "Edit furniture" : "Add furniture";
     this.types = api.furnitureTypes
   }
 

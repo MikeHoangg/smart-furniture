@@ -21,10 +21,10 @@ export class OptionsComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<OptionsComponent>,
               private api: ApiService) {
-    this.title = this.data ? "Add options" : "Edit options";
+    this.title = this.data ? "Edit options" : "Add options";
 
     this.optionsForm = new FormGroup({
-      type: new FormControl(this.data ? this.data.type : 'chair', [Validators.required]),
+      type: new FormControl(this.data ? this.data.type : "chair", [Validators.required]),
       name: new FormControl(this.data ? this.data.name : null, [Validators.required, Validators.maxLength(32)]),
       height: new FormControl(this.data ? this.data.height : api.currentUser.height * 3 / 7, [Validators.min(0)]),
       length: new FormControl(this.data ? this.data.length : api.currentUser.height * 2 / 7, [Validators.min(0)]),

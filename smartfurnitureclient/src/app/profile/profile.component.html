@@ -50,7 +50,7 @@
         Add furniture
       </button>
 
-      <div *ngIf="ownedFurnitureDataSource.filteredData.length">
+      <div>
         <mat-form-field>
           <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
@@ -87,7 +87,7 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="currentFurnitureDataSource.filteredData.length">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Furniture
@@ -96,7 +96,7 @@
           All {{ data.username }}'s current furniture
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngIf="currentFurnitureDataSource.filteredData.length">
+      <div>
         <mat-form-field>
           <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
@@ -133,7 +133,7 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="allowedFurnitureDataSource.filteredData.length">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Furniture
@@ -142,7 +142,7 @@
           All {{ data.username }}'s allowed furniture
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngIf="allowedFurnitureDataSource.filteredData.length">
+      <div>
         <mat-form-field>
           <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
@@ -179,7 +179,7 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="isOwner()">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Options
@@ -192,7 +192,7 @@
         <mat-icon svgIcon="add"></mat-icon>
         Add options
       </button>
-      <span *ngIf="isOwner() && !data.heigth">
+      <span *ngIf="isOwner() && !data.height">
         You need to add your height before you can create options
       </span>
       <div *ngIf="optionsDataSource.filteredData.length">

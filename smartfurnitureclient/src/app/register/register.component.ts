@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
           if (response) {
             this.api.currentUser = response;
             this.dialogRef.close(true);
-            this.router.navigateByUrl(`/profile/${this.api.currentUser.pk}`);
+            this.router.navigateByUrl(`/profile`);
           }
         });
       } else
