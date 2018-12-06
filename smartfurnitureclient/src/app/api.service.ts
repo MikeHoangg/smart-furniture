@@ -109,4 +109,9 @@ export class ApiService {
     return this.httpClient.post(`${this.apiUrl}/${list}/`, data, this.getHttpOptions())
       .pipe(catchError(this.handleError()));
   }
+
+  deleteObj(list, id) {
+    return this.httpClient.delete(`${this.apiUrl}/${list}/${id}`, this.getHttpOptions())
+      .pipe(catchError(this.handleError()));
+  }
 }

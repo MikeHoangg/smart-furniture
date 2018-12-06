@@ -147,7 +147,13 @@ export class ProfileComponent implements OnInit {
   }
 
   //TODO add/edit options + furniture, stripe dialog
-  openDialog(name: string): void {
+  deleteObject(list, id) {
+    this.api.deleteObj(list, id).subscribe((response: any) => {
+      console.log(response);
+    });
+  }
+
+  openDialog(name: string, id = null): void {
     let dialogRef;
     if (name === 'editProfile')
       dialogRef = this.dialog.open(EditProfileComponent);
@@ -157,6 +163,21 @@ export class ProfileComponent implements OnInit {
       dialogRef = this.dialog.open(FurnitureComponent);
     else if (name === 'upgradePrime')
       dialogRef = this.dialog.open(StripeComponent);
+    else if (name === 'editFurniture') {
+      this.api.getObj('furniture', id).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          dialogRef = this.dialog.open(FurnitureComponent, {data: response});
+        }
+      });
+    } else if (name === 'editOptions') {
+      this.api.getObj('options', id).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          dialogRef = this.dialog.open(OptionsComponent, {data: response});
+        }
+      });
+    }
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.api.getCurrentUser().subscribe((response: any) => {

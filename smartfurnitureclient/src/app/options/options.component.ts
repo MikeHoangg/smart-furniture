@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDialogRef} from "@angular/material";
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
@@ -9,7 +9,6 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./options.component.css']
 })
 export class OptionsComponent implements OnInit {
-  @Input() data: any;
   title: string;
   error: any;
   optionsForm: FormGroup;
@@ -20,8 +19,9 @@ export class OptionsComponent implements OnInit {
   is_prime_type: boolean;
 
   constructor(private dialogRef: MatDialogRef<OptionsComponent>,
-              private api: ApiService) {
-    this.title = this.data ? "Edit options" : "Add options";
+              private api: ApiService,
+              @Inject(MAT_DIALOG_DATA) private data: any) {
+    this.title = data ? "Edit options" : "Add options";
 
     this.optionsForm = new FormGroup({
       type: new FormControl(this.data ? this.data.type : "chair", [Validators.required]),
@@ -35,7 +35,7 @@ export class OptionsComponent implements OnInit {
       rigidity: new FormControl(this.data ? this.data.massage : 'medium'),
       creator: new FormControl(api.currentUser.pk),
     });
-    this.title = this.data ? "Add furniture" : "Edit furniture";
+    this.title = data ? "Add furniture" : "Edit furniture";
     this.types = api.furnitureTypes;
     this.rigidity_types = this.massage_types = [];
     for (let type of api.massageRigidityTypes) {
@@ -49,7 +49,7 @@ export class OptionsComponent implements OnInit {
       if (type.prime_actions)
         this.prime_types.push(type.name)
     }
-    this.is_prime_type = this.data ? this.prime_types.includes(this.data.type) : true;
+    this.is_prime_type = data ? this.prime_types.includes(data.type) : true;
   }
 
   ngOnInit() {
