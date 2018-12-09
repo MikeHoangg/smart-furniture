@@ -7,12 +7,14 @@ import {OptionsComponent} from "../options/options.component";
 import {FurnitureComponent} from "../furniture/furniture.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {StripeComponent} from "../stripe/stripe.component";
+import {ApplyOptionsComponent} from "../apply-options/apply-options.component";
 
 export interface furniture {
   id: number;
   code: string;
   manufacturer: string;
   type: string;
+  owner: any;
 }
 
 export interface options {
@@ -45,9 +47,11 @@ export interface notification {
 export class ProfileComponent implements OnInit {
   data: any;
   error: any;
-  furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type'];
+  ownedFurnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type'];
+  furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'owner'];
   optionsDisplayedColumns: string[] = ['id', 'type', 'name', 'height', 'length',
     'width', 'incline', 'rigidity', 'temperature', 'massage'];
+  notificationDisplayedColumns: string[] = ['sender', 'date', 'content'];
   ownedFurnitureDataSource: MatTableDataSource<furniture>;
   optionsDataSource: MatTableDataSource<options>;
   notificationsDataSource: MatTableDataSource<notification>;
@@ -108,6 +112,14 @@ export class ProfileComponent implements OnInit {
     return this.api.currentUser ? this.api.currentUser.pk == this.data.pk : false;
   }
 
+  isFurnitureOwner(id) {
+    if (this.api.currentUser)
+      for (let furniture of this.data.furniture_set)
+        if (furniture.pk === id && furniture.owner.pk === this.api.currentUser.pk)
+          return true;
+    return false;
+  }
+
   getTables() {
     this.optionsDataSource = new MatTableDataSource(this.data.options_set);
     this.optionsDataSource.paginator = this.paginator;
@@ -136,6 +148,24 @@ export class ProfileComponent implements OnInit {
       this.ownedFurnitureDataSource.paginator.firstPage();
   }
 
+  applyCurrentFurnitureFilter(filterValue: string) {
+    this.currentFurnitureDataSource.filter = filterValue.trim().toLowerCase();
+    if (this.currentFurnitureDataSource.paginator)
+      this.currentFurnitureDataSource.paginator.firstPage();
+  }
+
+  applyAllowedFurnitureFilter(filterValue: string) {
+    this.allowedFurnitureDataSource.filter = filterValue.trim().toLowerCase();
+    if (this.allowedFurnitureDataSource.paginator)
+      this.allowedFurnitureDataSource.paginator.firstPage();
+  }
+
+  applyNotificationsFilter(filterValue: string) {
+    this.notificationsDataSource.filter = filterValue.trim().toLowerCase();
+    if (this.notificationsDataSource.paginator)
+      this.notificationsDataSource.paginator.firstPage();
+  }
+
   applyOptionsFilter(filterValue: string) {
     this.optionsDataSource.filter = filterValue.trim().toLowerCase();
     if (this.optionsDataSource.paginator)
@@ -152,6 +182,7 @@ export class ProfileComponent implements OnInit {
       console.log(response);
     });
   }
+
 
   openDialog(name: string, id = null): void {
     let dialogRef;
@@ -175,6 +206,13 @@ export class ProfileComponent implements OnInit {
         console.log(response);
         if (response) {
           dialogRef = this.dialog.open(OptionsComponent, {data: response});
+        }
+      });
+    } else if (name === 'settings') {
+      this.api.getObj('furniture', id).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
         }
       });
     }

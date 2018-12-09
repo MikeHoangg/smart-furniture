@@ -36,6 +36,59 @@
     </mat-card-actions>
   </mat-card>
   <mat-accordion class="tables-content">
+    <mat-expansion-panel *ngIf="notificationsDataSource.filteredData.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Notifications
+        </mat-panel-title>
+        <mat-panel-description>
+          All {{ data.username }}'s notifications
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <mat-form-field>
+          <input matInput (keyup)="applyNotificationsFilter($event.target.value)" placeholder="Filter notifications">
+        </mat-form-field>
+
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="notificationsDataSource" matSort>
+
+            <ng-container matColumnDef="sender">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Sender</th>
+              <td mat-cell *matCellDef="let notification"> {{ notification.sender.username }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
+              <td mat-cell *matCellDef="let notification"> {{ notification.date }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="content">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
+              <td mat-cell *matCellDef="let notification"> {{ notification.content }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
+              <td mat-cell *matCellDef="let notification">
+                <button mat-button>
+                  allow
+                </button>
+                <button mat-button>
+                  disallow
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: notificationDisplayedColumns;">
+            </tr>
+          </table>
+
+          <mat-paginator [pageSize]="5"></mat-paginator>
+        </div>
+      </div>
+    </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -78,8 +131,28 @@
               <td mat-cell *matCellDef="let furniture"> {{ furniture.type }} </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="furnitureDisplayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: furnitureDisplayedColumns;">
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
+              <td mat-cell *matCellDef="let furniture" *ngIf="isOwner()">
+                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                </button>
+                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                  <mat-icon svgIcon="delete"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="settings">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Settings</th>
+              <td mat-cell *matCellDef="let furniture">
+                <button mat-button (click)="openDialog('settings', furniture.pk)">
+                  <mat-icon svgIcon="settings"></mat-icon>
+                </button>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="ownedFurnitureDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: ownedFurnitureDisplayedColumns;">
             </tr>
           </table>
 
@@ -98,7 +171,7 @@
       </mat-expansion-panel-header>
       <div>
         <mat-form-field>
-          <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
+          <input matInput (keyup)="applyCurrentFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
 
         <div class="mat-elevation-z8">
@@ -124,6 +197,31 @@
               <td mat-cell *matCellDef="let furniture"> {{ furniture.type }} </td>
             </ng-container>
 
+            <ng-container matColumnDef="owner">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner</th>
+              <td mat-cell *matCellDef="let furniture"> {{ furniture.owner.username }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
+              <td mat-cell *matCellDef="let furniture" *ngIf="isFurnitureOwner(furniture.pk)">
+                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                </button>
+                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                  <mat-icon svgIcon="delete"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="settings">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Settings</th>
+              <td mat-cell *matCellDef="let furniture">
+                <button mat-button (click)="openDialog('settings', furniture.pk)">
+                  <mat-icon svgIcon="settings"></mat-icon>
+                </button>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="furnitureDisplayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: furnitureDisplayedColumns;">
             </tr>
@@ -144,7 +242,7 @@
       </mat-expansion-panel-header>
       <div>
         <mat-form-field>
-          <input matInput (keyup)="applyFurnitureFilter($event.target.value)" placeholder="Filter furniture">
+          <input matInput (keyup)="applyAllowedFurnitureFilter($event.target.value)" placeholder="Filter furniture">
         </mat-form-field>
 
         <div class="mat-elevation-z8">
@@ -170,6 +268,31 @@
               <td mat-cell *matCellDef="let furniture"> {{ furniture.type }} </td>
             </ng-container>
 
+            <ng-container matColumnDef="owner">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner</th>
+              <td mat-cell *matCellDef="let furniture"> {{ furniture.owner.username }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
+              <td mat-cell *matCellDef="let furniture" *ngIf="isFurnitureOwner(furniture.pk)">
+                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+                  <mat-icon svgIcon="edit"></mat-icon>
+                </button>
+                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                  <mat-icon svgIcon="delete"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="settings">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Settings</th>
+              <td mat-cell *matCellDef="let furniture">
+                <button mat-button (click)="openDialog('settings', furniture.pk)">
+                  <mat-icon svgIcon="settings"></mat-icon>
+                </button>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="furnitureDisplayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: furnitureDisplayedColumns;">
             </tr>
@@ -188,11 +311,11 @@
           All {{ data.username }}'s options
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addOptions')" *ngIf="isOwner() && data.height">
+      <button mat-button (click)="openDialog('addOptions')" *ngIf="data.height">
         <mat-icon svgIcon="add"></mat-icon>
         Add options
       </button>
-      <span *ngIf="isOwner() && !data.height">
+      <span *ngIf="!data.height">
         You need to add your height before you can create options
       </span>
       <div *ngIf="optionsDataSource.filteredData.length">
@@ -253,7 +376,7 @@
               <td mat-cell *matCellDef="let options"> {{ options.massage }} </td>
             </ng-container>
 
-            <ng-container matColumnDef="actions" *ngIf="isOwner() && data.height">
+            <ng-container matColumnDef="actions" *ngIf="data.height">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
               <td mat-cell *matCellDef="let options">
                 <button mat-button (click)="openDialog('editOptions', options.pk)">
@@ -261,7 +384,6 @@
                 </button>
                 <button mat-button (click)="deleteObject('options',options.pk)">
                   <mat-icon svgIcon="delete"></mat-icon>
-                  Add options
                 </button>
               </td>
             </ng-container>
