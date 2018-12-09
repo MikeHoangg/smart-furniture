@@ -54,7 +54,7 @@ class MassageAndRigidityTypeSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        depth = 1
+        depth = 2
         model = UserModel
         fields = ['pk', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
                   'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
