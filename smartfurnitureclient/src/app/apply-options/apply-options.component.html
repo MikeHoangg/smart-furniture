@@ -1,3 +1,22 @@
-<p>
-  apply-options works!
-</p>
+<div class="dialog">
+  <h1 mat-dialog-title>{{ data.type }} - {{ data.code }}</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="applyOptionsForm" (ngSubmit)="apply()" id="applyOptionsForm"
+                                                              class="dialog-content" *ngIf="options.length; else noOptions">
+      <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+      <mat-form-field>
+        <small *ngIf="curr_opts"> Yoa re already using {{ curr_opts.name }} for {{ data.type }}
+          - {{ data.code }}</small>
+        <mat-select placeholder="Options" formControlName="options" required>
+          <mat-option *ngFor="let option of options" [value]="option.pk" >{{ option.name }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="error && error.options">{{ error.options }}</mat-error>
+      </mat-form-field>
+    </form>
+    <ng-template #noOptions>You have no options of this type to apply</ng-template>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button color="primary" type="submit" form="applyOptionsForm" *ngIf="options.length">Apply</button>
+    <button mat-flat-button color="warn" *ngIf="options.length && curr_opts" (click)="discard()">Discard</button>
+  </div>
+</div>
