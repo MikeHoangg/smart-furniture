@@ -18,6 +18,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {Module as StripeModule} from "stripe-angular"
+import {CarouselModule} from 'ngx-bootstrap';
 
 import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
@@ -58,6 +59,7 @@ import {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    CarouselModule,
     HttpClientXsrfModule.withOptions({
       cookieName: 'csrftoken',
       headerName: 'X-CSRFTOKEN',
@@ -86,6 +88,7 @@ import {
     EditProfileComponent,
     FurnitureComponent,
     OptionsComponent,
+    ApplyOptionsComponent,
   ],
   entryComponents: [
     LoginComponent,
@@ -94,6 +97,7 @@ import {
     EditProfileComponent,
     FurnitureComponent,
     OptionsComponent,
+    ApplyOptionsComponent,
   ],
   providers: [ApiService,
     {provide: APP_INITIALIZER, useFactory: loadUserProvider, deps: [ApiService], multi: true},
