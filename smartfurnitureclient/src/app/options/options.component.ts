@@ -26,9 +26,9 @@ export class OptionsComponent implements OnInit {
     this.optionsForm = new FormGroup({
       type: new FormControl(this.data ? this.data.type : "chair", [Validators.required]),
       name: new FormControl(this.data ? this.data.name : null, [Validators.required, Validators.maxLength(32)]),
-      height: new FormControl(this.data ? this.data.height : api.currentUser.height * 3 / 7, [Validators.min(0)]),
-      length: new FormControl(this.data ? this.data.length : api.currentUser.height * 2 / 7, [Validators.min(0)]),
-      width: new FormControl(this.data ? this.data.width : api.currentUser.height * 2 / 7, [Validators.min(0)]),
+      height: new FormControl(this.data ? this.data.height : Math.round(api.currentUser.height * 3 / 7), [Validators.min(0)]),
+      length: new FormControl(this.data ? this.data.length : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
+      width: new FormControl(this.data ? this.data.width : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
       incline: new FormControl(this.data ? this.data.incline : 95, [Validators.max(180), Validators.min(0)]),
       temperature: new FormControl(this.data ? this.data.temperature : 36.6),
       massage: new FormControl(this.data ? this.data.massage : 'none'),
@@ -84,34 +84,46 @@ export class OptionsComponent implements OnInit {
     this.is_prime_type = this.prime_types.includes(this.optionsForm.value['type']);
     switch (this.optionsForm.value['type']) {
       case 'sofa':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 3 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 3 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 3 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 3 / 7),
+          length: Math.round(this.api.currentUser.height * 3 / 7),
+          width: Math.round(this.api.currentUser.height * 3 / 7),
+        });
         break;
       case 'bed':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 3 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 10 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 9 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 3 / 7),
+          length: Math.round(this.api.currentUser.height * 10 / 7),
+          width: Math.round(this.api.currentUser.height * 9 / 7),
+        });
         break;
       case 'chair':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 3 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 2 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 2 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 3 / 7),
+          length: Math.round(this.api.currentUser.height * 2 / 7),
+          width: Math.round(this.api.currentUser.height * 2 / 7),
+        });
         break;
       case 'table':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 4 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 4 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 5 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 4 / 7),
+          length: Math.round(this.api.currentUser.height * 4 / 7),
+          width: Math.round(this.api.currentUser.height * 5 / 7),
+        });
         break;
       case 'desk':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 4 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 4 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 5 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 4 / 7),
+          length: Math.round(this.api.currentUser.height * 4 / 7),
+          width: Math.round(this.api.currentUser.height * 5 / 7),
+        });
         break;
       case 'cupboard':
-        this.optionsForm.value['height'] = this.api.currentUser.height * 10 / 7;
-        this.optionsForm.value['length'] = this.api.currentUser.height * 3 / 7;
-        this.optionsForm.value['width'] = this.api.currentUser.height * 4 / 7;
+        this.optionsForm.patchValue({
+          height: Math.round(this.api.currentUser.height * 10 / 7),
+          length: Math.round(this.api.currentUser.height * 3 / 7),
+          width: Math.round(this.api.currentUser.height * 5 / 7),
+        });
         break;
       default:
         break;
