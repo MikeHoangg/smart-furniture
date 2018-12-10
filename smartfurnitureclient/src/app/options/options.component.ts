@@ -83,7 +83,7 @@ export class OptionsComponent implements OnInit {
   }
 
   onTypeChange() {
-    this.is_prime_type = this.prime_types.include(this.optionsForm.value['type']);
+    this.is_prime_type = this.prime_types.includes(this.optionsForm.value['type']);
     switch (this.optionsForm.value['type']) {
       case 'sofa':
         this.optionsForm.value['height'] = this.api.currentUser.height * 3 / 7;

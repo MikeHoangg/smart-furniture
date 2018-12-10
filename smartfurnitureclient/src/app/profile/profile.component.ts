@@ -47,11 +47,11 @@ export interface notification {
 export class ProfileComponent implements OnInit {
   data: any;
   error: any;
-  ownedFurnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type'];
-  furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'owner'];
+  ownedFurnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'actions', 'settings'];
+  furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'owner', 'actions', 'settings'];
   optionsDisplayedColumns: string[] = ['id', 'type', 'name', 'height', 'length',
-    'width', 'incline', 'rigidity', 'temperature', 'massage'];
-  notificationDisplayedColumns: string[] = ['sender', 'date', 'content'];
+    'width', 'incline', 'rigidity', 'temperature', 'massage', 'actions'];
+  notificationDisplayedColumns: string[] = ['sender', 'date', 'content', 'actions'];
   ownedFurnitureDataSource: MatTableDataSource<furniture>;
   optionsDataSource: MatTableDataSource<options>;
   notificationsDataSource: MatTableDataSource<notification>;

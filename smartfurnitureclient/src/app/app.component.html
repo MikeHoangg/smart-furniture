@@ -3,16 +3,16 @@
     <span routerLink="/">PFM</span>
   </div>
   <button *ngIf="!currentUserId" mat-button color="primary" (click)="openDialog('login')" class="nav-item">
-    Login
+    <h5>Login</h5>
   </button>
   <button *ngIf="!currentUserId" mat-button color="primary" (click)="openDialog('register')" class="nav-item">
-    Register
+    <h5>Register</h5>
   </button>
   <button *ngIf="currentUserId" mat-button color="primary" class="nav-item" routerLink="/profile">
-    Profile
+    <h5>Profile</h5>
   </button>
   <button *ngIf="currentUserId" mat-button color="primary" (click)="logout()" class="nav-item" routerLink="/">
-    Logout
+    <h5>Logout</h5>
   </button>
 </mat-toolbar>
 <router-outlet></router-outlet>

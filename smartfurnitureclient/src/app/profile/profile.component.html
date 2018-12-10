@@ -9,15 +9,15 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
-        <div *ngIf="data.first_name">
+        <div>
           <mat-divider></mat-divider>
           <mat-list-item>first name: {{ data.first_name }}</mat-list-item>
         </div>
-        <div *ngIf="data.last_name">
+        <div>
           <mat-divider></mat-divider>
           <mat-list-item>last name: {{ data.last_name }}</mat-list-item>
         </div>
-        <div *ngIf="data.height">
+        <div>
           <mat-divider></mat-divider>
           <mat-list-item>height: {{ data.height }}</mat-list-item>
           <mat-divider></mat-divider>
@@ -131,13 +131,13 @@
               <td mat-cell *matCellDef="let furniture"> {{ furniture.type }} </td>
             </ng-container>
 
-            <ng-container matColumnDef="actions">
+            <ng-container matColumnDef="actions" *ngIf="isOwner()">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
-              <td mat-cell *matCellDef="let furniture" *ngIf="isOwner()">
-                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+              <td mat-cell *matCellDef="let furniture">
+                <button mat-button (click)="openDialog('editFurniture', furniture.id)">
                   <mat-icon svgIcon="edit"></mat-icon>
                 </button>
-                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                <button mat-button (click)="deleteObject('furniture',furniture.id)">
                   <mat-icon svgIcon="delete"></mat-icon>
                 </button>
               </td>
@@ -146,7 +146,7 @@
             <ng-container matColumnDef="settings">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Settings</th>
               <td mat-cell *matCellDef="let furniture">
-                <button mat-button (click)="openDialog('settings', furniture.pk)">
+                <button mat-button (click)="openDialog('settings', furniture.id)">
                   <mat-icon svgIcon="settings"></mat-icon>
                 </button>
             </ng-container>
@@ -204,11 +204,13 @@
 
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
-              <td mat-cell *matCellDef="let furniture" *ngIf="isFurnitureOwner(furniture.pk)">
-                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+              <td mat-cell *matCellDef="let furniture">
+                <button
+                  mat-button (click)="openDialog('editFurniture', furniture.pk)" *ngIf="isFurnitureOwner(furniture.pk)">
                   <mat-icon svgIcon="edit"></mat-icon>
                 </button>
-                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                <button
+                  mat-button (click)="deleteObject('furniture',furniture.pk)" *ngIf="isFurnitureOwner(furniture.pk)">
                   <mat-icon svgIcon="delete"></mat-icon>
                 </button>
               </td>
@@ -275,11 +277,13 @@
 
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions</th>
-              <td mat-cell *matCellDef="let furniture" *ngIf="isFurnitureOwner(furniture.pk)">
-                <button mat-button (click)="openDialog('editFurniture', furniture.pk)">
+              <td mat-cell *matCellDef="let furniture">
+                <button
+                  mat-button (click)="openDialog('editFurniture', furniture.pk)" *ngIf="isFurnitureOwner(furniture.pk)">
                   <mat-icon svgIcon="edit"></mat-icon>
                 </button>
-                <button mat-button (click)="deleteObject('furniture',furniture.pk)">
+                <button
+                  mat-button (click)="deleteObject('furniture',furniture.pk)" *ngIf="isFurnitureOwner(furniture.pk)">
                   <mat-icon svgIcon="delete"></mat-icon>
                 </button>
               </td>

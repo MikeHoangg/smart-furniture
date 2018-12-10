@@ -5,7 +5,7 @@
       <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
       <mat-form-field>
         <mat-select placeholder="Type" formControlName="type" required (selectionChange)="onTypeChange()">
-          <mat-option *ngFor="let type of types" value="type.name">{{ type.verbose_name }}</mat-option>
+          <mat-option *ngFor="let type of types" [value]="type.name">{{ type.verbose_name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="error && error.type">{{ error.type }}</mat-error>
       </mat-form-field>
