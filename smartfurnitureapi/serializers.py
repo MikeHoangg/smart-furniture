@@ -56,7 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 2
         model = UserModel
-        fields = ['pk', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
+        fields = ['id', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
                   'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
         read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser']
 
@@ -64,7 +64,7 @@ class UserSerializer(serializers.ModelSerializer):
 class FurnitureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Furniture
-        fields = ['pk', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
+        fields = ['id', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
                   'current_options']
         read_only_fields = ['current_users', 'allowed_users', 'current_options']
 
@@ -72,21 +72,21 @@ class FurnitureSerializer(serializers.ModelSerializer):
 class OptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Options
-        fields = ['pk', 'type', 'name', 'height', 'length', 'width', 'incline', 'temperature', 'massage', 'rigidity',
+        fields = ['id', 'type', 'name', 'height', 'length', 'width', 'incline', 'temperature', 'massage', 'rigidity',
                   'creator']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['pk', 'content', 'rating', 'date', 'user', 'furniture']
+        fields = ['id', 'content', 'rating', 'date', 'user', 'furniture']
         read_only_fields = ['date']
 
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['pk', 'content', 'date', 'pending', 'receiver', 'sender']
+        fields = ['id', 'content', 'date', 'pending', 'receiver', 'sender']
         read_only_fields = ['date']
 
 
