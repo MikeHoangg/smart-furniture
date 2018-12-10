@@ -47,9 +47,9 @@ export interface notification {
 export class ProfileComponent implements OnInit {
   data: any;
   error: any;
-  ownedFurnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'actions', 'settings'];
-  furnitureDisplayedColumns: string[] = ['id', 'code', 'manufacturer', 'type', 'owner', 'actions', 'settings'];
-  optionsDisplayedColumns: string[] = ['id', 'type', 'name', 'height', 'length',
+  ownedFurnitureDisplayedColumns: string[] = ['code', 'manufacturer', 'type', 'actions', 'settings'];
+  furnitureDisplayedColumns: string[] = ['code', 'manufacturer', 'type', 'owner', 'actions', 'settings'];
+  optionsDisplayedColumns: string[] = ['type', 'name', 'height', 'length',
     'width', 'incline', 'rigidity', 'temperature', 'massage', 'actions'];
   notificationDisplayedColumns: string[] = ['sender', 'date', 'content', 'actions'];
   ownedFurnitureDataSource: MatTableDataSource<furniture>;
@@ -57,6 +57,7 @@ export class ProfileComponent implements OnInit {
   notificationsDataSource: MatTableDataSource<notification>;
   allowedFurnitureDataSource: MatTableDataSource<furniture>;
   currentFurnitureDataSource: MatTableDataSource<furniture>;
+  prime_types: string[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -72,15 +73,19 @@ export class ProfileComponent implements OnInit {
     iconRegistry.addSvgIcon('prime',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-stars-24px.svg'));
     iconRegistry.addSvgIcon('rate',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-24px.svg'));
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-18px.svg'));
     iconRegistry.addSvgIcon('allow',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-check_circle-24px.svg'));
     iconRegistry.addSvgIcon('disallow',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-cancel-24px.svg'));
     iconRegistry.addSvgIcon('settings',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-24px.svg'));
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-20px.svg'));
     iconRegistry.addSvgIcon('delete',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
+    for (let type of this.api.furnitureTypes) {
+      if (type.prime_actions)
+        this.prime_types.push(type.name)
+    }
   }
 
   ngOnInit() {
@@ -92,7 +97,7 @@ export class ProfileComponent implements OnInit {
     if (this.api.currentUser != null && id == null) {
       this.data = this.api.currentUser;
       this.getTables();
-    } else if (this.api.currentUser != null && id == this.api.currentUser.pk) {
+    } else if (this.api.currentUser != null && id == this.api.currentUser.id) {
       this.router.navigateByUrl(`/profile`);
     } else {
       this.api.getObj('users', id).subscribe((response: any) => {
@@ -109,13 +114,13 @@ export class ProfileComponent implements OnInit {
   }
 
   isOwner() {
-    return this.api.currentUser ? this.api.currentUser.pk == this.data.pk : false;
+    return this.api.currentUser ? this.api.currentUser.id == this.data.id : false;
   }
 
   isFurnitureOwner(id) {
     if (this.api.currentUser)
       for (let furniture of this.data.furniture_set)
-        if (furniture.pk === id && furniture.owner.pk === this.api.currentUser.pk)
+        if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
@@ -186,19 +191,24 @@ export class ProfileComponent implements OnInit {
 
   openDialog(name: string, id = null): void {
     let dialogRef;
-    if (name === 'editProfile')
+    if (name === 'editProfile') {
       dialogRef = this.dialog.open(EditProfileComponent);
-    else if (name === 'addOptions')
+      this.closedDialog(dialogRef);
+    } else if (name === 'addOptions') {
       dialogRef = this.dialog.open(OptionsComponent);
-    else if (name === 'addFurniture')
+      this.closedDialog(dialogRef);
+    } else if (name === 'addFurniture') {
       dialogRef = this.dialog.open(FurnitureComponent);
-    else if (name === 'upgradePrime')
+      this.closedDialog(dialogRef);
+    } else if (name === 'upgradePrime') {
       dialogRef = this.dialog.open(StripeComponent);
-    else if (name === 'editFurniture') {
+      this.closedDialog(dialogRef);
+    } else if (name === 'editFurniture') {
       this.api.getObj('furniture', id).subscribe((response: any) => {
         console.log(response);
         if (response) {
           dialogRef = this.dialog.open(FurnitureComponent, {data: response});
+          this.closedDialog(dialogRef);
         }
       });
     } else if (name === 'editOptions') {
@@ -206,6 +216,7 @@ export class ProfileComponent implements OnInit {
         console.log(response);
         if (response) {
           dialogRef = this.dialog.open(OptionsComponent, {data: response});
+          this.closedDialog(dialogRef);
         }
       });
     } else if (name === 'settings') {
@@ -213,9 +224,13 @@ export class ProfileComponent implements OnInit {
         console.log(response);
         if (response) {
           dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
+          this.closedDialog(dialogRef);
         }
       });
     }
+  }
+
+  closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.api.getCurrentUser().subscribe((response: any) => {

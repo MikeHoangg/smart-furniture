@@ -24,6 +24,13 @@ table {
   width: 100%
 }
 
-.profile-card{
+.profile-card {
   height: 350px;
+}
+
+.mat-header-cell {
+  text-align: center;
+}
+.mat-cell{
+  text-align: center;
 }
