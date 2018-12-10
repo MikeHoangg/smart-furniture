@@ -13,9 +13,9 @@ export class OptionsComponent implements OnInit {
   error: any;
   optionsForm: FormGroup;
   types: any;
-  massage_types: any;
-  rigidity_types: any;
-  prime_types: any;
+  massage_types: any[] = [];
+  rigidity_types: any[] = [];
+  prime_types: string[] = [];
   is_prime_type: boolean;
 
   constructor(private dialogRef: MatDialogRef<OptionsComponent>,
@@ -32,19 +32,17 @@ export class OptionsComponent implements OnInit {
       incline: new FormControl(this.data ? this.data.incline : 95, [Validators.max(180), Validators.min(0)]),
       temperature: new FormControl(this.data ? this.data.temperature : 36.6),
       massage: new FormControl(this.data ? this.data.massage : 'none'),
-      rigidity: new FormControl(this.data ? this.data.massage : 'medium'),
-      creator: new FormControl(api.currentUser.pk),
+      rigidity: new FormControl(this.data ? this.data.rigidity : 'medium'),
+      creator: new FormControl(api.currentUser.id),
     });
-    this.title = data ? "Add furniture" : "Edit furniture";
+    this.title = data ? "Edit options" : "Add options";
     this.types = api.furnitureTypes;
-    this.rigidity_types = this.massage_types = [];
     for (let type of api.massageRigidityTypes) {
       if (type.type === 'massage')
         this.massage_types.push(type);
       else
         this.rigidity_types.push(type);
     }
-    this.prime_types = [];
     for (let type of this.types) {
       if (type.prime_actions)
         this.prime_types.push(type.name)
@@ -66,7 +64,7 @@ export class OptionsComponent implements OnInit {
           this.error = this.api.errorLog.pop();
       });
     } else {
-      this.api.editObj('options', this.data.pk, this.optionsForm.value).subscribe((response: any) => {
+      this.api.editObj('options', this.data.id, this.optionsForm.value).subscribe((response: any) => {
         console.log(response);
         if (response) {
           this.error = null;

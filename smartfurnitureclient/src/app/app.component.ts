@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private api: ApiService) {
     if (api.currentUser != null)
-      this.currentUserId = api.currentUser.pk;
+      this.currentUserId = api.currentUser.id;
   }
 
   ngOnInit() {
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
       dialogRef = this.dialog.open(RegisterComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result)
-        this.currentUserId = this.api.currentUser.pk;
+        this.currentUserId = this.api.currentUser.id;
     });
   }
 

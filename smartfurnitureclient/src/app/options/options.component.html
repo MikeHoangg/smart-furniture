@@ -42,14 +42,14 @@
 
        <mat-form-field *ngIf="isPrimeAccount() && is_prime_type">
         <mat-select placeholder="Massage" formControlName="massage">
-          <mat-option *ngFor="let type of massage_types" value="type.name">{{ type.massage }}</mat-option>
+          <mat-option *ngFor="let type of massage_types" [value]="type.name">{{ type.verbose_name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="error && error.massage">{{ error.massage }}</mat-error>
       </mat-form-field>
 
        <mat-form-field *ngIf="isPrimeAccount() && is_prime_type">
         <mat-select placeholder="Rigidity" formControlName="rigidity">
-          <mat-option *ngFor="let type of rigidity_types" value="type.name">{{ type.verbose_name }}</mat-option>
+          <mat-option *ngFor="let type of rigidity_types" [value]="type.name">{{ type.verbose_name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="error && error.rigidity">{{ error.rigidity }}</mat-error>
       </mat-form-field>

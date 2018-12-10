@@ -22,7 +22,7 @@ export class FurnitureComponent implements OnInit {
       manufacturer: new FormControl(data ? data.manufacturer : null),
       type: new FormControl(data ? data.type : "chair"),
       is_public: new FormControl(data ? data.is_public : false),
-      owner: new FormControl(api.currentUser.pk),
+      owner: new FormControl(api.currentUser.di),
     });
     this.title = data ? "Edit furniture" : "Add furniture";
     this.types = api.furnitureTypes
@@ -42,7 +42,7 @@ export class FurnitureComponent implements OnInit {
           this.error = this.api.errorLog.pop();
       });
     } else {
-      this.api.editObj('furniture', this.data.pk, this.furnitureForm.value).subscribe((response: any) => {
+      this.api.editObj('furniture', this.data.di, this.furnitureForm.value).subscribe((response: any) => {
         console.log(response);
         if (response) {
           this.error = null;

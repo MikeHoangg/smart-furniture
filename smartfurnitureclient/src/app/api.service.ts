@@ -95,13 +95,13 @@ export class ApiService {
       .pipe(catchError(this.handleError()));
   }
 
-  getObj(list, pk) {
-    return this.httpClient.get(`${this.apiUrl}/${list}/${pk}/`, this.getHttpOptions())
+  getObj(list, id) {
+    return this.httpClient.get(`${this.apiUrl}/${list}/${id}/`, this.getHttpOptions())
       .pipe(catchError(this.handleError()));
   }
 
-  editObj(list, pk, data) {
-    return this.httpClient.put(`${this.apiUrl}/${list}/${pk}/`, data, this.getHttpOptions())
+  editObj(list, id, data) {
+    return this.httpClient.put(`${this.apiUrl}/${list}/${id}/`, data, this.getHttpOptions())
       .pipe(catchError(this.handleError()));
   }
 

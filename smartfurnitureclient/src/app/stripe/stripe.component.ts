@@ -23,7 +23,7 @@ export class StripeComponent implements OnInit {
     console.log(token);
 
     this.api.createObj('set-prime', {
-      "user": this.api.currentUser.pk,
+      "user": this.api.currentUser.id,
       "stripe_token": token,
       "price": this.price * 100
     }).subscribe((response: any) => {
