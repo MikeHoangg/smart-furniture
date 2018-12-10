@@ -5,10 +5,10 @@
                                                               class="dialog-content" *ngIf="options.length; else noOptions">
       <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
       <mat-form-field>
-        <small *ngIf="curr_opts"> Yoa re already using {{ curr_opts.name }} for {{ data.type }}
+        <small *ngIf="curr_opts"> You are already using {{ curr_opts.name }} for {{ data.type }}
           - {{ data.code }}</small>
         <mat-select placeholder="Options" formControlName="options" required>
-          <mat-option *ngFor="let option of options" [value]="option.pk" >{{ option.name }}</mat-option>
+          <mat-option *ngFor="let option of options" [value]="option.id" >{{ option.name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="error && error.options">{{ error.options }}</mat-error>
       </mat-form-field>

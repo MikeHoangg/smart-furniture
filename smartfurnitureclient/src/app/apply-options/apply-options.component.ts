@@ -20,12 +20,12 @@ export class ApplyOptionsComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.curr_opts = this.getCurrentOptions();
     this.applyOptionsForm = new FormGroup({
-      options: new FormControl(this.curr_opts ? this.curr_opts.pk : null),
-      furniture: new FormControl(data.pk)
+      options: new FormControl(this.curr_opts ? this.curr_opts.id : null),
+      furniture: new FormControl(data.id)
     });
     this.discardOptionsForm = new FormGroup({
-      furniture: new FormControl(data.pk),
-      user: new FormControl(api.currentUser.pk)
+      furniture: new FormControl(data.id),
+      user: new FormControl(api.currentUser.id)
     });
     this.options = this.getOptions();
   }
@@ -35,15 +35,15 @@ export class ApplyOptionsComponent implements OnInit {
 
   getOptions() {
     let res = [];
-    for (let option of this.api.currentUser.options)
+    for (let option of this.api.currentUser.options_set)
       if (this.data.type === option.type)
-        res.push(res);
+        res.push(option);
     return res;
   }
 
   getCurrentOptions() {
-    for (let option of this.api.currentUser.options)
-      if (this.data.current_options.includes(option.pk))
+    for (let option of this.api.currentUser.options_set)
+      if (this.data.current_options.includes(option.id))
         return option;
     return null;
   }
@@ -58,8 +58,9 @@ export class ApplyOptionsComponent implements OnInit {
         this.error = this.api.errorLog.pop();
     });
   }
-  discard():void{
-     this.api.createObj('discard-options', this.discardOptionsForm.value).subscribe((response: any) => {
+
+  discard(): void {
+    this.api.createObj('discard-options', this.discardOptionsForm.value).subscribe((response: any) => {
       console.log(response);
       if (response) {
         this.error = null;
