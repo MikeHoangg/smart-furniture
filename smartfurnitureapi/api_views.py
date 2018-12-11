@@ -9,7 +9,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from smartfurnitureapi import models, serializers, types
-from smartfurnitureapi.models import Furniture
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -123,7 +122,7 @@ class ManufacturerReviewList(generics.ListAPIView):
     serializer_class = serializers.ReviewSerializer
 
     def get(self, request, *args, **kwargs):
-        if not Furniture.objects.filter(manufacturer=self.kwargs.get('manufacturer')).exists():
+        if not models.Furniture.objects.filter(manufacturer=self.kwargs.get('manufacturer')).exists():
             return Response({'detail': _('Not found.')}, status=status.HTTP_404_NOT_FOUND)
         else:
             return super().get(request, *args, **kwargs)
@@ -183,12 +182,16 @@ class DisallowUser(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
         user = models.User.objects.get(id=request.POST.get('user'))
+        notification = models.Notification.objects.get(id=request.POST.get('notification'))
+        notification.pending = False
+        notification.save()
         furniture.allowed_users.remove(user)
         for options in furniture.current_options.all():
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        return Response({'detail': _('User disallowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': _('User %s is disallowed to use %s.' % user.username, furniture)},
+                        status=status.HTTP_202_ACCEPTED)
 
 
 class AllowUser(generics.CreateAPIView):
@@ -198,8 +201,12 @@ class AllowUser(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
         user = models.User.objects.get(id=request.POST.get('user'))
+        notification = models.Notification.objects.get(id=request.POST.get('notification'))
+        notification.pending = False
+        notification.save()
         furniture.allowed_users.add(user)
-        return Response({'detail': _('User allowed to use %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': _('User %s is allowed to use %s.' % user.username, furniture)},
+                        status=status.HTTP_202_ACCEPTED)
 
 
 class SetPrimeAccount(generics.CreateAPIView):

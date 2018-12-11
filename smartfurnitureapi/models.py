@@ -140,6 +140,9 @@ class Notification(models.Model):
                                on_delete=models.CASCADE,
                                related_name='sent_notifications',
                                verbose_name=_("Sender"))
+    furniture = models.ForeignKey('Furniture',
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_("Furniture"))
 
     class Meta:
         verbose_name = _("Notification")
