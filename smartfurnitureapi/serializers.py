@@ -61,19 +61,21 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser']
 
 
-class FurnitureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Furniture
-        fields = ['id', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
-                  'current_options']
-        read_only_fields = ['current_users', 'allowed_users', 'current_options']
-
-
 class OptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Options
         fields = ['id', 'type', 'name', 'height', 'length', 'width', 'incline', 'temperature', 'massage', 'rigidity',
                   'creator']
+
+
+class FurnitureSerializer(serializers.ModelSerializer):
+    current_options = OptionsSerializer(many=True)
+
+    class Meta:
+        model = Furniture
+        fields = ['id', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
+                  'current_options']
+        read_only_fields = ['current_users', 'allowed_users', 'current_options']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
