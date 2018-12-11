@@ -2,6 +2,9 @@
   <div class="brand">
     <span routerLink="/">PFM</span>
   </div>
+  <button mat-button color="primary" routerLink="/furniture">
+    <h5>Furniture</h5>
+  </button>
   <button *ngIf="!currentUserId" mat-button color="primary" (click)="openDialog('login')" class="nav-item">
     <h5>Login</h5>
   </button>

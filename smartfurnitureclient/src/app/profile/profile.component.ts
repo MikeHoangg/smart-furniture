@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatIconRegistry, MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatIconRegistry, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
 import {ApiService} from "../api.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {EditProfileComponent} from "../edit-profile/edit-profile.component";
@@ -35,8 +35,9 @@ export interface notification {
   content: string;
   date: string;
   pending: boolean;
-  receiver: number;
-  sender: number;
+  receiver: any;
+  sender: any;
+  furniture: any;
 }
 
 @Component({
@@ -64,7 +65,7 @@ export class ProfileComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private api: ApiService,
               private route: ActivatedRoute,
-              private router: Router,
+              private router: Router, public snackBar: MatSnackBar,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
@@ -134,7 +135,7 @@ export class ProfileComponent implements OnInit {
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
 
-    this.notificationsDataSource = new MatTableDataSource(this.data.notification_set);
+    this.notificationsDataSource = new MatTableDataSource(this.get_notifications());
     this.notificationsDataSource.paginator = this.paginator;
     this.notificationsDataSource.sort = this.sort;
 
@@ -145,6 +146,46 @@ export class ProfileComponent implements OnInit {
     this.currentFurnitureDataSource = new MatTableDataSource(this.data.current_furniture);
     this.currentFurnitureDataSource.paginator = this.paginator;
     this.currentFurnitureDataSource.sort = this.sort;
+  }
+
+  get_notifications() {
+    let res = [];
+    for (let notification of this.data.notification_set)
+      if (notification.pending)
+        res.push(notification);
+    return res;
+  }
+
+  allow(furniture, user, notification) {
+    this.notificationAction(furniture, user, notification, 'allow');
+  }
+
+  disallow(furniture, user, notification) {
+    this.notificationAction(furniture, user, notification, 'disallow');
+  }
+
+  notificationAction(furniture, user, notification, action) {
+    this.api.createObj(action, {
+      'furniture': furniture,
+      'user': user,
+      'notification': notification
+    }).subscribe((response: any) => {
+      console.log(response);
+      if (response) {
+        this.api.getCurrentUser().subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            this.api.currentUser = response;
+            this.data = this.api.currentUser;
+            this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
+            this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
+          }
+        });
+        this.snackBar.open(response.detail, 'Ok', {
+          duration: 2000,
+        });
+      }
+    });
   }
 
   applyFurnitureFilter(filterValue: string) {
@@ -177,11 +218,12 @@ export class ProfileComponent implements OnInit {
       this.optionsDataSource.paginator.firstPage();
   }
 
+  //TODO
   isNotPrime() {
+    console.log(this.data.prime_expiration_date);
     return true;
   }
 
-  //TODO add/edit options + furniture, stripe dialog
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
       console.log(response);

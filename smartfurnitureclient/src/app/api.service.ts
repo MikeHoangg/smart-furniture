@@ -10,6 +10,7 @@ import {StripeScriptTag} from "stripe-angular";
 export class ApiService {
   apiUrl: string = 'http://127.0.0.1:8000/en/api/v1';
   errorLog: Array<object> = [];
+  statusLog: Array<object> = [];
   currentUser: any;
   massageRigidityTypes: any;
   furnitureTypes: any;
@@ -60,6 +61,7 @@ export class ApiService {
   private handleError<T>(result?: T) {
     return (response: any): Observable<T> => {
       this.errorLog.push(response.error);
+      this.statusLog.push(response.status);
       return of(result as T);
     };
   }

@@ -17,6 +17,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Module as StripeModule} from "stripe-angular"
 import {CarouselModule} from 'ngx-bootstrap';
 
@@ -31,7 +32,6 @@ import {FurnitureComponent} from './furniture/furniture.component';
 import {OptionsComponent} from './options/options.component';
 import {StripeComponent} from './stripe/stripe.component';
 import {ApplyOptionsComponent} from './apply-options/apply-options.component';
-import {AllowDisallowComponent} from './allow-disallow/allow-disallow.component';
 import {ManufacturerComponent} from './manufacturer/manufacturer.component';
 import {
   loadFurnitureTypesProvider,
@@ -52,7 +52,6 @@ import {
     OptionsComponent,
     StripeComponent,
     ApplyOptionsComponent,
-    AllowDisallowComponent,
     ManufacturerComponent
   ],
   imports: [
@@ -80,6 +79,7 @@ import {
     MatExpansionModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatSnackBarModule,
   ],
   exports: [
     LoginComponent,
