@@ -18,19 +18,17 @@
 
 .profile-card {
   margin-right: 2rem;
+  height: 350px;
 }
 
 table {
   width: 100%
 }
 
-.profile-card {
-  height: 350px;
-}
-
 .mat-header-cell {
   text-align: center;
 }
-.mat-cell{
+
+.mat-cell {
   text-align: center;
 }

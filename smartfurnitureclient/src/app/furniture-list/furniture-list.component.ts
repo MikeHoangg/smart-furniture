@@ -10,7 +10,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 export interface furniture {
   id: number;
   code: string;
-  manufacturer: string;
+  brand: string;
   type: string;
   current_options: any[];
   owner: number;
@@ -29,7 +29,7 @@ export interface furniture {
   ],
 })
 export class FurnitureListComponent implements OnInit {
-  furnitureDisplayedColumns: string[] = ['code', 'manufacturer', 'type'];
+  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type'];
   furnitureDataSource: MatTableDataSource<furniture>;
   expandedElement: furniture | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -75,7 +75,7 @@ export class FurnitureListComponent implements OnInit {
   }
 
   isFurnitureOwner(id) {
-    if (this.api.currentUser)
+    if (this.api.currentUser != null)
       for (let furniture of this.api.currentUser.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;

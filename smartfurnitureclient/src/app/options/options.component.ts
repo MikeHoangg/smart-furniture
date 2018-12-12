@@ -54,7 +54,7 @@ export class OptionsComponent implements OnInit {
   }
 
   save(): void {
-    if (this.title === "Add options") {
+    if (this.data == null) {
       this.api.createObj('options', this.optionsForm.value).subscribe((response: any) => {
         console.log(response);
         if (response) {
@@ -75,9 +75,15 @@ export class OptionsComponent implements OnInit {
     }
   }
 
-  // TODO check if account is prime
   isPrimeAccount() {
-    return true;
+    if (this.api.currentUser && this.api.currentUser.prime_expiration_date != null) {
+      let expire_date = new Date(this.data.prime_expiration_date);
+      let today = new Date();
+      today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      if (today <= expire_date)
+        return true;
+    }
+    return false;
   }
 
   onTypeChange() {

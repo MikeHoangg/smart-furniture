@@ -12,7 +12,7 @@ import {ApplyOptionsComponent} from "../apply-options/apply-options.component";
 export interface furniture {
   id: number;
   code: string;
-  manufacturer: string;
+  brand: string;
   type: string;
   owner: any;
 }
@@ -48,8 +48,8 @@ export interface notification {
 export class ProfileComponent implements OnInit {
   data: any;
   error: any;
-  ownedFurnitureDisplayedColumns: string[] = ['code', 'manufacturer', 'type', 'actions', 'settings'];
-  furnitureDisplayedColumns: string[] = ['code', 'manufacturer', 'type', 'owner', 'actions', 'settings'];
+  ownedFurnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'actions', 'settings'];
+  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'owner', 'actions', 'settings'];
   optionsDisplayedColumns: string[] = ['type', 'name', 'height', 'length',
     'width', 'incline', 'rigidity', 'temperature', 'massage', 'actions'];
   notificationDisplayedColumns: string[] = ['sender', 'date', 'content', 'actions'];
@@ -119,8 +119,8 @@ export class ProfileComponent implements OnInit {
   }
 
   isFurnitureOwner(id) {
-    if (this.api.currentUser)
-      for (let furniture of this.data.owned_furniture)
+    if (this.api.currentUser != null)
+      for (let furniture of this.api.currentUser.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
     return false;
@@ -218,9 +218,15 @@ export class ProfileComponent implements OnInit {
       this.optionsDataSource.paginator.firstPage();
   }
 
-  //TODO
-  isNotPrime() {
-    return true;
+  isPrimeAccount() {
+    if (this.data.prime_expiration_date != null) {
+      let expire_date = new Date(this.data.prime_expiration_date);
+      let today = new Date();
+      today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      if (today <= expire_date)
+        return true;
+    }
+    return false;
   }
 
   deleteObject(list, id) {

@@ -33,6 +33,9 @@ tr.element-row:not(.expanded-row):active {
 .element-description {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.element-info {
   display: flex;
   flex-direction: column;
 }

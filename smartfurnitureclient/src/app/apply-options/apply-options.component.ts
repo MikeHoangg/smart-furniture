@@ -44,6 +44,8 @@ export class ApplyOptionsComponent implements OnInit {
   }
 
   getCurrentOptions() {
+    console.log(this.data.current_options);
+    console.log(this.api.currentUser.options_set);
     for (let option of this.api.currentUser.options_set)
       for (let curr_opts of this.data.current_options)
         if (option.id == curr_opts.id)
@@ -81,8 +83,10 @@ export class ApplyOptionsComponent implements OnInit {
         this.error = null;
         this.status = null;
         this.dialogRef.close(true);
-      } else
+      } else {
+        this.status = this.api.statusLog.pop();
         this.error = this.api.errorLog.pop();
+      }
     });
   }
 

@@ -19,7 +19,7 @@ export class FurnitureComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.furnitureForm = new FormGroup({
       code: new FormControl(data ? data.code : null),
-      manufacturer: new FormControl(data ? data.manufacturer : null),
+      brand: new FormControl(data ? data.brand : null),
       type: new FormControl(data ? data.type : "chair"),
       is_public: new FormControl(data ? data.is_public : false),
       owner: new FormControl(api.currentUser.di),
@@ -32,7 +32,7 @@ export class FurnitureComponent implements OnInit {
   }
 
   save(): void {
-    if (this.title === "Add furniture") {
+    if (this.data == null) {
       this.api.createObj('furniture', this.furnitureForm.value).subscribe((response: any) => {
         console.log(response);
         if (response) {
@@ -42,7 +42,7 @@ export class FurnitureComponent implements OnInit {
           this.error = this.api.errorLog.pop();
       });
     } else {
-      this.api.editObj('furniture', this.data.di, this.furnitureForm.value).subscribe((response: any) => {
+      this.api.editObj('furniture', this.data.id, this.furnitureForm.value).subscribe((response: any) => {
         console.log(response);
         if (response) {
           this.error = null;

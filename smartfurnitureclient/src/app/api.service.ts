@@ -60,6 +60,7 @@ export class ApiService {
 
   private handleError<T>(result?: T) {
     return (response: any): Observable<T> => {
+      console.log(response);
       this.errorLog.push(response.error);
       this.statusLog.push(response.status);
       return of(result as T);
