@@ -32,7 +32,7 @@ import {FurnitureComponent} from './furniture/furniture.component';
 import {OptionsComponent} from './options/options.component';
 import {StripeComponent} from './stripe/stripe.component';
 import {ApplyOptionsComponent} from './apply-options/apply-options.component';
-import {ManufacturerComponent} from './manufacturer/manufacturer.component';
+import {BrandComponent} from "./brand/brand.component";
 import {
   loadFurnitureTypesProvider,
   loadMassageRigidityTypesProvider,
@@ -52,7 +52,7 @@ import {
     OptionsComponent,
     StripeComponent,
     ApplyOptionsComponent,
-    ManufacturerComponent
+    BrandComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,15 @@
+.brand-content {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.reviews {
+  height: 80vh;
+  overflow: auto;
+}
+
+.brand-card {
+  margin-left: 2rem;
+  height: 350px;
+}

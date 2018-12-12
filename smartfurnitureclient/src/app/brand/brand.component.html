@@ -1,0 +1,88 @@
+<div class="brand-content" *ngIf="!error">
+  <div class="reviews">
+    <mat-card *ngIf="data;else notAuthorized">
+      <mat-card-header>
+        <div mat-card-avatar *ngIf="data.image"
+          [style.backgroundImage]="'url('+ data.image +')'"></div>
+        <div mat-card-avatar *ngIf="!data.image"
+          [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
+        <mat-card-title>
+          <a routerLink="/user/{{ data.id }}">{{ data.username }}</a>
+        </mat-card-title>
+        <mat-card-subtitle>
+          Leave a review
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="reviewForm" (ngSubmit)="submit()" id="reviewForm" class="form-content">
+          <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+          <mat-form-field>
+            <mat-select placeholder="Furniture" formControlName="furniture" required>
+              <mat-option *ngFor="let furniture of furnitureList" [value]="furniture.id" >{{ furniture.code }}
+                - {{ furniture.type }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="error && error.furniture">{{ error.furniture }}</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Rating</mat-label>
+            <input matInput type="number" formControlName="rating" required>
+            <mat-error *ngIf="error && error.rating">{{ error.rating }}</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Content" formControlName="content"></textarea>
+          </mat-form-field>
+        </form>
+        <button mat-flat-button color="primary" type="submit" form="reviewForm">Submit</button>
+      </mat-card-content>
+    </mat-card>
+    <ng-template #notAuthorized>
+      In order to leave review please authorize.
+    </ng-template>
+    <mat-card *ngFor="let review of reviews">
+      <mat-card-header>
+        <div mat-card-avatar *ngIf="review.user.image"
+          [style.backgroundImage]="'url('+ review.user.image +')'"></div>
+        <div mat-card-avatar *ngIf="!review.user.image"
+          [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
+        <mat-card-title>
+          <a routerLink="/user/{{ review.user.id }}">{{ review.user.username }}</a>
+        </mat-card-title>
+        <mat-card-subtitle>
+          date: {{ getDate(review.date) }} at {{ getTime(review.date) }} rating: {{ review.rating }}★
+          <button mat-button *ngIf="isReviewOwner(review.id)" (click)="deleteObject('reviews',review.id)">
+            <mat-icon svgIcon="delete"></mat-icon>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          {{ review.content }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-card class="brand-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h2><b>{{ title }}</b></h2>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          total users: {{ total_users }}
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <span *ngIf="rating >= 0;else notRated">rating: {{ rating }}</span>
+          <ng-template #notRated>not rated yet</ng-template>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="error" class="profile-content">
+  <h3>{{ error.detail }}</h3>
+</div>
+
+

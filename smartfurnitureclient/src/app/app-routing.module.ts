@@ -10,6 +10,7 @@ const routes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'user/:id', component: ProfileComponent},
   {path: 'furniture', component: FurnitureListComponent},
+  {path: '/brand/:brand', component: FurnitureListComponent},
 ];
 
 @NgModule({
