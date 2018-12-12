@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatIconRegistry, MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatIconRegistry, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
 import {furniture} from "../profile/profile.component";
 import {ApiService} from "../api.service";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -38,6 +38,7 @@ export class FurnitureListComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
+              public snackBar: MatSnackBar,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
@@ -75,31 +76,38 @@ export class FurnitureListComponent implements OnInit {
 
   isFurnitureOwner(id) {
     if (this.api.currentUser)
-      for (let furniture of this.api.currentUser.furniture_set)
+      for (let furniture of this.api.currentUser.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
 
   openDialog(name: string, id = null): void {
-    let dialogRef;
-    if (name === 'editFurniture') {
-      this.api.getObj('furniture', id).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          dialogRef = this.dialog.open(FurnitureComponent, {data: response});
-          this.closedDialog(dialogRef);
-        }
+    if (this.api.currentUser == null)
+      this.snackBar.open('You are not authorized.', 'Ok', {
+        duration: 2000,
       });
-    } else if (name === 'settings') {
-      this.api.getObj('furniture', id).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
-          this.closedDialog(dialogRef);
-        }
-      });
+    else {
+      let dialogRef;
+      if (name === 'editFurniture') {
+        this.api.getObj('furniture', id).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            dialogRef = this.dialog.open(FurnitureComponent, {data: response});
+            this.closedDialog(dialogRef);
+          }
+        });
+      } else if (name === 'settings') {
+        this.api.getObj('furniture', id).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
+            this.closedDialog(dialogRef);
+          }
+        });
+      }
     }
+
   }
 
   closedDialog(dialogRef) {

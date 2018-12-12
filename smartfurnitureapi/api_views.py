@@ -136,9 +136,9 @@ class ApplyOptions(generics.CreateAPIView):
     serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
-        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
-        options = models.Options.objects.get(id=request.POST.get('options'))
-        if options.creator in furniture.current_users:
+        furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
+        options = models.Options.objects.get(id=request.data.get('options'))
+        if options.creator in furniture.current_users.all():
             for options in furniture.current_options.all():
                 if options.creator == options.creator:
                     furniture.current_options.remove(options)
@@ -149,7 +149,7 @@ class ApplyOptions(generics.CreateAPIView):
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
             msg = _('Couldn\'t apply options because user %s is using it.' % (furniture.current_users.first()))
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        elif not furniture.is_public and options.creator not in furniture.allowed_users and options.creator != furniture.owner:
+        elif not furniture.is_public and options.creator not in furniture.allowed_users.all() and options.creator != furniture.owner:
             msg = _('Couldn\'t apply options to %s because you have no access to it.' % furniture)
             stat = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
@@ -165,8 +165,8 @@ class DiscardOptions(generics.CreateAPIView):
     serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
-        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
-        user = models.User.objects.get(id=request.POST.get('user'))
+        furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
+        user = models.User.objects.get(id=request.data.get('user'))
         furniture.current_users.remove(user)
         for options in furniture.current_options.all():
             if options.creator == user:
@@ -180,9 +180,9 @@ class DisallowUser(generics.CreateAPIView):
     serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
-        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
-        user = models.User.objects.get(id=request.POST.get('user'))
-        notification = models.Notification.objects.get(id=request.POST.get('notification'))
+        furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
+        user = models.User.objects.get(id=request.data.get('user'))
+        notification = models.Notification.objects.get(id=request.data.get('notification'))
         notification.pending = False
         notification.save()
         furniture.allowed_users.remove(user)
@@ -199,9 +199,9 @@ class AllowUser(generics.CreateAPIView):
     serializer_class = serializers.FurnitureUserSerializer
 
     def create(self, request, *args, **kwargs):
-        furniture = models.Furniture.objects.get(id=request.POST.get('furniture'))
-        user = models.User.objects.get(id=request.POST.get('user'))
-        notification = models.Notification.objects.get(id=request.POST.get('notification'))
+        furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
+        user = models.User.objects.get(id=request.data.get('user'))
+        notification = models.Notification.objects.get(id=request.data.get('notification'))
         notification.pending = False
         notification.save()
         furniture.allowed_users.add(user)
@@ -231,9 +231,9 @@ class SetPrimeAccount(generics.CreateAPIView):
             return True
 
     def create(self, request, *args, **kwargs):
-        user = models.User.objects.get(id=request.POST.get('user'))
-        stripe_token = request.POST.get('stripe_token')
-        price = request.POST.get('price')
+        user = models.User.objects.get(id=request.data.get('user'))
+        stripe_token = request.data.get('stripe_token')
+        price = request.data.get('price')
         now = timezone.now()
         expiration_date = now + datetime.timedelta(days=calendar.monthrange(now.year, now.month)[1])
         result = self.create_charge(user, stripe_token, price, expiration_date)

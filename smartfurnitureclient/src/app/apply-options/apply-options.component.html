@@ -1,32 +1,36 @@
 <div class="dialog">
-  <h1 mat-dialog-title>{{ data.type }} - {{ data.code }}</h1>
-  <div mat-dialog-content>
-    <form [formGroup]="applyOptionsForm" (ngSubmit)="apply()" id="applyOptionsForm"
-                                                              class="dialog-content" *ngIf="options.length; else noOptions">
-      <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
-      <mat-form-field>
-        <small *ngIf="curr_opts"> You are already using {{ curr_opts.name }} for {{ data.type }}
-          - {{ data.code }}</small>
-        <mat-select placeholder="Options" formControlName="options" required>
-          <mat-option *ngFor="let option of options" [value]="option.id" >{{ option.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="error && error.options">{{ error.options }}</mat-error>
-      </mat-form-field>
-    </form>
-    <ng-template #noOptions>You have no options of this type to apply</ng-template>
-    <div *ngIf="error && error.detail">
-      {{ error.detail }}
-      <div *ngIf="status === 405">
-        <span>Do you want to ask for permission?</span>
-        <button mat-flat-button color="primary" (click)="yes()" *ngIf="options.length">Yes
-        </button>
-        <button mat-flat-button color="primary" (click)="no()" *ngIf="options.length">No
-        </button>
+  <div *ngIf="error && error.not_authorized; else settings">{{ error.not_authorized }}</div>
+  <ng-template #settings>
+    <h1 mat-dialog-title>{{ data.type }} - {{ data.code }}</h1>
+    <div mat-dialog-content>
+      <form [formGroup]="applyOptionsForm" (ngSubmit)="apply()" id="applyOptionsForm"
+                                                                class="dialog-content" *ngIf="options.length; else noOptions">
+        <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+        <mat-form-field>
+          <small *ngIf="curr_opts"> You are already using {{ curr_opts.name }} for {{ data.type }}
+            - {{ data.code }}</small>
+          <mat-select placeholder="Options" formControlName="options" required>
+            <mat-option *ngFor="let option of options" [value]="option.id" >{{ option.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="error && error.options">{{ error.options }}</mat-error>
+        </mat-form-field>
+      </form>
+      <ng-template #noOptions>You have no options of this type to apply</ng-template>
+      <div *ngIf="error && error.detail">
+        {{ error.detail }}
+        <div *ngIf="status === 405">
+          <span>Do you want to ask for permission?</span>
+          <button mat-flat-button color="primary" (click)="yes()" *ngIf="options.length">Yes
+          </button>
+          <button mat-flat-button color="primary" (click)="no()" *ngIf="options.length">No
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-flat-button color="primary" type="submit" form="applyOptionsForm" *ngIf="options.length">Apply</button>
-    <button mat-flat-button color="warn" *ngIf="options.length && curr_opts" (click)="discard()">Discard</button>
-  </div>
+    <div mat-dialog-actions>
+      <button mat-flat-button color="primary" type="submit" form="applyOptionsForm" *ngIf="options.length">Apply
+      </button>
+      <button mat-flat-button color="warn" *ngIf="options.length && curr_opts" (click)="discard()">Discard</button>
+    </div>
+  </ng-template>
 </div>

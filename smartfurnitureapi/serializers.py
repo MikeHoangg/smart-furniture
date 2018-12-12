@@ -57,8 +57,10 @@ class UserSerializer(serializers.ModelSerializer):
         depth = 2
         model = UserModel
         fields = ['id', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
-                  'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser']
-        read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser']
+                  'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser',
+                  'received_notifications', 'sent_notifications']
+        read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser',
+                            'received_notifications', 'sent_notifications']
 
 
 class OptionsSerializer(serializers.ModelSerializer):

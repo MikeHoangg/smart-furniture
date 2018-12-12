@@ -34,7 +34,7 @@
         </div>
       </mat-list>
     </mat-card-content>
-    <mat-card-actions *ngIf="isOwner()" >
+    <mat-card-actions *ngIf="isOwner()">
       <button mat-button (click)="openDialog('editProfile')">
         <mat-icon svgIcon="edit"></mat-icon>
         Edit profile
@@ -46,7 +46,7 @@
     </mat-card-actions>
   </mat-card>
   <mat-accordion class="tables-content">
-    <mat-expansion-panel *ngIf="notificationsDataSource.filteredData.length">
+    <mat-expansion-panel *ngIf="isOwner() && notificationsDataSource.filteredData.length">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Notifications
@@ -159,18 +159,18 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="actions" *ngIf="isOwner()">
+          <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               Actions
             </th>
             <td mat-cell *matCellDef="let furniture">
-              <button mat-button>
+              <button mat-button  *ngIf="isOwner()">
                 <mat-icon svgIcon="rate"></mat-icon>
               </button>
-              <button mat-button (click)="openDialog('editFurniture', furniture.id)">
+              <button mat-button  *ngIf="isOwner()" (click)="openDialog('editFurniture', furniture.id)">
                 <mat-icon svgIcon="edit"></mat-icon>
               </button>
-              <button mat-button (click)="deleteObject('furniture',furniture.id)">
+              <button mat-button  *ngIf="isOwner()" (click)="deleteObject('furniture',furniture.id)">
                 <mat-icon svgIcon="delete"></mat-icon>
               </button>
             </td>
@@ -242,9 +242,7 @@
               Owner
             </th>
             <td mat-cell *matCellDef="let furniture">
-              <a routerLink="/user/{{ furniture.sender.id }}">
                 {{ furniture.owner.username }}
-              </a>
             </td>
           </ng-container>
 
@@ -486,15 +484,15 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="actions" *ngIf="data.height">
+          <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               Actions
             </th>
             <td mat-cell *matCellDef="let options">
-              <button mat-button (click)="openDialog('editOptions', options.id)">
+              <button mat-button *ngIf="data.height" (click)="openDialog('editOptions', options.id)">
                 <mat-icon svgIcon="edit"></mat-icon>
               </button>
-              <button mat-button (click)="deleteObject('options',options.id)">
+              <button mat-button *ngIf="data.height" (click)="deleteObject('options',options.id)">
                 <mat-icon svgIcon="delete"></mat-icon>
               </button>
             </td>

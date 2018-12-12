@@ -45,8 +45,9 @@ export class ApplyOptionsComponent implements OnInit {
 
   getCurrentOptions() {
     for (let option of this.api.currentUser.options_set)
-      if (this.data.current_options.includes(option.id))
-        return option;
+      for (let curr_opts of this.data.current_options)
+        if (option.id == curr_opts.id)
+          return option;
     return null;
   }
 
@@ -73,6 +74,7 @@ export class ApplyOptionsComponent implements OnInit {
   }
 
   apply(): void {
+    console.log(this.applyOptionsForm.value);
     this.api.createObj('apply-options', this.applyOptionsForm.value).subscribe((response: any) => {
       console.log(response);
       if (response) {

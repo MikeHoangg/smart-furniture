@@ -120,24 +120,16 @@ export class ProfileComponent implements OnInit {
 
   isFurnitureOwner(id) {
     if (this.api.currentUser)
-      for (let furniture of this.data.furniture_set)
+      for (let furniture of this.data.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
 
   getTables() {
-    this.optionsDataSource = new MatTableDataSource(this.data.options_set);
-    this.optionsDataSource.paginator = this.paginator;
-    this.optionsDataSource.sort = this.sort;
-
     this.ownedFurnitureDataSource = new MatTableDataSource(this.data.owned_furniture);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
-
-    this.notificationsDataSource = new MatTableDataSource(this.get_notifications());
-    this.notificationsDataSource.paginator = this.paginator;
-    this.notificationsDataSource.sort = this.sort;
 
     this.allowedFurnitureDataSource = new MatTableDataSource(this.data.allowed_furniture);
     this.allowedFurnitureDataSource.paginator = this.paginator;
@@ -146,11 +138,19 @@ export class ProfileComponent implements OnInit {
     this.currentFurnitureDataSource = new MatTableDataSource(this.data.current_furniture);
     this.currentFurnitureDataSource.paginator = this.paginator;
     this.currentFurnitureDataSource.sort = this.sort;
+
+    this.optionsDataSource = new MatTableDataSource(this.data.options_set);
+    this.optionsDataSource.paginator = this.paginator;
+    this.optionsDataSource.sort = this.sort;
+
+    this.notificationsDataSource = new MatTableDataSource(this.get_notifications());
+    this.notificationsDataSource.paginator = this.paginator;
+    this.notificationsDataSource.sort = this.sort;
   }
 
   get_notifications() {
     let res = [];
-    for (let notification of this.data.notification_set)
+    for (let notification of this.data.received_notifications)
       if (notification.pending)
         res.push(notification);
     return res;
@@ -220,7 +220,6 @@ export class ProfileComponent implements OnInit {
 
   //TODO
   isNotPrime() {
-    console.log(this.data.prime_expiration_date);
     return true;
   }
 
@@ -232,56 +231,63 @@ export class ProfileComponent implements OnInit {
 
 
   openDialog(name: string, id = null): void {
-    let dialogRef;
-    if (name === 'editProfile') {
-      dialogRef = this.dialog.open(EditProfileComponent);
-      this.closedDialog(dialogRef);
-    } else if (name === 'addOptions') {
-      dialogRef = this.dialog.open(OptionsComponent);
-      this.closedDialog(dialogRef);
-    } else if (name === 'addFurniture') {
-      dialogRef = this.dialog.open(FurnitureComponent);
-      this.closedDialog(dialogRef);
-    } else if (name === 'upgradePrime') {
-      dialogRef = this.dialog.open(StripeComponent);
-      this.closedDialog(dialogRef);
-    } else if (name === 'editFurniture') {
-      this.api.getObj('furniture', id).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          dialogRef = this.dialog.open(FurnitureComponent, {data: response});
-          this.closedDialog(dialogRef);
-        }
+    if (this.api.currentUser == null)
+      this.snackBar.open('You are not authorized.', 'Ok', {
+        duration: 2000,
       });
-    } else if (name === 'editOptions') {
-      this.api.getObj('options', id).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          dialogRef = this.dialog.open(OptionsComponent, {data: response});
-          this.closedDialog(dialogRef);
-        }
-      });
-    } else if (name === 'settings') {
-      this.api.getObj('furniture', id).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
-          this.closedDialog(dialogRef);
-        }
-      });
+    else {
+      let dialogRef;
+      if (name === 'editProfile') {
+        dialogRef = this.dialog.open(EditProfileComponent);
+        this.closedDialog(dialogRef);
+      } else if (name === 'addOptions') {
+        dialogRef = this.dialog.open(OptionsComponent);
+        this.closedDialog(dialogRef);
+      } else if (name === 'addFurniture') {
+        dialogRef = this.dialog.open(FurnitureComponent);
+        this.closedDialog(dialogRef);
+      } else if (name === 'upgradePrime') {
+        dialogRef = this.dialog.open(StripeComponent);
+        this.closedDialog(dialogRef);
+      } else if (name === 'editFurniture') {
+        this.api.getObj('furniture', id).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            dialogRef = this.dialog.open(FurnitureComponent, {data: response});
+            this.closedDialog(dialogRef);
+          }
+        });
+      } else if (name === 'editOptions') {
+        this.api.getObj('options', id).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            dialogRef = this.dialog.open(OptionsComponent, {data: response});
+            this.closedDialog(dialogRef);
+          }
+        });
+      } else if (name === 'settings') {
+        this.api.getObj('furniture', id).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
+            this.closedDialog(dialogRef);
+          }
+        });
+      }
     }
+
   }
 
   closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if (result) {
         this.api.getCurrentUser().subscribe((response: any) => {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
             this.data = this.api.currentUser;
-            this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
-            this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
+            this.getTables();
           }
         });
       }
