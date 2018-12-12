@@ -58,9 +58,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ['id', 'image', 'username', 'email', 'first_name', 'last_name', 'height', 'owned_furniture',
                   'current_furniture', 'allowed_furniture', 'options_set', 'prime_expiration_date', 'is_superuser',
-                  'received_notifications', 'sent_notifications']
+                  'received_notifications', 'sent_notifications', 'review_set']
         read_only_fields = ['owned_furniture', 'current_furniture', 'options_set', 'allowed_furniture', 'is_superuser',
-                            'received_notifications', 'sent_notifications']
+                            'received_notifications', 'sent_notifications', 'review_set']
 
 
 class OptionsSerializer(serializers.ModelSerializer):
@@ -70,21 +70,37 @@ class OptionsSerializer(serializers.ModelSerializer):
                   'creator']
 
 
-class FurnitureSerializer(serializers.ModelSerializer):
-    current_options = OptionsSerializer(many=True)
-
+class WriteFurnitureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Furniture
-        fields = ['id', 'code', 'manufacturer', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
+        fields = ['id', 'code', 'brand', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
                   'current_options']
         read_only_fields = ['current_users', 'allowed_users', 'current_options']
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class ReadFurnitureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Furniture
+        depth = 1
+        fields = ['id', 'code', 'brand', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
+                  'current_options']
+        read_only_fields = ['id', 'code', 'brand', 'type', 'is_public', 'owner', 'current_users', 'allowed_users',
+                            'current_options']
+
+
+class WriteReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'content', 'rating', 'date', 'user', 'furniture']
         read_only_fields = ['date']
+
+
+class ReadReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        depth = 1
+        fields = ['id', 'content', 'rating', 'date', 'user', 'furniture']
+        read_only_fields = ['id', 'content', 'rating', 'date', 'user', 'furniture']
 
 
 class NotificationSerializer(serializers.ModelSerializer):

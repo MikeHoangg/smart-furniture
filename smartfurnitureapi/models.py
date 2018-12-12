@@ -38,8 +38,8 @@ class Furniture(models.Model):
                                 message=_('Code should have only latin symbols and numbers.')
                             )],
                             verbose_name=_("Code"))
-    manufacturer = models.SlugField(max_length=64,
-                                    verbose_name=_("Manufacturer"))
+    brand = models.SlugField(max_length=64,
+                             verbose_name=_("Brand"))
     type = models.CharField(max_length=32,
                             choices=types.SOLO_FURNITURE_TYPES + types.MULTI_FURNITURE_TYPES,
                             verbose_name=_("Type"))

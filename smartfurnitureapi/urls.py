@@ -14,7 +14,7 @@ urlpatterns = [
     path('options/<int:pk>/', api_views.OptionsDetail.as_view(), name='options-detail'),
     path('reviews/', api_views.LeaveReview.as_view(), name='reviews'),
     path('reviews/<int:pk>/', api_views.ReviewDetail.as_view(), name='reviews-detail'),
-    path('reviews/<slug:manufacturer>/', api_views.ManufacturerReviewList.as_view(), name='manufacturer-reviews'),
+    path('reviews/<slug:brand>/', api_views.BrandReviewList.as_view(), name='brand-reviews'),
     path('notifications/', api_views.NotificationList.as_view(), name='notifications'),
     path('notifications/<int:pk>/', api_views.NotificationDetail.as_view(), name='notifications-detail'),
 

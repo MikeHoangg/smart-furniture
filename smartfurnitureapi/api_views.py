@@ -3,6 +3,7 @@ import datetime
 
 import stripe
 from django.conf import settings
+from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, permissions, status
@@ -69,13 +70,25 @@ class UserDetail(generics.RetrieveAPIView):
 class FurnitureList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = models.Furniture.objects.all()
-    serializer_class = serializers.FurnitureSerializer
+
+    def get_serializer_class(self):
+        method = self.request.method
+        if method in ('POST', 'PUT'):
+            return serializers.WriteFurnitureSerializer
+        else:
+            return serializers.ReadFurnitureSerializer
 
 
 class FurnitureDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = models.Furniture.objects.all()
-    serializer_class = serializers.FurnitureSerializer
+
+    def get_serializer_class(self):
+        method = self.request.method
+        if method in ('POST', 'PUT'):
+            return serializers.WriteFurnitureSerializer
+        else:
+            return serializers.ReadFurnitureSerializer
 
 
 class OptionsList(generics.ListCreateAPIView):
@@ -93,13 +106,21 @@ class OptionsDetail(generics.RetrieveUpdateDestroyAPIView):
 class LeaveReview(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = models.Review.objects.all()
-    serializer_class = serializers.ReviewSerializer
+    serializer_class = serializers.WriteReviewSerializer
+
+    def create(self, request, *args, **kwargs):
+        user = models.User.objects.get(id=request.data.get('user'))
+        furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
+        if models.Review.objects.filter(user=user, furniture=furniture):
+            return Response({'furniture': _('You have already reviewed this piece of furniture')},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+        return super().create(request, *args, **kwargs)
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = models.Review.objects.all()
-    serializer_class = serializers.ReviewSerializer
+    serializer_class = serializers.WriteReviewSerializer
 
     def perform_update(self, serializer):
         serializer.save(date=timezone.now())
@@ -117,18 +138,18 @@ class NotificationDetail(generics.RetrieveDestroyAPIView):
     serializer_class = serializers.NotificationSerializer
 
 
-class ManufacturerReviewList(generics.ListAPIView):
+class BrandReviewList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = serializers.ReviewSerializer
+    serializer_class = serializers.ReadReviewSerializer
 
     def get(self, request, *args, **kwargs):
-        if not models.Furniture.objects.filter(manufacturer=self.kwargs.get('manufacturer')).exists():
-            return Response({'detail': _('Not found.')}, status=status.HTTP_404_NOT_FOUND)
+        if not models.Furniture.objects.filter(brand=self.kwargs.get('brand')).exists():
+            return Http404
         else:
             return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return models.Review.objects.filter(furniture__manufacturer=self.kwargs.get('manufacturer'))
+        return models.Review.objects.filter(furniture__brand=self.kwargs.get('brand'))
 
 
 class ApplyOptions(generics.CreateAPIView):
