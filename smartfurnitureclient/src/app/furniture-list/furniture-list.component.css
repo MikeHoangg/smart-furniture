@@ -1,13 +1,9 @@
-table {
-  width: 100%;
-}
-
 tr.detail-row {
   height: 0;
 }
 
 tr.element-row:not(.expanded-row):hover {
-  background: #f5f5f5;
+  background: #f7f7f7;
 }
 
 tr.element-row:not(.expanded-row):active {
@@ -18,27 +14,43 @@ tr.element-row:not(.expanded-row):active {
   border-bottom-width: 0;
 }
 
+.expanded-cell {
+  background-color: #f7f7f7;
+}
+
 .element-detail {
+  padding: 1rem;
   overflow: hidden;
   display: flex;
 }
 
 .element-actions {
-  min-width: 20vw;
+  min-width: 10vw;
   display: flex;
   flex-direction: column;
 }
 
-.element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
-
 .element-description {
-  padding: 16px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.element-description-attribution {
-  opacity: 0.5;
+.table-content {
+  justify-content: center;
+  margin: 2rem;
+}
+
+.table-content table {
+  border-collapse: inherit;
+  width: 100%;
+}
+
+.element-description-attr {
+  opacity: 0.7;
+}
+
+.collapsed {
+  border-bottom-width: 0;
 }
