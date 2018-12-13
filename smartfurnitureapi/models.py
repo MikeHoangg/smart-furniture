@@ -23,7 +23,7 @@ class User(AbstractUser):
                                              verbose_name=_("Prime account expiration date"))
 
     def __str__(self):
-        return self.email
+        return self.username
 
     class Meta:
         verbose_name = _("User")

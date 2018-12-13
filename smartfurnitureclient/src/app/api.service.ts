@@ -8,20 +8,23 @@ import {StripeScriptTag} from "stripe-angular";
   providedIn: 'root'
 })
 export class ApiService {
-  apiUrl: string = 'http://127.0.0.1:8000/en/api/v1';
   errorLog: Array<object> = [];
   statusLog: Array<object> = [];
   currentUser: any;
   massageRigidityTypes: any;
   furnitureTypes: any;
-
+  currentLang: string;
+  apiUrl: string = `http://127.0.0.1:8000/${this.currentLang}/api/v1`;
 
   loadUser() {
     return new Promise((resolve, reject) => {
+      let lang = document.cookie.match(/lang=(\w+)/);
+      this.currentLang = lang ? lang[1] : 'en';
       if (document.cookie.match(/auth_token=(Token \w+)/)) {
         this.getCurrentUser().subscribe((response: any) => {
           resolve();
           console.log(response);
+
           if (response)
             this.currentUser = response;
         });

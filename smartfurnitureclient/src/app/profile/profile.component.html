@@ -165,7 +165,7 @@
             </th>
             <td mat-cell *matCellDef="let furniture">
               <button mat-button  *ngIf="isOwner()">
-                <mat-icon svgIcon="rate"></mat-icon>
+                <mat-icon svgIcon="rate" routerLink="/brand/{{ furniture.brand }}/?furniture={{ furniture.id }}"></mat-icon>
               </button>
               <button mat-button  *ngIf="isOwner()" (click)="openDialog('editFurniture', furniture.id)">
                 <mat-icon svgIcon="edit"></mat-icon>
@@ -252,7 +252,7 @@
             </th>
             <td mat-cell *matCellDef="let furniture">
               <button mat-button>
-                <mat-icon svgIcon="rate"></mat-icon>
+                <mat-icon svgIcon="rate" routerLink="/brand/{{ furniture.brand }}/?furniture={{ furniture.id }}"></mat-icon>
               </button>
               <button
                 mat-button (click)="openDialog('editFurniture', furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">
@@ -343,7 +343,7 @@
             </th>
             <td mat-cell *matCellDef="let furniture">
               <button mat-button>
-                <mat-icon svgIcon="rate"></mat-icon>
+                <mat-icon svgIcon="rate" routerLink="/brand/{{ furniture.brand }}/?furniture={{ furniture.id }}"></mat-icon>
               </button>
               <button
                 mat-button (click)="openDialog('editFurniture', furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">

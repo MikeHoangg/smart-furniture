@@ -5,10 +5,9 @@ import stripe
 from django.conf import settings
 from django.http import Http404
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-
+from django.utils.translation import get_language
 from smartfurnitureapi import models, serializers, types
 
 
@@ -112,7 +111,11 @@ class LeaveReview(generics.CreateAPIView):
         user = models.User.objects.get(id=request.data.get('user'))
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         if models.Review.objects.filter(user=user, furniture=furniture):
-            return Response({'furniture': _('You have already reviewed this piece of furniture')},
+            if get_language() == 'ua':
+                msg = 'Ви вже залишили рицензію на ці меблі'
+            else:
+                msg = 'You have already reviewed this piece of furniture'
+            return Response({'furniture': msg},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         return super().create(request, *args, **kwargs)
 
@@ -165,18 +168,30 @@ class ApplyOptions(generics.CreateAPIView):
                     furniture.current_options.remove(options)
                     furniture.current_options.add(options)
                     break
-            msg = _('Options applied to %s.' % furniture)
+            if get_language() == 'ua':
+                msg = f'Опції застосовано до меблів {furniture}'
+            else:
+                msg = f'Options applied to furniture {furniture}.'
             stat = status.HTTP_202_ACCEPTED
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
-            msg = _('Couldn\'t apply options because user %s is using it.' % (furniture.current_users.first()))
+            if get_language() == 'ua':
+                msg = f'Опції не застосовано до меблів {furniture}, тому що меблями користується {furniture.current_users.first()} '
+            else:
+                msg = f'Couldn\'t apply options to furniture {furniture} because user {furniture.current_users.first()} is using it.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
         elif not furniture.is_public and options.creator not in furniture.allowed_users.all() and options.creator != furniture.owner:
-            msg = _('Couldn\'t apply options to %s because you have no access to it.' % furniture)
+            if get_language() == 'ua':
+                msg = f'Опції не застосовано до меблів {furniture}, тому що у вас немає доступу.'
+            else:
+                msg = f'Couldn\'t apply options to furniture  {furniture} because you have no access to it.'
             stat = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
             furniture.current_users.add(options.creator)
             furniture.current_options.add(options)
-            msg = _('Options applied to %s.' % furniture)
+            if get_language() == 'ua':
+                msg = f'Опції застосовано до меблів {furniture}.'
+            else:
+                msg = f'Options applied to furniture {furniture}.'
             stat = status.HTTP_202_ACCEPTED
         return Response({'detail': msg}, status=stat)
 
@@ -193,7 +208,11 @@ class DiscardOptions(generics.CreateAPIView):
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        return Response({'detail': _('Options discarded from %s.' % furniture)}, status=status.HTTP_202_ACCEPTED)
+        if get_language() == 'ua':
+            msg = f'Опції зняті з меблів {furniture}.'
+        else:
+            msg = f'Options discarded from furniture {furniture}.'
+        return Response({'detail': msg}, status=status.HTTP_202_ACCEPTED)
 
 
 class DisallowUser(generics.CreateAPIView):
@@ -211,7 +230,11 @@ class DisallowUser(generics.CreateAPIView):
             if options.creator == user:
                 furniture.current_options.remove(options)
                 break
-        return Response({'detail': _('User %s is disallowed to use %s.' % user.username, furniture)},
+        if get_language() == 'ua':
+            msg = f'Користувачу {user} не дозволено користуватися меблями {furniture}.'
+        else:
+            msg = f'User {user} is disallowed to use furniture {furniture}.'
+        return Response({'detail': msg},
                         status=status.HTTP_202_ACCEPTED)
 
 
@@ -226,7 +249,11 @@ class AllowUser(generics.CreateAPIView):
         notification.pending = False
         notification.save()
         furniture.allowed_users.add(user)
-        return Response({'detail': _('User %s is allowed to use %s.' % user.username, furniture)},
+        if get_language() == 'ua':
+            msg = f'Користувачу {user} дозволено користуватися меблями {furniture}.'
+        else:
+            msg = f'User {user} is allowed to use furniture {furniture}.'
+        return Response({'detail': msg},
                         status=status.HTTP_202_ACCEPTED)
 
 
@@ -259,9 +286,15 @@ class SetPrimeAccount(generics.CreateAPIView):
         expiration_date = now + datetime.timedelta(days=calendar.monthrange(now.year, now.month)[1])
         result = self.create_charge(user, stripe_token, price, expiration_date)
         if result:
-            msg = _(f'Successfully upgraded to prime account till {expiration_date}.')
+            if get_language() == 'ua':
+                msg = f'Успішне оновлення до prime облікового запису {expiration_date}.'
+            else:
+                msg = f'Successfully upgraded to prime account till {expiration_date}.'
             stat = status.HTTP_201_CREATED
         else:
-            msg = _(f'Your card was declined.')
+            if get_language() == 'ua':
+                msg = f'Вашу карту відхилено.'
+            else:
+                msg = f'Your card was declined.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
         return Response({'detail': msg}, status=stat)

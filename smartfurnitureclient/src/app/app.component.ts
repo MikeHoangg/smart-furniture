@@ -33,6 +33,11 @@ export class AppComponent implements OnInit {
     });
   }
 
+  setLang(lang) {
+    this.api.currentLang = lang;
+    document.cookie = `lang=${lang};path=/`;
+  }
+
   logout(): void {
     this.api.authorize('logout').subscribe((response: any) => {
       console.log(response);
