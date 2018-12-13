@@ -177,8 +177,7 @@ export class ProfileComponent implements OnInit {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
-            this.data = this.api.currentUser;
-            this.getTables();
+            this.getUser();
           }
         });
         this.snackBar.open(response.detail, 'Ok', {
@@ -232,11 +231,16 @@ export class ProfileComponent implements OnInit {
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
       console.log(response);
-      this.getUser();
+      this.api.getCurrentUser().subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.api.currentUser = response;
+          this.getUser();
+        }
+      });
     });
   }
 
-  //TODO get curr user after every delete/edit/add
   openDialog(name: string, id = null): void {
     if (this.api.currentUser == null)
       this.snackBar.open('You are not authorized.', 'Ok', {
@@ -293,8 +297,7 @@ export class ProfileComponent implements OnInit {
           console.log(response);
           if (response) {
             this.api.currentUser = response;
-            this.data = this.api.currentUser;
-            this.getTables();
+            this.getUser();
           }
         });
       }
