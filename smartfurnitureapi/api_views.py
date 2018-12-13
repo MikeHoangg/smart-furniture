@@ -162,7 +162,13 @@ class ApplyOptions(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         options = models.Options.objects.get(id=request.data.get('options'))
-        if options.creator in furniture.current_users.all():
+        if furniture.current_users.count() >= 5:
+            if get_language() == 'uk':
+                msg = f'Опції не застосовано до меблів {furniture}, тому що меблями ліміт користувачів досягнено.'
+            else:
+                msg = f'Couldn\'t apply options to furniture {furniture} because user limit has been reached.'
+            stat = status.HTTP_406_NOT_ACCEPTABLE
+        elif options.creator in furniture.current_users.all():
             for options in furniture.current_options.all():
                 if options.creator == options.creator:
                     furniture.current_options.remove(options)
@@ -175,7 +181,7 @@ class ApplyOptions(generics.CreateAPIView):
             stat = status.HTTP_202_ACCEPTED
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
             if get_language() == 'uk':
-                msg = f'Опції не застосовано до меблів {furniture}, тому що меблями користується {furniture.current_users.first()} '
+                msg = f'Опції не застосовано до меблів {furniture}, тому що меблями користується {furniture.current_users.first()}.'
             else:
                 msg = f'Couldn\'t apply options to furniture {furniture} because user {furniture.current_users.first()} is using it.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
