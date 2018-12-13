@@ -15,7 +15,7 @@ export class BrandComponent implements OnInit {
   data: any;
   reviews: any;
   title: string;
-  rating: number;
+  rating: any;
   total_users: number;
   reviewForm: FormGroup;
   furnitureList: any[];
