@@ -82,7 +82,7 @@
 
           <ng-container matColumnDef="content">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Type
+              Content
             </th>
             <td mat-cell *matCellDef="let notification">
               {{ notification.content }}
@@ -95,9 +95,11 @@
             </th>
             <td mat-cell *matCellDef="let notification">
               <button mat-button (click)="allow(notification.furniture.id, notification.sender.id, notification.id)">
+                <mat-icon svgIcon="allow"></mat-icon>
                 allow
               </button>
               <button mat-button (click)="disallow(notification.furniture.id, notification.sender.id, notification.id)">
+                <mat-icon svgIcon="disallow"></mat-icon>
                 disallow
               </button>
             </td>
@@ -165,7 +167,8 @@
             </th>
             <td mat-cell *matCellDef="let furniture">
               <button
-                mat-button  *ngIf="isOwner()" routerLink="/brand/{{ furniture.brand }}" [queryParams]="{'furniture':furniture.id}">
+                mat-button  *ngIf="isOwner()"
+                routerLink="/brand/{{ furniture.brand }}" [queryParams]="{'furniture':furniture.id}">
                 <mat-icon svgIcon="rate"></mat-icon>
               </button>
               <button mat-button  *ngIf="isOwner()" (click)="openDialog('editFurniture', furniture.id)">

@@ -20,17 +20,19 @@
         {{ error.detail }}
         <div *ngIf="status === 405">
           <span>Do you want to ask for permission?</span>
-          <button mat-flat-button color="primary" class="control-button"  (click)="yes()" *ngIf="options.length">Yes
+          <button mat-flat-button color="primary" class="control-button" (click)="yes()" *ngIf="options.length">Yes
           </button>
-          <button mat-flat-button color="primary" (click)="no()" *ngIf="options.length">No
+          <button mat-flat-button color="primary" class="control-button" (click)="no()" *ngIf="options.length">No
           </button>
         </div>
       </div>
     </div>
     <div mat-dialog-actions>
-      <button mat-flat-button color="primary" class="control-button" type="submit" form="applyOptionsForm" *ngIf="options.length">Apply
+      <button mat-flat-button color="primary" type="submit" form="applyOptionsForm" *ngIf="options.length">Apply
       </button>
-      <button mat-flat-button color="warn" *ngIf="options.length && curr_opts" (click)="discard()">Discard</button>
+      <button mat-flat-button color="warn"
+              class="control-button" *ngIf="options.length && curr_opts" (click)="discard()">Discard
+      </button>
     </div>
   </ng-template>
 </div>

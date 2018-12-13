@@ -106,7 +106,7 @@ class ReadReviewSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['id', 'content', 'date', 'pending', 'receiver', 'sender']
+        fields = ['id', 'content', 'date', 'pending', 'receiver', 'sender', 'furniture']
         read_only_fields = ['date']
 
 

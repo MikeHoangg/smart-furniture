@@ -121,6 +121,7 @@ export class FurnitureListComponent implements OnInit {
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
       console.log(response);
+      this.getFurniture();
     });
   }
 

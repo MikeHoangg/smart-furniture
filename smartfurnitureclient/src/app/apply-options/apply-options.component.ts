@@ -23,11 +23,11 @@ export class ApplyOptionsComponent implements OnInit {
     this.curr_opts = this.getCurrentOptions();
     this.applyOptionsForm = new FormGroup({
       options: new FormControl(this.curr_opts ? this.curr_opts.id : null, [Validators.required]),
-      furniture: new FormControl(data.id,[Validators.required])
+      furniture: new FormControl(data.id, [Validators.required])
     });
     this.discardOptionsForm = new FormGroup({
-      furniture: new FormControl(data.id,[Validators.required]),
-      user: new FormControl(api.currentUser.id,[Validators.required])
+      furniture: new FormControl(data.id, [Validators.required]),
+      user: new FormControl(api.currentUser.id, [Validators.required])
     });
     this.options = this.getOptions();
   }
@@ -56,9 +56,10 @@ export class ApplyOptionsComponent implements OnInit {
   yes() {
     this.error = null;
     this.status = null;
-    this.api.createObj('', {
+    this.api.createObj('notifications', {
       'sender': this.api.currentUser.id,
-      'receiver': this.data.owner,
+      'receiver': this.data.owner.id,
+      'furniture': this.data.id,
       'content': `User ${this.api.currentUser.username} would like to use ${this.data.type}-${this.data.code}`
     }).subscribe((response: any) => {
         console.log(response);

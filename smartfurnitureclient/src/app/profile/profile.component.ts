@@ -130,7 +130,8 @@ export class ProfileComponent implements OnInit {
     this.ownedFurnitureDataSource = new MatTableDataSource(this.data.owned_furniture);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
-
+    console.log(this.data.owned_furniture);
+    console.log(this.ownedFurnitureDataSource);
     this.allowedFurnitureDataSource = new MatTableDataSource(this.data.allowed_furniture);
     this.allowedFurnitureDataSource.paginator = this.paginator;
     this.allowedFurnitureDataSource.sort = this.sort;
@@ -177,8 +178,7 @@ export class ProfileComponent implements OnInit {
           if (response) {
             this.api.currentUser = response;
             this.data = this.api.currentUser;
-            this.ownedFurnitureDataSource = new MatTableDataSource(this.api.currentUser.owned_furniture);
-            this.optionsDataSource = new MatTableDataSource(this.api.currentUser.options_set);
+            this.getTables();
           }
         });
         this.snackBar.open(response.detail, 'Ok', {
@@ -232,10 +232,11 @@ export class ProfileComponent implements OnInit {
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
       console.log(response);
+      this.getUser();
     });
   }
 
-
+  //TODO get curr user after every delete/edit/add
   openDialog(name: string, id = null): void {
     if (this.api.currentUser == null)
       this.snackBar.open('You are not authorized.', 'Ok', {
