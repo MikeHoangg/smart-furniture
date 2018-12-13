@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
 import {MatSnackBar} from '@angular/material';
@@ -22,12 +22,12 @@ export class ApplyOptionsComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.curr_opts = this.getCurrentOptions();
     this.applyOptionsForm = new FormGroup({
-      options: new FormControl(this.curr_opts ? this.curr_opts.id : null),
-      furniture: new FormControl(data.id)
+      options: new FormControl(this.curr_opts ? this.curr_opts.id : null, [Validators.required]),
+      furniture: new FormControl(data.id,[Validators.required])
     });
     this.discardOptionsForm = new FormGroup({
-      furniture: new FormControl(data.id),
-      user: new FormControl(api.currentUser.id)
+      furniture: new FormControl(data.id,[Validators.required]),
+      user: new FormControl(api.currentUser.id,[Validators.required])
     });
     this.options = this.getOptions();
   }
@@ -76,30 +76,31 @@ export class ApplyOptionsComponent implements OnInit {
   }
 
   apply(): void {
-    console.log(this.applyOptionsForm.value);
-    this.api.createObj('apply-options', this.applyOptionsForm.value).subscribe((response: any) => {
-      console.log(response);
-      if (response) {
-        this.error = null;
-        this.status = null;
-        this.dialogRef.close(true);
-      } else {
-        this.status = this.api.statusLog.pop();
-        this.error = this.api.errorLog.pop();
-      }
-    });
+    if (this.applyOptionsForm.valid)
+      this.api.createObj('apply-options', this.applyOptionsForm.value).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.error = null;
+          this.status = null;
+          this.dialogRef.close(true);
+        } else {
+          this.status = this.api.statusLog.pop();
+          this.error = this.api.errorLog.pop();
+        }
+      });
   }
 
   discard(): void {
-    this.api.createObj('discard-options', this.discardOptionsForm.value).subscribe((response: any) => {
-      console.log(response);
-      if (response) {
-        this.error = null;
-        this.dialogRef.close(true);
-      } else {
-        this.error = this.api.errorLog.pop();
-        this.status = this.api.statusLog.pop();
-      }
-    });
+    if (this.discardOptionsForm.valid)
+      this.api.createObj('discard-options', this.discardOptionsForm.value).subscribe((response: any) => {
+        console.log(response);
+        if (response) {
+          this.error = null;
+          this.dialogRef.close(true);
+        } else {
+          this.error = this.api.errorLog.pop();
+          this.status = this.api.statusLog.pop();
+        }
+      });
   }
 }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
 import {Router} from "@angular/router";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-register',
@@ -11,10 +11,10 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class RegisterComponent implements OnInit {
   registerForm = new FormGroup({
-    username: new FormControl(),
-    email: new FormControl(),
-    password1: new FormControl(),
-    password2: new FormControl(),
+    username: new FormControl(null,[Validators.required]),
+    email: new FormControl(null,[Validators.required]),
+    password1: new FormControl(null,[Validators.required]),
+    password2: new FormControl(null,[Validators.required]),
   });
   error: any;
 

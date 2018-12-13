@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   }
 
   setLang(lang) {
-    this.api.currentLang = lang;
+    this.api.apiUrl = `http://127.0.0.1:8000/${lang}/api/v1`
     document.cookie = `lang=${lang};path=/`;
   }
 

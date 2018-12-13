@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from "../api.service";
 import {MatDialogRef} from "@angular/material";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-edit-profile',
@@ -18,11 +18,11 @@ export class EditProfileComponent implements OnInit {
               private dialogRef: MatDialogRef<EditProfileComponent>) {
     this.data = this.api.currentUser;
     this.editProfileForm = new FormGroup({
-      username: new FormControl(this.data.username),
-      email: new FormControl(this.data.email),
+      username: new FormControl(this.data.username, [Validators.required]),
+      email: new FormControl(this.data.email, [Validators.required]),
       first_name: new FormControl(this.data.first_name),
       last_name: new FormControl(this.data.last_name),
-      height: new FormControl(this.data.height || 0),
+      height: new FormControl(this.data.height || 0, [Validators.required, Validators.min(0)]),
     })
   }
 

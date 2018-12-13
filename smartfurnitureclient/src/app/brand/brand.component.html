@@ -1,10 +1,10 @@
-<div class="brand-content" *ngIf="!error">
+<div class="brand-content" *ngIf="!error || !error.detail">
   <div class="reviews">
     <mat-card *ngIf="data;else notAuthorized">
       <mat-card-header>
-        <div mat-card-avatar *ngIf="data.image"
+        <div mat-card-avatar class="avatar" *ngIf="data.image"
           [style.backgroundImage]="'url('+ data.image +')'"></div>
-        <div mat-card-avatar *ngIf="!data.image"
+        <div mat-card-avatar class="avatar" *ngIf="!data.image"
           [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
         <mat-card-title>
           <a routerLink="/user/{{ data.id }}">{{ data.username }}</a>
@@ -29,7 +29,8 @@
             <mat-error *ngIf="error && error.rating">{{ error.rating }}</mat-error>
           </mat-form-field>
           <mat-form-field>
-            <textarea matInput placeholder="Content" formControlName="content"></textarea>
+            <textarea matInput placeholder="Content" formControlName="content" required></textarea>
+            <mat-error *ngIf="error && error.content">{{ error.rating }}</mat-error>
           </mat-form-field>
         </form>
         <button mat-flat-button color="primary" type="submit" form="reviewForm">Submit</button>
@@ -38,17 +39,19 @@
     <ng-template #notAuthorized>
       In order to leave review please authorize.
     </ng-template>
-    <mat-card *ngFor="let review of reviews">
+    <mat-card *ngFor="let review of reviews" class="review">
       <mat-card-header>
-        <div mat-card-avatar *ngIf="review.user.image"
+        <div mat-card-avatar class="avatar" *ngIf="review.user.image"
           [style.backgroundImage]="'url('+ review.user.image +')'"></div>
-        <div mat-card-avatar *ngIf="!review.user.image"
+        <div mat-card-avatar class="avatar" *ngIf="!review.user.image"
           [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
         <mat-card-title>
           <a routerLink="/user/{{ review.user.id }}">{{ review.user.username }}</a>
         </mat-card-title>
         <mat-card-subtitle>
           date: {{ getDate(review.date) }} at {{ getTime(review.date) }} rating: {{ review.rating }}★
+          about {{ review.furniture.code }}
+          - {{ review.furniture.type }}
           <button mat-button *ngIf="isReviewOwner(review.id)" (click)="deleteObject('reviews',review.id)">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
@@ -69,6 +72,7 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
+        <mat-divider></mat-divider>
         <mat-list-item>
           total users: {{ total_users }}
         </mat-list-item>

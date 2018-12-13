@@ -37,8 +37,8 @@
         <div class="element-detail"
           [@detailExpand]="furniture == expandedElement ? 'expanded' : 'collapsed'">
           <div class="element-actions">
-            <button mat-button>
-              <mat-icon svgIcon="rate" routerLink="/brand/{{ furniture.brand }}/?furniture={{ furniture.id }}" routerLink="/brand/{{ furniture.brand }}/?furniture={{ furniture.id }}"></mat-icon>
+            <button mat-button routerLink="/brand/{{ furniture.brand }}" [queryParams]="{'furniture':furniture.id}">
+              <mat-icon svgIcon="rate"></mat-icon>
               Review
             </button>
             <button

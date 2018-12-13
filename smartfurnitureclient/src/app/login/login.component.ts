@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from "../api.service";
 import {Router} from "@angular/router";
-import {FormGroup, FormControl} from '@angular/forms';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +12,8 @@ import {FormGroup, FormControl} from '@angular/forms';
 export class LoginComponent implements OnInit {
   error: any;
   loginForm = new FormGroup({
-    username: new FormControl(),
-    password: new FormControl(),
+    username: new FormControl(null,[Validators.required]),
+    password: new FormControl(null,[Validators.required]),
   });
 
   constructor(private dialogRef: MatDialogRef<LoginComponent>,

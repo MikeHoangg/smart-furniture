@@ -55,23 +55,25 @@ export class OptionsComponent implements OnInit {
 
   save(): void {
     if (this.data == null) {
-      this.api.createObj('options', this.optionsForm.value).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          this.error = null;
-          this.dialogRef.close(true);
-        } else
-          this.error = this.api.errorLog.pop();
-      });
+      if (this.optionsForm.valid)
+        this.api.createObj('options', this.optionsForm.value).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            this.error = null;
+            this.dialogRef.close(true);
+          } else
+            this.error = this.api.errorLog.pop();
+        });
     } else {
-      this.api.editObj('options', this.data.id, this.optionsForm.value).subscribe((response: any) => {
-        console.log(response);
-        if (response) {
-          this.error = null;
-          this.dialogRef.close(true);
-        } else
-          this.error = this.api.errorLog.pop();
-      });
+      if (this.optionsForm.valid)
+        this.api.editObj('options', this.data.id, this.optionsForm.value).subscribe((response: any) => {
+          console.log(response);
+          if (response) {
+            this.error = null;
+            this.dialogRef.close(true);
+          } else
+            this.error = this.api.errorLog.pop();
+        });
     }
   }
 

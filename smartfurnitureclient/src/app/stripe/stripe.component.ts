@@ -20,14 +20,11 @@ export class StripeComponent implements OnInit {
   }
 
   setStripeToken(token: StripeToken) {
-    console.log(token);
-
     this.api.createObj('set-prime', {
       "user": this.api.currentUser.id,
       "stripe_token": token.id,
       "price": this.price * 100
     }).subscribe((response: any) => {
-      console.log(token);
       if (response) {
         this.dialogRef.close(true);
         this.error = null;
