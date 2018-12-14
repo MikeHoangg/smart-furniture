@@ -6,6 +6,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {FurnitureComponent} from "../furniture/furniture.component";
 import {ApplyOptionsComponent} from "../apply-options/apply-options.component";
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {TranslateService} from "@ngx-translate/core";
 
 export interface furniture {
   id: number;
@@ -38,7 +39,7 @@ export class FurnitureListComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
-              public snackBar: MatSnackBar,
+              public snackBar: MatSnackBar, public translate: TranslateService,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('edit',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
@@ -84,8 +85,10 @@ export class FurnitureListComponent implements OnInit {
 
   openDialog(name: string, id = null): void {
     if (this.api.currentUser == null)
-      this.snackBar.open('You are not authorized.', 'Ok', {
-        duration: 2000,
+      this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
+        this.snackBar.open(res, 'OK', {
+          duration: 2000,
+        });
       });
     else {
       let dialogRef;

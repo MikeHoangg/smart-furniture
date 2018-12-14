@@ -127,7 +127,6 @@ class Review(models.Model):
 
 
 class Notification(models.Model):
-    content = models.TextField(verbose_name=_("Content"))
     date = models.DateTimeField(default=timezone.now,
                                 verbose_name=_("Date"))
     pending = models.BooleanField(default=True,

@@ -3,6 +3,7 @@ import {MatDialog} from "@angular/material";
 import {LoginComponent} from "./login/login.component";
 import {ApiService} from "./api.service";
 import {RegisterComponent} from "./register/register.component";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,12 @@ export class AppComponent implements OnInit {
   currentUserId: number;
 
   constructor(private dialog: MatDialog,
-              private api: ApiService) {
+              private api: ApiService,
+              public translate: TranslateService) {
+    translate.addLangs(['en', 'uk']);
+    translate.setDefaultLang('en');
+    let lang = document.cookie.match(/lang=(\w+)/);
+    translate.use(lang ? lang[1] : 'en');
     if (api.currentUser != null)
       this.currentUserId = api.currentUser.id;
   }
@@ -34,7 +40,8 @@ export class AppComponent implements OnInit {
   }
 
   setLang(lang) {
-    this.api.apiUrl = `http://127.0.0.1:8000/${lang}/api/v1`
+    this.api.apiUrl = `http://127.0.0.1:8000/${lang}/api/v1`;
+    this.translate.use(lang);
     document.cookie = `lang=${lang};path=/`;
   }
 

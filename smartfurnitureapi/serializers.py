@@ -13,7 +13,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 class FurnitureTypeSerializer(serializers.Serializer):
     name = serializers.SerializerMethodField()
-    verbose_name = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     prime_actions = serializers.SerializerMethodField()
 
@@ -26,17 +25,12 @@ class FurnitureTypeSerializer(serializers.Serializer):
         return obj['name']
 
     @staticmethod
-    def get_verbose_name(obj):
-        return obj['verbose_name']
-
-    @staticmethod
     def get_prime_actions(obj):
         return obj['prime_actions']
 
 
 class MassageAndRigidityTypeSerializer(serializers.Serializer):
     name = serializers.SerializerMethodField()
-    verbose_name = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
 
     @staticmethod
@@ -46,10 +40,6 @@ class MassageAndRigidityTypeSerializer(serializers.Serializer):
     @staticmethod
     def get_name(obj):
         return obj['name']
-
-    @staticmethod
-    def get_verbose_name(obj):
-        return obj['verbose_name']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -103,11 +93,19 @@ class ReadReviewSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'content', 'rating', 'date', 'user', 'furniture']
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class WriteNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['id', 'content', 'date', 'pending', 'receiver', 'sender', 'furniture']
+        fields = ['id', 'date', 'pending', 'receiver', 'sender', 'furniture']
         read_only_fields = ['date']
+
+
+class ReadNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        depth = 1
+        fields = ['id', 'date', 'pending', 'receiver', 'sender', 'furniture']
+        read_only_fields = ['id', 'date', 'pending', 'receiver', 'sender', 'furniture']
 
 
 class FurnitureUserSerializer(serializers.Serializer):

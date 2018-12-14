@@ -1,21 +1,35 @@
 <div class="dialog">
-  <h1 mat-dialog-title>Login</h1>
+  <h1 mat-dialog-title>
+    {{ 'APP.LOGIN'|translate }}
+  </h1>
   <div mat-dialog-content>
     <form [formGroup]="loginForm" (ngSubmit)="login()" id="loginForm" class="dialog-content">
-      <mat-error *ngIf="error && error.non_field_errors">{{ error.non_field_errors }}</mat-error>
+      <mat-error *ngIf="error && error.non_field_errors">
+        {{ error.non_field_errors }}
+      </mat-error>
       <mat-form-field>
-        <mat-label>Username</mat-label>
+        <mat-label>
+          {{ 'USER.USERNAME'|translate }}
+        </mat-label>
         <input matInput formControlName="username" required>
-        <mat-error *ngIf="error && error.username">{{ error.username }}</mat-error>
+        <mat-error *ngIf="error && error.username">
+          {{ error.username }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Password</mat-label>
+        <mat-label>
+          {{ 'USER.PASSWORD'|translate }}
+        </mat-label>
         <input matInput type='password' formControlName="password" required>
-        <mat-error *ngIf="error && error.password">{{ error.password }}</mat-error>
+        <mat-error *ngIf="error && error.password">
+          {{ error.password }}
+        </mat-error>
       </mat-form-field>
     </form>
   </div>
   <div mat-dialog-actions>
-    <button mat-flat-button color="primary" type="submit" form="loginForm">Login</button>
+    <button mat-flat-button color="primary" type="submit" form="loginForm">
+      {{ 'APP.LOGIN'|translate }}
+    </button>
   </div>
 </div>

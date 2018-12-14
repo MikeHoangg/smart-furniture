@@ -28,7 +28,7 @@ export class StripeComponent implements OnInit {
       if (response) {
         this.dialogRef.close(true);
         this.error = null;
-        this.snackBar.open('Successfully upgraded to a prime account.', 'Ok', {
+        this.snackBar.open(response.detail, 'OK', {
           duration: 2000,
         });
       } else

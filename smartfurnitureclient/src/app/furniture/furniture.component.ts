@@ -24,7 +24,7 @@ export class FurnitureComponent implements OnInit {
       is_public: new FormControl(data ? data.is_public : false),
       owner: new FormControl(api.currentUser.id,[Validators.required]),
     });
-    this.title = data ? "Edit furniture" : "Add furniture";
+    this.title = data ? "EDIT" : "ADD";
     this.types = api.furnitureTypes
   }
 

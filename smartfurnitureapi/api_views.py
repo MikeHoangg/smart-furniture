@@ -31,7 +31,7 @@ class FurnitureTypeList(generics.ListAPIView):
 
     @staticmethod
     def get_types_info(types_arr, type_name):
-        return [{'name': i[0], 'verbose_name': i[1], 'type': type_name,
+        return [{'name': i[0], 'type': type_name,
                  'prime_actions': i[0] in types.PRIME_FURNITURE_TYPES} for i in
                 types_arr]
 
@@ -47,7 +47,7 @@ class MassageAndRigidityTypeList(generics.ListAPIView):
 
     @staticmethod
     def get_types_info(types_arr, type_name):
-        return [{'name': i[0], 'verbose_name': i[1], 'type': type_name} for i in types_arr]
+        return [{'name': i[0], 'type': type_name} for i in types_arr]
 
     def get_queryset(self):
         self.queryset = self.get_types_info(types.MASSAGE, 'massage') + self.get_types_info(types.RIGIDITY, 'rigidity')
@@ -132,13 +132,14 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class NotificationList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = models.Notification.objects.all()
-    serializer_class = serializers.NotificationSerializer
+    serializer_class = serializers.WriteNotificationSerializer
 
-
-class NotificationDetail(generics.RetrieveDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-    queryset = models.Notification.objects.all()
-    serializer_class = serializers.NotificationSerializer
+    def get_serializer_class(self):
+        method = self.request.method
+        if method in ('POST', 'PUT'):
+            return serializers.WriteNotificationSerializer
+        else:
+            return serializers.ReadNotificationSerializer
 
 
 class BrandReviewList(generics.ListAPIView):
@@ -293,7 +294,7 @@ class SetPrimeAccount(generics.CreateAPIView):
         result = self.create_charge(user, stripe_token, price, expiration_date)
         if result:
             if get_language() == 'uk':
-                msg = f'Успішне оновлення до prime облікового запису {expiration_date}.'
+                msg = f'Успішне оновлення до prime облікового запису до {expiration_date}.'
             else:
                 msg = f'Successfully upgraded to prime account till {expiration_date}.'
             stat = status.HTTP_201_CREATED

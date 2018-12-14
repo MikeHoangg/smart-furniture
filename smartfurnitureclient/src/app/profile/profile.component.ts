@@ -8,6 +8,7 @@ import {FurnitureComponent} from "../furniture/furniture.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {StripeComponent} from "../stripe/stripe.component";
 import {ApplyOptionsComponent} from "../apply-options/apply-options.component";
+import {TranslateService} from "@ngx-translate/core";
 
 export interface furniture {
   id: number;
@@ -15,6 +16,7 @@ export interface furniture {
   brand: string;
   type: string;
   owner: any;
+  is_public: boolean;
 }
 
 export interface options {
@@ -48,8 +50,8 @@ export interface notification {
 export class ProfileComponent implements OnInit {
   data: any;
   error: any;
-  ownedFurnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'actions', 'settings'];
-  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'owner', 'actions', 'settings'];
+  ownedFurnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'actions', 'settings', 'is_public'];
+  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'owner', 'actions', 'settings', 'is_public'];
   optionsDisplayedColumns: string[] = ['type', 'name', 'height', 'length',
     'width', 'incline', 'rigidity', 'temperature', 'massage', 'actions'];
   notificationDisplayedColumns: string[] = ['sender', 'date', 'content', 'actions'];
@@ -64,7 +66,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
-              private route: ActivatedRoute,
+              private route: ActivatedRoute, public translate: TranslateService,
               private router: Router, public snackBar: MatSnackBar,
               iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('edit',
@@ -130,8 +132,7 @@ export class ProfileComponent implements OnInit {
     this.ownedFurnitureDataSource = new MatTableDataSource(this.data.owned_furniture);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
-    console.log(this.data.owned_furniture);
-    console.log(this.ownedFurnitureDataSource);
+
     this.allowedFurnitureDataSource = new MatTableDataSource(this.data.allowed_furniture);
     this.allowedFurnitureDataSource.paginator = this.paginator;
     this.allowedFurnitureDataSource.sort = this.sort;
@@ -152,8 +153,11 @@ export class ProfileComponent implements OnInit {
   get_notifications() {
     let res = [];
     for (let notification of this.data.received_notifications)
-      if (notification.pending)
+      if (notification.pending) {
+        console.log(notification);
         res.push(notification);
+      }
+
     return res;
   }
 
@@ -180,7 +184,7 @@ export class ProfileComponent implements OnInit {
             this.getUser();
           }
         });
-        this.snackBar.open(response.detail, 'Ok', {
+        this.snackBar.open(response.detail, 'OK', {
           duration: 2000,
         });
       }
@@ -243,8 +247,10 @@ export class ProfileComponent implements OnInit {
 
   openDialog(name: string, id = null): void {
     if (this.api.currentUser == null)
-      this.snackBar.open('You are not authorized.', 'Ok', {
-        duration: 2000,
+      this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
+        this.snackBar.open(res, 'OK', {
+          duration: 2000,
+        });
       });
     else {
       let dialogRef;

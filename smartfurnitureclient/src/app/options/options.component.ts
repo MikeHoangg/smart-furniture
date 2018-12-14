@@ -21,7 +21,7 @@ export class OptionsComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<OptionsComponent>,
               private api: ApiService,
               @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.title = data ? "Edit options" : "Add options";
+    this.title = data ? "EDIT" : "ADD";
 
     this.optionsForm = new FormGroup({
       type: new FormControl(this.data ? this.data.type : "chair", [Validators.required]),
@@ -35,7 +35,6 @@ export class OptionsComponent implements OnInit {
       rigidity: new FormControl(this.data ? this.data.rigidity : 'medium'),
       creator: new FormControl(api.currentUser.id),
     });
-    this.title = data ? "Edit options" : "Add options";
     this.types = api.furnitureTypes;
     for (let type of api.massageRigidityTypes) {
       if (type.type === 'massage')

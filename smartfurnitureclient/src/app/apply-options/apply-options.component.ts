@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ApiService} from "../api.service";
 import {MatSnackBar} from '@angular/material';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-apply-options',
@@ -18,8 +19,8 @@ export class ApplyOptionsComponent implements OnInit {
   curr_opts: any;
 
   constructor(private dialogRef: MatDialogRef<ApplyOptionsComponent>,
-              private api: ApiService, public snackBar: MatSnackBar,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
+              private api: ApiService, public snackBar: MatSnackBar, public translate: TranslateService,
+              @Inject(MAT_DIALOG_DATA)  private data: any) {
     this.curr_opts = this.getCurrentOptions();
     this.applyOptionsForm = new FormGroup({
       options: new FormControl(this.curr_opts ? this.curr_opts.id : null, [Validators.required]),
@@ -60,12 +61,13 @@ export class ApplyOptionsComponent implements OnInit {
       'sender': this.api.currentUser.id,
       'receiver': this.data.owner.id,
       'furniture': this.data.id,
-      'content': `User ${this.api.currentUser.username} would like to use ${this.data.type}-${this.data.code}`
     }).subscribe((response: any) => {
         console.log(response);
         if (response)
-          this.snackBar.open('Request has been sent', 'Ok', {
-            duration: 2000,
+          this.translate.get('ACTION.SENT').subscribe((res: string) => {
+            this.snackBar.open(res, 'OK', {
+              duration: 2000,
+            });
           });
       }
     );

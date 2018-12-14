@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
+import {HttpClientModule, HttpClientXsrfModule, HttpClient} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -21,6 +21,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Module as StripeModule} from "stripe-angular"
 import {CarouselModule} from 'ngx-bootstrap';
 
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ApiService} from "./api.service";
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
@@ -38,6 +40,10 @@ import {
   loadMassageRigidityTypesProvider,
   loadUserProvider,
 } from "./api_load";
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient);
+}
 
 @NgModule({
   declarations: [
@@ -62,6 +68,13 @@ import {
     HttpClientXsrfModule.withOptions({
       cookieName: 'csrftoken',
       headerName: 'X-CSRFTOKEN',
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
     }),
     StripeModule,
     ReactiveFormsModule,
