@@ -17,7 +17,9 @@
         {{ 'FURNITURE.BRAND'|translate }}
       </th>
       <td mat-cell *matCellDef="let furniture">
-        {{ furniture.brand }}
+        <a routerLink="/brand/{{ furniture.brand }}">
+          {{ furniture.brand }}
+        </a>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">
@@ -33,56 +35,69 @@
         <div class="element-detail"
           [@detailExpand]="furniture == expandedElement ? 'expanded' : 'collapsed'">
           <div class="element-actions">
-            <button mat-button routerLink="/brand/{{ furniture.brand }}" [queryParams]="{'furniture':furniture.id}">
+            <button mat-flat-button color="primary"
+                    routerLink="/brand/{{ furniture.brand }}" [queryParams]="{'furniture':furniture.id}">
               <mat-icon svgIcon="rate"></mat-icon>
               {{ 'ACTION.REVIEW'|translate }}
             </button>
-            <button
-              mat-button (click)="openDialog('editFurniture', furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">
+            <button mat-flat-button color="primary" class="action-button"
+              (click)="openDialog('editFurniture', furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">
               <mat-icon svgIcon="edit"></mat-icon>
               {{ 'ACTION.EDIT'|translate }}
             </button>
-            <button
-              mat-button (click)="deleteObject('furniture',furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">
+            <button mat-flat-button color="primary" class="action-button"
+              (click)="deleteObject('furniture',furniture.id)" *ngIf="isFurnitureOwner(furniture.id)">
               <mat-icon svgIcon="delete"></mat-icon>
               {{ 'ACTION.DELETE'|translate }}
             </button>
-            <button mat-button (click)="openDialog('settings', furniture.id)">
+            <button mat-flat-button color="primary"
+                    class="action-button" (click)="openDialog('settings', furniture.id)">
               <mat-icon svgIcon="settings"></mat-icon>
               {{ 'APP.OPTIONS'|translate }}
             </button>
           </div>
           <div class="element-description element-info">
-            {{ 'FURNITURE.OWNER'|translate }}: <a
-            routerLink="/user/{{ furniture.owner.id }}">{{ furniture.owner.username }}</a>
+            <span>
+              {{ 'FURNITURE.OWNER'|translate }}: <a
+              routerLink="/user/{{ furniture.owner.id }}">{{ furniture.owner.username }}</a>
+            </span>
             <div *ngIf="furniture.current_options.length;else noOptions" class="element-info">
-              <span class="element-description-attr">
+              <span><b>{{ 'APP.OPTIONS'|translate }}</b>:</span>
+              <span>
                 {{ 'OPTION.HEIGHT'|translate }}: {{ getAvg(furniture.current_options,'height') }}
               </span>
-              <span class="element-description-attr">
+              <span>
                 {{ 'OPTION.LENGTH'|translate }}: {{ getAvg(furniture.current_options,'length') }}
               </span>
-              <span class="element-description-attr">
+              <span>
                 {{ 'OPTION.WIDTH'|translate }}: {{ getAvg(furniture.current_options,'width') }}
               </span>
-              <span class="element-description-attr">
+              <span>
                 {{ 'OPTION.INCLINE'|translate }}: {{ getAvg(furniture.current_options,'incline') }}
               </span>
               <span *ngIf="prime_types.includes(furniture.type)">
                 {{ 'OPTION.TEMPERATURE'|translate }}: {{ getAvg(furniture.current_options,'temperature') }}
               </span>
               <span *ngIf="prime_types.includes(furniture.type)">
-                {{ 'OPTION.MASSAGE'|translate }}: {{ getAvg(furniture.current_options,'massage') }}
+                {{ 'OPTION.MASSAGE'|translate }}: {{ 'PRIME_TYPE.' + getAvg(furniture.current_options,'massage')|translate }}
               </span>
               <span *ngIf="prime_types.includes(furniture.type)">
-                {{ 'OPTION.EIDIGITY'|translate }}: {{ getAvg(furniture.current_options,'rigidity') }}
+                {{ 'OPTION.RIGIDITY'|translate }}: {{ 'PRIME_TYPE.' + getAvg(furniture.current_options,'rigidity')|translate }}
               </span>
             </div>
             <ng-template #noOptions>
-              <span class="element-description-attr">
-                {{ 'ACTION.NO_OPTIONS_APPLIED'|translate }}
+              <span>
+                <b>{{ 'ACTION.NO_OPTIONS_APPLIED'|translate }}</b>
               </span>
             </ng-template>
+          </div>
+          <div class="element-description element-info" *ngIf="furniture.current_users.length">
+            <span>
+              <b>{{ 'FURNITURE.CURRENT_USERS'|translate }}</b>:
+            </span>
+            <span class="element-description-attr" *ngFor="let user of furniture.current_users">
+              <a routerLink="/user/{{ user.id }}">{{ user.username }}</a>
+            </span>
           </div>
         </div>
       </td>

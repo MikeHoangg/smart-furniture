@@ -29,7 +29,7 @@ export class StripeComponent implements OnInit {
         this.dialogRef.close(true);
         this.error = null;
         this.snackBar.open(response.detail, 'OK', {
-          duration: 2000,
+          duration: 5000,
         });
       } else
         this.error = this.api.errorLog.pop()

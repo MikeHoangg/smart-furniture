@@ -7,7 +7,7 @@
 .tables-content {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  min-width: 60vw;
 }
 
 .avatar {
@@ -18,7 +18,13 @@
 
 .profile-card {
   margin-right: 2rem;
-  height: 350px;
+  align-self: flex-start;
+  min-width: 20vw;
+}
+
+.user-card {
+  margin-right: 2rem;
+  align-self: flex-start;
 }
 
 table {

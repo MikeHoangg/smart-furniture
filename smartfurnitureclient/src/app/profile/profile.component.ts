@@ -185,7 +185,7 @@ export class ProfileComponent implements OnInit {
           }
         });
         this.snackBar.open(response.detail, 'OK', {
-          duration: 2000,
+          duration: 5000,
         });
       }
     });
@@ -249,7 +249,7 @@ export class ProfileComponent implements OnInit {
     if (this.api.currentUser == null)
       this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
         this.snackBar.open(res, 'OK', {
-          duration: 2000,
+          duration: 5000,
         });
       });
     else {
@@ -308,5 +308,10 @@ export class ProfileComponent implements OnInit {
         });
       }
     });
+  }
+
+  getPrimeDate() {
+    let date = new Date(this.data.prime_expiration_date);
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
   }
 }

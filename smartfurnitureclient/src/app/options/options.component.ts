@@ -78,7 +78,7 @@ export class OptionsComponent implements OnInit {
 
   isPrimeAccount() {
     if (this.api.currentUser && this.api.currentUser.prime_expiration_date != null) {
-      let expire_date = new Date(this.data.prime_expiration_date);
+      let expire_date = new Date(this.api.currentUser.prime_expiration_date);
       let today = new Date();
       today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       if (today <= expire_date)

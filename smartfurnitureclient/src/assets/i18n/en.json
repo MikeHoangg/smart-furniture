@@ -16,7 +16,9 @@
     "TYPE": "Type",
     "BRAND": "Brand",
     "OWNER": "Owner",
-    "IS_PUBLIC": "Is public"
+    "IS_PUBLIC": "Is public",
+    "CURRENT_USERS": "Current users",
+    "ALLOWED_USERS": "Allowed users"
   },
   "ACTION": {
     "REVIEW": "Review",
@@ -40,6 +42,7 @@
     "UPGRADE": "Upgrade to prime",
     "FILTER": "Filter",
     "PAY": "Pay",
+    "NO_COMMENT": "Please authorize to leave reviews",
     "NEED_HEIGHT": "You need to add your height before you can create options"
   },
   "OPTION": {
@@ -67,7 +70,8 @@
     "ALLOWED_FURNITURE": "Allowed furniture",
     "NOTIFICATIONS": "Notifications",
     "PASSWORD": "Password",
-    "CONFIRM": "Confirm password"
+    "CONFIRM": "Confirm password",
+    "UNTIL": "until"
   },
   "TYPE": {
     "chair": "Chair",

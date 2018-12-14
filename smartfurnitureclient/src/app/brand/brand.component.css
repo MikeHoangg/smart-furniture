@@ -7,14 +7,14 @@
 .reviews {
   height: 80vh;
   overflow: auto;
-  min-width: 30vw;
+  min-width: 40vw;
 }
 .review{
   margin-top: 0.5rem;
 }
 .brand-card {
   margin-left: 2rem;
-  height: 170px;
+  align-self: flex-start;
   min-width: 20vw;
 }
 

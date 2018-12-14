@@ -23,6 +23,7 @@ export class BrandComponent implements OnInit {
   constructor(private api: ApiService,
               private route: ActivatedRoute, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     this.title = this.route.snapshot.paramMap.get('brand');
+    this.data = this.api.currentUser;
     iconRegistry.addSvgIcon('delete',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
   }
@@ -76,8 +77,7 @@ export class BrandComponent implements OnInit {
             }
           this.route.queryParams.subscribe(params => {
             let furniture = parseInt(params['furniture']);
-            if (this.api.currentUser != null) {
-              this.data = this.api.currentUser;
+            if (this.data != null) {
               this.reviewForm = new FormGroup({
                 furniture: new FormControl(furniture && this.isInFurnitureList(furniture) ? furniture : null, [Validators.required]),
                 content: new FormControl(null, [Validators.required]),
@@ -121,7 +121,7 @@ export class BrandComponent implements OnInit {
 
   getDate(datetimeStr) {
     let date = new Date(datetimeStr);
-    return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
   }
 
   getTime(datetimeStr) {

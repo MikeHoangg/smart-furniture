@@ -169,11 +169,11 @@ class ApplyOptions(generics.CreateAPIView):
             else:
                 msg = f'Couldn\'t apply options to furniture {furniture} because user limit has been reached.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        elif options.creator in furniture.current_users.all():
-            for options in furniture.current_options.all():
-                if options.creator == options.creator:
-                    furniture.current_options.remove(options)
-                    furniture.current_options.add(options)
+        elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all*():
+            furniture.current_options.add(options)
+            for opts in furniture.current_options.all():
+                if opts.creator == opts.creator:
+                    furniture.current_options.remove(opts)
                     break
             if get_language() == 'uk':
                 msg = f'Опції застосовано до меблів {furniture}'
@@ -229,10 +229,12 @@ class DisallowUser(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         user = models.User.objects.get(id=request.data.get('user'))
-        notification = models.Notification.objects.get(id=request.data.get('notification'))
-        notification.pending = False
-        notification.save()
+        if request.data.get('notification'):
+            notification = models.Notification.objects.get(id=request.data.get('notification'))
+            notification.pending = False
+            notification.save()
         furniture.allowed_users.remove(user)
+        furniture.current_users.remove(user)
         for options in furniture.current_options.all():
             if options.creator == user:
                 furniture.current_options.remove(options)
@@ -252,9 +254,10 @@ class AllowUser(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         user = models.User.objects.get(id=request.data.get('user'))
-        notification = models.Notification.objects.get(id=request.data.get('notification'))
-        notification.pending = False
-        notification.save()
+        if request.data.get('notification'):
+            notification = models.Notification.objects.get(id=request.data.get('notification'))
+            notification.pending = False
+            notification.save()
         furniture.allowed_users.add(user)
         if get_language() == 'uk':
             msg = f'Користувачу {user} дозволено користуватися меблями {furniture}.'

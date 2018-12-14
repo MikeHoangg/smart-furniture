@@ -1,5 +1,5 @@
 <div class="profile-content" *ngIf="!error && data">
-  <mat-card class="profile-card">
+  <mat-card [ngClass]="isOwner()?'profile-card':'user-card'">
     <mat-card-header>
       <div mat-card-avatar *ngIf="data.image" class="avatar" [style.backgroundImage]="'url('+ data.image +')'"></div>
       <div mat-card-avatar *ngIf="!data.image"
@@ -25,6 +25,12 @@
             {{ 'USER.LAST_NAME'|translate }}: {{ data.last_name }}
           </mat-list-item>
         </div>
+        <div *ngIf="isOwner() && isPrimeAccount()">
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            Prime {{ 'USER.UNTIL'|translate }}: {{ getPrimeDate() }}
+          </mat-list-item>
+        </div>
         <div>
           <mat-divider></mat-divider>
           <mat-list-item>
@@ -32,6 +38,7 @@
           </mat-list-item>
           <mat-divider></mat-divider>
         </div>
+
       </mat-list>
     </mat-card-content>
     <mat-card-actions *ngIf="isOwner()">
@@ -113,7 +120,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ 'APP.FURNITURE'|translate }}
+          {{ 'USER.OWNED_FURNITURE'|translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <button mat-button (click)="openDialog('addFurniture')" *ngIf="isOwner()">
@@ -199,7 +206,7 @@
     <mat-expansion-panel *ngIf="currentFurnitureDataSource.filteredData.length">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ 'APP.FURNITURE'|translate }}
+          {{ 'USER.CURRENT_FURNITURE'|translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div>
@@ -292,13 +299,13 @@
     <mat-expansion-panel *ngIf="allowedFurnitureDataSource.filteredData.length">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ 'APP.FURNITURE'|translate }}
+          {{ 'USER.ALLOWED_FURNITURE'|translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div>
         <mat-form-field>
           <input matInput (keyup)="applyAllowedFurnitureFilter($event.target.value)"
-                 placeholder="{{ 'APP.FILTER'|translate }} {{ 'APP.FURNITURE'|translate }}">
+                 placeholder="{{ 'ACTION.FILTER'|translate }} {{ 'APP.FURNITURE'|translate }}">
         </mat-form-field>
         <table mat-table [dataSource]="allowedFurnitureDataSource" matSort>
           <ng-container matColumnDef="code">

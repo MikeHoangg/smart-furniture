@@ -31,8 +31,9 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .element-description {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  opacity: 0.7;
+  min-width: 30vw;
+  margin-left: 2rem;
 }
 
 .element-info {
@@ -50,10 +51,12 @@ tr.element-row:not(.expanded-row):active {
   width: 100%;
 }
 
-.element-description-attr {
-  opacity: 0.7;
-}
-
 .collapsed {
   border-bottom-width: 0;
+}
+tr.element-row:hover{
+  cursor: pointer;
+}
+.action-button{
+  margin-top: 0.7rem;
 }

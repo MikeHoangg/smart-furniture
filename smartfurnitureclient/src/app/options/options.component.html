@@ -50,6 +50,15 @@
           {{ error.width }}
         </mat-error>
       </mat-form-field>
+       <mat-form-field>
+        <mat-label>
+          {{ 'OPTION.INCLINE'|translate }}
+        </mat-label>
+        <input matInput type="number" formControlName="incline">
+        <mat-error *ngIf="error && error.incline">
+          {{ error.incline }}
+        </mat-error>
+      </mat-form-field>
       <mat-form-field *ngIf="isPrimeAccount() && is_prime_type">
         <mat-label>
           {{ 'OPTION.WIDTH'|translate }}

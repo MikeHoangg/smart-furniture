@@ -87,7 +87,7 @@ export class FurnitureListComponent implements OnInit {
     if (this.api.currentUser == null)
       this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
         this.snackBar.open(res, 'OK', {
-          duration: 2000,
+          duration: 5000,
         });
       });
     else {

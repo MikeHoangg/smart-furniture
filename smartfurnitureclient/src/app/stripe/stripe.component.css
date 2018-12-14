@@ -1,1 +1,5 @@
 @import "../login/login.component.css";
+
+.dialog-content {
+  padding-bottom: 1rem;
+}

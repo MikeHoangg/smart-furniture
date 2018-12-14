@@ -43,7 +43,7 @@
       </mat-card-content>
     </mat-card>
     <ng-template #notAuthorized>
-      {{ 'ACTION.NOT_AUTHORIZED'|translate }}
+      {{ 'ACTION.NO_COMMENT'|translate }}
     </ng-template>
     <mat-card *ngFor="let review of reviews" class="review">
       <mat-card-header>
@@ -55,15 +55,20 @@
           <a routerLink="/user/{{ review.user.id }}">{{ review.user.username }}</a>
         </mat-card-title>
         <mat-card-subtitle>
-          {{ 'REVIEW.DATE'|translate }}: {{ getDate(review.date) }} {{ 'REVIEW.AT'|translate }} {{ getTime(review.date) }}
-          {{ 'REVIEW.RATING'|translate }}: {{ review.rating }}★
-          {{ 'APP.FURNITURE'|translate }}: {{ 'TYPE.' + review.furniture.type|translate }} - {{ review.furniture.code }}
+          {{ 'REVIEW.DATE'|translate }}: {{ getDate(review.date) }} {{ 'REVIEW.AT'|translate }}
+          {{ getTime(review.date) }}
           <button mat-button *ngIf="isReviewOwner(review.id)" (click)="deleteObject('reviews',review.id)">
             <mat-icon svgIcon="delete"></mat-icon>
           </button>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
+        <p>
+          {{ 'APP.FURNITURE'|translate }}: {{ 'TYPE.' + review.furniture.type|translate }} - {{ review.furniture.code }}
+        </p>
+        <p>
+          {{ 'REVIEW.RATING'|translate }}: {{ review.rating }}★
+        </p>
         <p>
           {{ review.content }}
         </p>
@@ -78,15 +83,20 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-          {{ 'REVIEW.TOTAL_USERS'|translate }}: {{ total_users }}
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-          <span *ngIf="rating >= 0;else notRated">{{ 'REVIEW.RATING'|translate }}: {{ rating }}</span>
-          <ng-template #notRated>{{ 'REVIEW.NOT_RATED'|translate }}</ng-template>
-        </mat-list-item>
+        <div>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            {{ 'REVIEW.TOTAL_USERS'|translate }}: {{ total_users }}
+          </mat-list-item>
+        </div>
+        <div>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <span *ngIf="rating >= 0;else notRated">{{ 'REVIEW.RATING'|translate }}: {{ rating }}</span>
+            <ng-template #notRated>{{ 'REVIEW.NOT_RATED'|translate }}</ng-template>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
       </mat-list>
     </mat-card-content>
   </mat-card>
