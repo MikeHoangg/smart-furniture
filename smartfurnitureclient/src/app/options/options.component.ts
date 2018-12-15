@@ -53,10 +53,9 @@ export class OptionsComponent implements OnInit {
   }
 
   save(): void {
-    if (this.data == null) {
+    if (!this.data) {
       if (this.optionsForm.valid)
         this.api.createObj('options', this.optionsForm.value).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.error = null;
             this.dialogRef.close(true);
@@ -66,7 +65,6 @@ export class OptionsComponent implements OnInit {
     } else {
       if (this.optionsForm.valid)
         this.api.editObj('options', this.data.id, this.optionsForm.value).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.error = null;
             this.dialogRef.close(true);
@@ -77,7 +75,7 @@ export class OptionsComponent implements OnInit {
   }
 
   isPrimeAccount() {
-    if (this.api.currentUser && this.api.currentUser.prime_expiration_date != null) {
+    if (this.api.currentUser && this.api.currentUser.prime_expiration_date) {
       let expire_date = new Date(this.api.currentUser.prime_expiration_date);
       let today = new Date();
       today = new Date(today.getFullYear(), today.getMonth(), today.getDate());

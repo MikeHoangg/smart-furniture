@@ -26,12 +26,10 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     this.api.authorize('login', this.loginForm.value).subscribe((response: any) => {
-      console.log(response);
       if (response) {
         this.error = null;
         document.cookie = `auth_token=Token ${response.key};path=/`;
         this.api.getCurrentUser().subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.api.currentUser = response;
             this.dialogRef.close(true);

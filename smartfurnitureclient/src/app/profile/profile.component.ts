@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatIconRegistry, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
+import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
 import {ApiService} from "../api.service";
-import {DomSanitizer} from "@angular/platform-browser";
 import {EditProfileComponent} from "../edit-profile/edit-profile.component";
 import {OptionsComponent} from "../options/options.component";
 import {FurnitureComponent} from "../furniture/furniture.component";
@@ -67,24 +66,7 @@ export class ProfileComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private api: ApiService,
               private route: ActivatedRoute, public translate: TranslateService,
-              private router: Router, public snackBar: MatSnackBar,
-              iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('edit',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
-    iconRegistry.addSvgIcon('add',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-add-24px.svg'));
-    iconRegistry.addSvgIcon('prime',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-stars-24px.svg'));
-    iconRegistry.addSvgIcon('rate',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-18px.svg'));
-    iconRegistry.addSvgIcon('allow',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-check_circle-24px.svg'));
-    iconRegistry.addSvgIcon('disallow',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-cancel-24px.svg'));
-    iconRegistry.addSvgIcon('settings',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-20px.svg'));
-    iconRegistry.addSvgIcon('delete',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
+              private router: Router, public snackBar: MatSnackBar) {
     for (let type of this.api.furnitureTypes) {
       if (type.prime_actions)
         this.prime_types.push(type.name)
@@ -97,14 +79,13 @@ export class ProfileComponent implements OnInit {
 
   getUser() {
     let id = this.route.snapshot.paramMap.get('id');
-    if (this.api.currentUser != null && id == null) {
+    if (this.api.currentUser && !id) {
       this.data = this.api.currentUser;
       this.getTables();
-    } else if (this.api.currentUser != null && id == this.api.currentUser.id) {
+    } else if (this.api.currentUser && id == this.api.currentUser.id) {
       this.router.navigateByUrl(`/profile`);
     } else {
       this.api.getObj('users', id).subscribe((response: any) => {
-        console.log(response);
         if (response) {
           this.error = null;
           this.data = response;
@@ -121,7 +102,7 @@ export class ProfileComponent implements OnInit {
   }
 
   isFurnitureOwner(id) {
-    if (this.api.currentUser != null)
+    if (this.api.currentUser)
       for (let furniture of this.api.currentUser.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
@@ -154,7 +135,6 @@ export class ProfileComponent implements OnInit {
     let res = [];
     for (let notification of this.data.received_notifications)
       if (notification.pending) {
-        console.log(notification);
         res.push(notification);
       }
 
@@ -175,10 +155,8 @@ export class ProfileComponent implements OnInit {
       'user': user,
       'notification': notification
     }).subscribe((response: any) => {
-      console.log(response);
       if (response) {
         this.api.getCurrentUser().subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.api.currentUser = response;
             this.getUser();
@@ -222,7 +200,7 @@ export class ProfileComponent implements OnInit {
   }
 
   isPrimeAccount() {
-    if (this.data.prime_expiration_date != null) {
+    if (this.data.prime_expiration_date) {
       let expire_date = new Date(this.data.prime_expiration_date);
       let today = new Date();
       today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -234,9 +212,7 @@ export class ProfileComponent implements OnInit {
 
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
-      console.log(response);
       this.api.getCurrentUser().subscribe((response: any) => {
-        console.log(response);
         if (response) {
           this.api.currentUser = response;
           this.getUser();
@@ -246,7 +222,7 @@ export class ProfileComponent implements OnInit {
   }
 
   openDialog(name: string, id = null): void {
-    if (this.api.currentUser == null)
+    if (!this.api.currentUser)
       this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
         this.snackBar.open(res, 'OK', {
           duration: 5000,
@@ -268,7 +244,6 @@ export class ProfileComponent implements OnInit {
         this.closedDialog(dialogRef);
       } else if (name === 'editFurniture') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             dialogRef = this.dialog.open(FurnitureComponent, {data: response});
             this.closedDialog(dialogRef);
@@ -276,7 +251,6 @@ export class ProfileComponent implements OnInit {
         });
       } else if (name === 'editOptions') {
         this.api.getObj('options', id).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             dialogRef = this.dialog.open(OptionsComponent, {data: response});
             this.closedDialog(dialogRef);
@@ -284,7 +258,6 @@ export class ProfileComponent implements OnInit {
         });
       } else if (name === 'settings') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
             this.closedDialog(dialogRef);
@@ -297,10 +270,8 @@ export class ProfileComponent implements OnInit {
 
   closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.api.getCurrentUser().subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.api.currentUser = response;
             this.getUser();

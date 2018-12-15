@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, of} from "rxjs";
 import {StripeScriptTag} from "stripe-angular";
+import {MatIconRegistry} from "@angular/material";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +24,6 @@ export class ApiService {
       if (document.cookie.match(/auth_token=(Token \w+)/)) {
         this.getCurrentUser().subscribe((response: any) => {
           resolve();
-          console.log(response);
-
           if (response)
             this.currentUser = response;
         });
@@ -35,7 +35,6 @@ export class ApiService {
   loadFurnitureTypes() {
     return new Promise((resolve, reject) => {
       this.getList('furniture-types').subscribe((response: any) => {
-        console.log(response);
         resolve();
         if (response)
           this.furnitureTypes = response;
@@ -46,7 +45,6 @@ export class ApiService {
   loadMassageRigidityTypes() {
     return new Promise((resolve, reject) => {
       this.getList('massage-rigidity-types').subscribe((response: any) => {
-        console.log(response);
         resolve();
         if (response)
           this.massageRigidityTypes = response;
@@ -55,14 +53,31 @@ export class ApiService {
   }
 
   constructor(private httpClient: HttpClient,
-              public stripeTag: StripeScriptTag) {
+              public stripeTag: StripeScriptTag,
+              iconRegistry: MatIconRegistry,
+              sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('edit',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
+    iconRegistry.addSvgIcon('add',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-add-24px.svg'));
+    iconRegistry.addSvgIcon('prime',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-stars-24px.svg'));
+    iconRegistry.addSvgIcon('rate',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-18px.svg'));
+    iconRegistry.addSvgIcon('allow',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-check_circle-24px.svg'));
+    iconRegistry.addSvgIcon('disallow',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-cancel-24px.svg'));
+    iconRegistry.addSvgIcon('settings',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-20px.svg'));
+    iconRegistry.addSvgIcon('delete',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
     this.stripeTag.setPublishableKey("pk_test_0iZ2ciCzQWinzLyvzEzkuWiE")
   }
 
 
   private handleError<T>(result?: T) {
     return (response: any): Observable<T> => {
-      console.log(response);
       this.errorLog.push(response.error);
       this.statusLog.push(response.status);
       return of(result as T);

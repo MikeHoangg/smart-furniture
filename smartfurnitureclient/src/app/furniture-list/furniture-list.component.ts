@@ -15,6 +15,7 @@ export interface furniture {
   type: string;
   current_options: any[];
   owner: number;
+  is_public: boolean;
 }
 
 @Component({
@@ -30,7 +31,7 @@ export interface furniture {
   ],
 })
 export class FurnitureListComponent implements OnInit {
-  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type'];
+  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type','is_public'];
   furnitureDataSource: MatTableDataSource<furniture>;
   expandedElement: furniture | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -76,7 +77,7 @@ export class FurnitureListComponent implements OnInit {
   }
 
   isFurnitureOwner(id) {
-    if (this.api.currentUser != null)
+    if (this.api.currentUser)
       for (let furniture of this.api.currentUser.owned_furniture)
         if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
           return true;
@@ -84,7 +85,7 @@ export class FurnitureListComponent implements OnInit {
   }
 
   openDialog(name: string, id = null): void {
-    if (this.api.currentUser == null)
+    if (!this.api.currentUser)
       this.translate.get('ACTION.NOT_AUTHORIZED').subscribe((res: string) => {
         this.snackBar.open(res, 'OK', {
           duration: 5000,
@@ -94,7 +95,6 @@ export class FurnitureListComponent implements OnInit {
       let dialogRef;
       if (name === 'editFurniture') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             dialogRef = this.dialog.open(FurnitureComponent, {data: response});
             this.closedDialog(dialogRef);
@@ -102,7 +102,6 @@ export class FurnitureListComponent implements OnInit {
         });
       } else if (name === 'settings') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
             this.closedDialog(dialogRef);
@@ -123,7 +122,6 @@ export class FurnitureListComponent implements OnInit {
 
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
-      console.log(response);
       this.getFurniture();
     });
   }

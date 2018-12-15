@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     translate.setDefaultLang('en');
     let lang = document.cookie.match(/lang=(\w+)/);
     translate.use(lang ? lang[1] : 'en');
-    if (api.currentUser != null)
+    if (api.currentUser)
       this.currentUserId = api.currentUser.id;
   }
 
@@ -47,7 +47,6 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.api.authorize('logout').subscribe((response: any) => {
-      console.log(response);
       if (response) {
         document.cookie = "auth_token=;path=/";
         this.api.currentUser = null;

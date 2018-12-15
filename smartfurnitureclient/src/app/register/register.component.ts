@@ -28,12 +28,10 @@ export class RegisterComponent implements OnInit {
 
   register(): void {
     this.api.authorize('register', this.registerForm.value).subscribe((response: any) => {
-      console.log(response);
       if (response) {
         document.cookie = `auth_token=Token ${response.key};path=/`;
         this.error = null;
         this.api.getCurrentUser().subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.api.currentUser = response;
             this.dialogRef.close(true);

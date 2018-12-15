@@ -32,10 +32,9 @@ export class FurnitureComponent implements OnInit {
   }
 
   save(): void {
-    if (this.data == null) {
+    if (!this.data) {
       if (this.furnitureForm.valid)
         this.api.createObj('furniture', this.furnitureForm.value).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.error = null;
             this.dialogRef.close(true);
@@ -45,7 +44,6 @@ export class FurnitureComponent implements OnInit {
     } else {
       if (this.furnitureForm.valid)
         this.api.editObj('furniture', this.data.id, this.furnitureForm.value).subscribe((response: any) => {
-          console.log(response);
           if (response) {
             this.error = null;
             this.dialogRef.close(true);

@@ -37,7 +37,6 @@ export class StripeComponent implements OnInit {
   }
 
   onStripeError(error: Error) {
-    this.error = Error;
-    console.log(error)
+    this.error = error;
   }
 }

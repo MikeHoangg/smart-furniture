@@ -23,7 +23,15 @@ export class BrandComponent implements OnInit {
   constructor(private api: ApiService,
               private route: ActivatedRoute, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     this.title = this.route.snapshot.paramMap.get('brand');
-    this.data = this.api.currentUser;
+    if (this.api.currentUser) {
+      this.data = this.api.currentUser;
+      this.reviewForm = new FormGroup({
+        furniture: new FormControl(null, [Validators.required]),
+        content: new FormControl(null, [Validators.required]),
+        rating: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(5)]),
+        user: new FormControl(this.data.id, [Validators.required]),
+      });
+    }
     iconRegistry.addSvgIcon('delete',
       sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
   }
@@ -34,7 +42,6 @@ export class BrandComponent implements OnInit {
 
   getReviews() {
     this.api.getObj('reviews', this.title).subscribe((response: any) => {
-      console.log(response);
       if (response) {
         this.error = null;
         this.reviews = response;
@@ -49,7 +56,6 @@ export class BrandComponent implements OnInit {
   submit(): void {
     if (this.reviewForm.valid)
       this.api.createObj('reviews', this.reviewForm.value).subscribe((response: any) => {
-        console.log(response);
         if (response) {
           this.error = null;
           this.getReviews();
@@ -77,14 +83,13 @@ export class BrandComponent implements OnInit {
             }
           this.route.queryParams.subscribe(params => {
             let furniture = parseInt(params['furniture']);
-            if (this.data != null) {
+            if (this.data) {
               this.reviewForm = new FormGroup({
                 furniture: new FormControl(furniture && this.isInFurnitureList(furniture) ? furniture : null, [Validators.required]),
                 content: new FormControl(null, [Validators.required]),
                 rating: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(5)]),
                 user: new FormControl(this.data.id, [Validators.required]),
               });
-              console.log(this.reviewForm.value)
             }
           });
           this.total_users = res
@@ -95,7 +100,7 @@ export class BrandComponent implements OnInit {
   }
 
   getRating() {
-    if (this.reviews == null)
+    if (!this.reviews)
       this.rating = -1;
     let rating = 0;
     for (let r of this.reviews)
@@ -106,13 +111,12 @@ export class BrandComponent implements OnInit {
 
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
-      console.log(response);
       this.getReviews()
     });
   }
 
   isReviewOwner(id) {
-    if (this.api.currentUser != null)
+    if (this.api.currentUser)
       for (let review of this.api.currentUser.review_set)
         if (review.id === id && review.user.id === this.api.currentUser.id)
           return true;

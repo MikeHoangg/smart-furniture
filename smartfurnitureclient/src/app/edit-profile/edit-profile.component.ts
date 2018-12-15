@@ -36,7 +36,6 @@ export class EditProfileComponent implements OnInit {
     if (this.fileToUpload)
       formData.append('image', this.fileToUpload);
     this.api.editCurrentUser(formData).subscribe((response: any) => {
-      console.log(response);
       if (response) {
         this.error = null;
         this.dialogRef.close(true);
