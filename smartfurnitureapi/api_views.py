@@ -1,7 +1,7 @@
 import calendar
 import datetime
-
 import stripe
+
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -9,6 +9,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.utils.translation import get_language
 from smartfurnitureapi import models, serializers, types
+from smartfurnitureapi.utils import get_iot_data
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -169,7 +170,7 @@ class ApplyOptions(generics.CreateAPIView):
             else:
                 msg = f'Couldn\'t apply options to furniture {furniture} because user limit has been reached.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all*():
+        elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all * ():
             furniture.current_options.add(options)
             for opts in furniture.current_options.all():
                 if opts.creator == opts.creator:
@@ -200,6 +201,8 @@ class ApplyOptions(generics.CreateAPIView):
             else:
                 msg = f'Options applied to furniture {furniture}.'
             stat = status.HTTP_202_ACCEPTED
+        if stat == status.HTTP_202_ACCEPTED:
+            get_iot_data(furniture)
         return Response({'detail': msg}, status=stat)
 
 
@@ -219,6 +222,7 @@ class DiscardOptions(generics.CreateAPIView):
             msg = f'Опції зняті з меблів {furniture}.'
         else:
             msg = f'Options discarded from furniture {furniture}.'
+        get_iot_data(furniture)
         return Response({'detail': msg}, status=status.HTTP_202_ACCEPTED)
 
 

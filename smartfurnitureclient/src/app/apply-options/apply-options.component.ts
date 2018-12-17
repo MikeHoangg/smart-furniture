@@ -148,7 +148,8 @@ export class ApplyOptionsComponent implements OnInit {
       let res = 0;
       for (let option of this.curr_furniture.current_options)
         res += option[attr];
-      return Math.round(res / this.curr_furniture.current_options.length)
+      res = res / this.curr_furniture.current_options.length;
+      return res.toFixed(2);
     } else if (attr == 'massage') {
       let res = {
         'none': 0,
