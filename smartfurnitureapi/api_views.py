@@ -170,7 +170,7 @@ class ApplyOptions(generics.CreateAPIView):
             else:
                 msg = f'Couldn\'t apply options to furniture {furniture} because user limit has been reached.'
             stat = status.HTTP_406_NOT_ACCEPTABLE
-        elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all * ():
+        elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all():
             furniture.current_options.add(options)
             for opts in furniture.current_options.all():
                 if opts.creator == opts.creator:
