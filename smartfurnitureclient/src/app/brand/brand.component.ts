@@ -12,7 +12,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 })
 export class BrandComponent implements OnInit {
   error: any;
-  data: any;
+  user_obj: any;
   reviews: any;
   title: string;
   rating: any;
@@ -24,12 +24,12 @@ export class BrandComponent implements OnInit {
               private route: ActivatedRoute, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     this.title = this.route.snapshot.paramMap.get('brand');
     if (this.api.currentUser) {
-      this.data = this.api.currentUser;
+      this.user_obj = this.api.currentUser;
       this.reviewForm = new FormGroup({
         furniture: new FormControl(null, [Validators.required]),
         content: new FormControl(null, [Validators.required]),
         rating: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(5)]),
-        user: new FormControl(this.data.id, [Validators.required]),
+        user: new FormControl(this.user_obj.id, [Validators.required]),
       });
     }
     iconRegistry.addSvgIcon('delete',
@@ -83,12 +83,12 @@ export class BrandComponent implements OnInit {
             }
           this.route.queryParams.subscribe(params => {
             let furniture = parseInt(params['furniture']);
-            if (this.data) {
+            if (this.user_obj) {
               this.reviewForm = new FormGroup({
                 furniture: new FormControl(furniture && this.isInFurnitureList(furniture) ? furniture : null, [Validators.required]),
                 content: new FormControl(null, [Validators.required]),
                 rating: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(5)]),
-                user: new FormControl(this.data.id, [Validators.required]),
+                user: new FormControl(this.user_obj.id, [Validators.required]),
               });
             }
           });

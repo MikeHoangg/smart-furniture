@@ -20,7 +20,7 @@ export class ApplyOptionsComponent implements OnInit {
   prime_types: any[] = [];
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) private curr_furniture: any,
+  constructor(@Inject(MAT_DIALOG_DATA) private furniture_obj: any,
               private dialogRef: MatDialogRef<ApplyOptionsComponent>,
               private api: ApiService,
               public snackBar: MatSnackBar,
@@ -28,11 +28,11 @@ export class ApplyOptionsComponent implements OnInit {
     this.curr_opts = this.getCurrentOptions();
     this.applyOptionsForm = new FormGroup({
       options: new FormControl(this.curr_opts ? this.curr_opts.id : null, [Validators.required]),
-      furniture: new FormControl(curr_furniture.id, [Validators.required])
+      furniture: new FormControl(furniture_obj.id, [Validators.required])
     });
     this.discardOptionsForm = new FormGroup({
       user: new FormControl(api.currentUser ? api.currentUser.id : null, [Validators.required]),
-      furniture: new FormControl(curr_furniture.id, [Validators.required])
+      furniture: new FormControl(furniture_obj.id, [Validators.required])
     });
     this.options = this.getOptions();
     if (api.furnitureTypes)
@@ -48,7 +48,7 @@ export class ApplyOptionsComponent implements OnInit {
     let options = [];
     if (this.api.currentUser)
       for (let option of this.api.currentUser.options_set)
-        if (this.curr_furniture.type === option.type)
+        if (this.furniture_obj.type === option.type)
           options.push(option);
     return options;
   }
@@ -56,7 +56,7 @@ export class ApplyOptionsComponent implements OnInit {
   getCurrentOptions(): any {
     if (this.api.currentUser)
       for (let option of this.api.currentUser.options_set)
-        for (let curr_opts of this.curr_furniture.current_options)
+        for (let curr_opts of this.furniture_obj.current_options)
           if (option.id == curr_opts.id)
             return option;
     return null;
@@ -67,8 +67,8 @@ export class ApplyOptionsComponent implements OnInit {
     if (this.api.currentUser)
       this.api.createObj('notifications', {
         'sender': this.api.currentUser.id,
-        'receiver': this.curr_furniture.owner.id,
-        'furniture': this.curr_furniture.id,
+        'receiver': this.furniture_obj.owner.id,
+        'furniture': this.furniture_obj.id,
       }).subscribe((response: any) => {
           if (response)
             this.translate.get('ACTION.SENT').subscribe((res: string) => {
@@ -120,7 +120,7 @@ export class ApplyOptionsComponent implements OnInit {
   isFurnitureOwner() {
     if (this.api.currentUser)
       for (let furniture of this.api.currentUser.owned_furniture)
-        if (furniture.id === this.curr_furniture.id && furniture.owner.id === this.api.currentUser.id)
+        if (furniture.id === this.furniture_obj.id && furniture.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
@@ -128,13 +128,13 @@ export class ApplyOptionsComponent implements OnInit {
   disallow(user_id) {
     if (this.isFurnitureOwner())
       this.api.createObj('disallow', {
-        'furniture': this.curr_furniture.id,
+        'furniture': this.furniture_obj.id,
         'user': user_id,
       }).subscribe((response: any) => {
         if (response) {
-          this.api.getObj('furniture', this.curr_furniture.id).subscribe((response: any) => {
+          this.api.getObj('furniture', this.furniture_obj.id).subscribe((response: any) => {
             if (response)
-              this.curr_furniture = response;
+              this.furniture_obj = response;
           });
           this.snackBar.open(response.detail, 'OK', {
             duration: 5000,
@@ -146,9 +146,9 @@ export class ApplyOptionsComponent implements OnInit {
   getAvg(attr) {
     if (attr != 'massage' && attr != 'rigidity') {
       let res = 0;
-      for (let option of this.curr_furniture.current_options)
+      for (let option of this.furniture_obj.current_options)
         res += option[attr];
-      res = res / this.curr_furniture.current_options.length;
+      res = res / this.furniture_obj.current_options.length;
       return res.toFixed(2);
     } else if (attr == 'massage') {
       let res = {
@@ -157,7 +157,7 @@ export class ApplyOptionsComponent implements OnInit {
         'medium': 0,
         'rapid': 0
       };
-      for (let option of this.curr_furniture.current_options)
+      for (let option of this.furniture_obj.current_options)
         res[option[attr]]++;
       return Object.keys(res).reduce(function (a, b) {
         return res[a] > res[b] ? a : b
@@ -168,7 +168,7 @@ export class ApplyOptionsComponent implements OnInit {
         'medium': 0,
         'solid': 0
       };
-      for (let option of this.curr_furniture.current_options)
+      for (let option of this.furniture_obj.current_options)
         res[option[attr]]++;
       return Object.keys(res).reduce(function (a, b) {
         return res[a] > res[b] ? a : b

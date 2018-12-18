@@ -10,19 +10,19 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class EditProfileComponent implements OnInit {
   error: any;
-  data: any;
+  user_obj: any;
   fileToUpload: File;
   editProfileForm: FormGroup;
 
   constructor(private api: ApiService,
               private dialogRef: MatDialogRef<EditProfileComponent>) {
-    this.data = this.api.currentUser;
+    this.user_obj = this.api.currentUser;
     this.editProfileForm = new FormGroup({
-      username: new FormControl(this.data.username, [Validators.required]),
-      email: new FormControl(this.data.email, [Validators.required]),
-      first_name: new FormControl(this.data.first_name),
-      last_name: new FormControl(this.data.last_name),
-      height: new FormControl(this.data.height || 0, [Validators.required, Validators.min(0)]),
+      username: new FormControl(this.user_obj.username, [Validators.required]),
+      email: new FormControl(this.user_obj.email, [Validators.required]),
+      first_name: new FormControl(this.user_obj.first_name),
+      last_name: new FormControl(this.user_obj.last_name),
+      height: new FormControl(this.user_obj.height || 0, [Validators.required, Validators.min(0)]),
     })
   }
 

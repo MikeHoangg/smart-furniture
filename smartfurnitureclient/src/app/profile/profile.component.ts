@@ -47,7 +47,7 @@ export interface notification {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  data: any;
+  user_obj: any;
   error: any;
   ownedFurnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'actions', 'settings', 'is_public'];
   furnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'owner', 'actions', 'settings', 'is_public'];
@@ -80,7 +80,7 @@ export class ProfileComponent implements OnInit {
   getUser() {
     let id = this.route.snapshot.paramMap.get('id');
     if (this.api.currentUser && !id) {
-      this.data = this.api.currentUser;
+      this.user_obj = this.api.currentUser;
       this.getTables();
     } else if (this.api.currentUser && id == this.api.currentUser.id) {
       this.router.navigateByUrl(`/profile`);
@@ -88,7 +88,7 @@ export class ProfileComponent implements OnInit {
       this.api.getObj('users', id).subscribe((response: any) => {
         if (response) {
           this.error = null;
-          this.data = response;
+          this.user_obj = response;
           this.getTables()
         } else {
           this.error = this.api.errorLog.pop();
@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit {
   }
 
   isOwner() {
-    return this.api.currentUser ? this.api.currentUser.id == this.data.id : false;
+    return this.api.currentUser ? this.api.currentUser.id == this.user_obj.id : false;
   }
 
   isFurnitureOwner(id) {
@@ -110,19 +110,19 @@ export class ProfileComponent implements OnInit {
   }
 
   getTables() {
-    this.ownedFurnitureDataSource = new MatTableDataSource(this.data.owned_furniture);
+    this.ownedFurnitureDataSource = new MatTableDataSource(this.user_obj.owned_furniture);
     this.ownedFurnitureDataSource.paginator = this.paginator;
     this.ownedFurnitureDataSource.sort = this.sort;
 
-    this.allowedFurnitureDataSource = new MatTableDataSource(this.data.allowed_furniture);
+    this.allowedFurnitureDataSource = new MatTableDataSource(this.user_obj.allowed_furniture);
     this.allowedFurnitureDataSource.paginator = this.paginator;
     this.allowedFurnitureDataSource.sort = this.sort;
 
-    this.currentFurnitureDataSource = new MatTableDataSource(this.data.current_furniture);
+    this.currentFurnitureDataSource = new MatTableDataSource(this.user_obj.current_furniture);
     this.currentFurnitureDataSource.paginator = this.paginator;
     this.currentFurnitureDataSource.sort = this.sort;
 
-    this.optionsDataSource = new MatTableDataSource(this.data.options_set);
+    this.optionsDataSource = new MatTableDataSource(this.user_obj.options_set);
     this.optionsDataSource.paginator = this.paginator;
     this.optionsDataSource.sort = this.sort;
 
@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
 
   get_notifications() {
     let res = [];
-    for (let notification of this.data.received_notifications)
+    for (let notification of this.user_obj.received_notifications)
       if (notification.pending) {
         res.push(notification);
       }
@@ -200,8 +200,8 @@ export class ProfileComponent implements OnInit {
   }
 
   isPrimeAccount() {
-    if (this.data.prime_expiration_date) {
-      let expire_date = new Date(this.data.prime_expiration_date);
+    if (this.user_obj.prime_expiration_date) {
+      let expire_date = new Date(this.user_obj.prime_expiration_date);
       let today = new Date();
       today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       if (today <= expire_date)
@@ -245,21 +245,21 @@ export class ProfileComponent implements OnInit {
       } else if (name === 'editFurniture') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(FurnitureComponent, {data: response});
+            dialogRef = this.dialog.open(FurnitureComponent, {user_obj: response});
             this.closedDialog(dialogRef);
           }
         });
       } else if (name === 'editOptions') {
         this.api.getObj('options', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(OptionsComponent, {data: response});
+            dialogRef = this.dialog.open(OptionsComponent, {user_obj: response});
             this.closedDialog(dialogRef);
           }
         });
       } else if (name === 'settings') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
+            dialogRef = this.dialog.open(ApplyOptionsComponent, {user_obj: response});
             this.closedDialog(dialogRef);
           }
         });
@@ -282,7 +282,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getPrimeDate() {
-    let date = new Date(this.data.prime_expiration_date);
+    let date = new Date(this.user_obj.prime_expiration_date);
     return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
   }
 }

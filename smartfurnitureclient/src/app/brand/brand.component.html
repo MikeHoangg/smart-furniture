@@ -1,13 +1,13 @@
 <div class="brand-content" *ngIf="!error || !error.detail">
   <div class="reviews">
-    <mat-card *ngIf="data;else notAuthorized">
+    <mat-card *ngIf="user_obj;else notAuthorized">
       <mat-card-header>
-        <div mat-card-avatar class="avatar" *ngIf="data.image"
-          [style.backgroundImage]="'url('+ data.image +')'"></div>
-        <div mat-card-avatar class="avatar" *ngIf="!data.image"
+        <div mat-card-avatar class="avatar" *ngIf="user_obj.image"
+          [style.backgroundImage]="'url('+ user_obj.image +')'"></div>
+        <div mat-card-avatar class="avatar" *ngIf="!user_obj.image"
           [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
         <mat-card-title>
-          <a routerLink="/user/{{ data.id }}">{{ data.username }}</a>
+          <a routerLink="/user/{{ user_obj.id }}">{{ user_obj.username }}</a>
         </mat-card-title>
         <mat-card-subtitle>
           {{ 'ACTION.REVIEW'|translate }}

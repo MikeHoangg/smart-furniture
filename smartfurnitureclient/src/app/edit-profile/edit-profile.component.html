@@ -1,5 +1,5 @@
 <div class="dialog">
-  <h1 mat-dialog-title>{{ 'ACTION.EDIT'|translate }} {{ data.username }}</h1>
+  <h1 mat-dialog-title>{{ 'ACTION.EDIT'|translate }} {{ user_obj.username }}</h1>
   <div mat-dialog-content>
     <form [formGroup]="editProfileForm" (ngSubmit)="save()" id="editProfileForm" class="dialog-content">
       <div class="dialog-content image-form-group">

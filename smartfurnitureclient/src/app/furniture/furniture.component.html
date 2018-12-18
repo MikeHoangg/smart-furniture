@@ -1,6 +1,6 @@
 <div class="dialog">
   <h1 mat-dialog-title>
-    {{ 'ACTION.' + title|translate }} {{ 'APP.FURNITURE'|translate }}<span *ngIf="data"> {{ 'TYPE.' + data.type|translate }} - {{ data.code }}</span>
+    {{ 'ACTION.' + title|translate }} {{ 'APP.FURNITURE'|translate }}<span *ngIf="furniture_obj"> {{ 'TYPE.' + furniture_obj.type|translate }} - {{ furniture_obj.code }}</span>
   </h1>
   <div mat-dialog-content>
     <form [formGroup]="furnitureForm" (ngSubmit)="save()" id="furnitureForm" class="dialog-content">

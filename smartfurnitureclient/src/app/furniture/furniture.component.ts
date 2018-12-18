@@ -16,15 +16,15 @@ export class FurnitureComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<FurnitureComponent>,
               private api: ApiService,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
+              @Inject(MAT_DIALOG_DATA) private furniture_obj: any) {
     this.furnitureForm = new FormGroup({
-      code: new FormControl(data ? data.code : null,[Validators.required]),
-      brand: new FormControl(data ? data.brand : null,[Validators.required]),
-      type: new FormControl(data ? data.type : "chair",[Validators.required]),
-      is_public: new FormControl(data ? data.is_public : false),
+      code: new FormControl(furniture_obj ? furniture_obj.code : null,[Validators.required]),
+      brand: new FormControl(furniture_obj ? furniture_obj.brand : null,[Validators.required]),
+      type: new FormControl(furniture_obj ? furniture_obj.type : "chair",[Validators.required]),
+      is_public: new FormControl(furniture_obj ? furniture_obj.is_public : false),
       owner: new FormControl(api.currentUser.id,[Validators.required]),
     });
-    this.title = data ? "EDIT" : "ADD";
+    this.title = furniture_obj ? "EDIT" : "ADD";
     this.types = api.furnitureTypes
   }
 
@@ -32,7 +32,7 @@ export class FurnitureComponent implements OnInit {
   }
 
   save(): void {
-    if (!this.data) {
+    if (!this.furniture_obj) {
       if (this.furnitureForm.valid)
         this.api.createObj('furniture', this.furnitureForm.value).subscribe((response: any) => {
           if (response) {
@@ -43,7 +43,7 @@ export class FurnitureComponent implements OnInit {
         });
     } else {
       if (this.furnitureForm.valid)
-        this.api.editObj('furniture', this.data.id, this.furnitureForm.value).subscribe((response: any) => {
+        this.api.editObj('furniture', this.furniture_obj.id, this.furnitureForm.value).subscribe((response: any) => {
           if (response) {
             this.error = null;
             this.dialogRef.close(true);

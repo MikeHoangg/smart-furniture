@@ -20,19 +20,19 @@ export class OptionsComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<OptionsComponent>,
               private api: ApiService,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.title = data ? "EDIT" : "ADD";
+              @Inject(MAT_DIALOG_DATA) private option_obj: any) {
+    this.title = option_obj ? "EDIT" : "ADD";
 
     this.optionsForm = new FormGroup({
-      type: new FormControl(this.data ? this.data.type : "chair", [Validators.required]),
-      name: new FormControl(this.data ? this.data.name : null, [Validators.required, Validators.maxLength(32)]),
-      height: new FormControl(this.data ? this.data.height : Math.round(api.currentUser.height * 3 / 7), [Validators.min(0)]),
-      length: new FormControl(this.data ? this.data.length : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
-      width: new FormControl(this.data ? this.data.width : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
-      incline: new FormControl(this.data ? this.data.incline : 95, [Validators.max(180), Validators.min(0)]),
-      temperature: new FormControl(this.data ? this.data.temperature : 36.6),
-      massage: new FormControl(this.data ? this.data.massage : 'none'),
-      rigidity: new FormControl(this.data ? this.data.rigidity : 'medium'),
+      type: new FormControl(this.option_obj ? this.option_obj.type : "chair", [Validators.required]),
+      name: new FormControl(this.option_obj ? this.option_obj.name : null, [Validators.required, Validators.maxLength(32)]),
+      height: new FormControl(this.option_obj ? this.option_obj.height : Math.round(api.currentUser.height * 3 / 7), [Validators.min(0)]),
+      length: new FormControl(this.option_obj ? this.option_obj.length : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
+      width: new FormControl(this.option_obj ? this.option_obj.width : Math.round(api.currentUser.height * 2 / 7), [Validators.min(0)]),
+      incline: new FormControl(this.option_obj ? this.option_obj.incline : 95, [Validators.max(180), Validators.min(0)]),
+      temperature: new FormControl(this.option_obj ? this.option_obj.temperature : 36.6),
+      massage: new FormControl(this.option_obj ? this.option_obj.massage : 'none'),
+      rigidity: new FormControl(this.option_obj ? this.option_obj.rigidity : 'medium'),
       creator: new FormControl(api.currentUser.id),
     });
     this.types = api.furnitureTypes;
@@ -46,14 +46,14 @@ export class OptionsComponent implements OnInit {
       if (type.prime_actions)
         this.prime_types.push(type.name)
     }
-    this.is_prime_type = data ? this.prime_types.includes(data.type) : true;
+    this.is_prime_type = option_obj ? this.prime_types.includes(option_obj.type) : true;
   }
 
   ngOnInit() {
   }
 
   save(): void {
-    if (!this.data) {
+    if (!this.option_obj) {
       if (this.optionsForm.valid)
         this.api.createObj('options', this.optionsForm.value).subscribe((response: any) => {
           if (response) {
@@ -64,7 +64,7 @@ export class OptionsComponent implements OnInit {
         });
     } else {
       if (this.optionsForm.valid)
-        this.api.editObj('options', this.data.id, this.optionsForm.value).subscribe((response: any) => {
+        this.api.editObj('options', this.option_obj.id, this.optionsForm.value).subscribe((response: any) => {
           if (response) {
             this.error = null;
             this.dialogRef.close(true);
