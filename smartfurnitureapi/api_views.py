@@ -102,6 +102,16 @@ class OptionsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Options.objects.all()
     serializer_class = serializers.OptionsSerializer
 
+    def perform_update(self, serializer):
+        for f in self.get_object().furniture_set.all():
+            get_iot_data(f)
+        return super().perform_update(serializer)
+
+    def perform_destroy(self, instance):
+        for f in instance.furniture_set.all():
+            get_iot_data(f)
+        return super().perform_destroy(instance)
+
 
 class LeaveReview(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -242,6 +252,7 @@ class DisallowUser(generics.CreateAPIView):
         for options in furniture.current_options.all():
             if options.creator == user:
                 furniture.current_options.remove(options)
+                get_iot_data(furniture)
                 break
         if get_language() == 'uk':
             msg = f'Користувачу {user} не дозволено користуватися меблями {furniture}.'

@@ -67,7 +67,12 @@ void getDoubleParam(String data, String param_name){
     res = res/count;
   }
   Serial.print(param_name);
-  Serial.println(res);
+  if (!count){
+    Serial.println("-");
+  }
+  else{
+    Serial.println(res);
+  }
 }
 
 void getStringParam(String arr[], int len, String data, bool is_massage, String param_name){
@@ -78,7 +83,12 @@ void getStringParam(String arr[], int len, String data, bool is_massage, String 
     type_counter[getIndexByKey(params[i], is_massage, len)]++;
   }
   Serial.print(param_name);
-  Serial.println(arr[getIndexOfMax(type_counter, len, is_massage)]);
+  if (!count){
+    Serial.println("-");
+  }
+  else{
+    Serial.println(arr[getIndexOfMax(type_counter, len, is_massage)]);
+  }
 }
 
 void setup() {

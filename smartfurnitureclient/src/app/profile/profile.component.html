@@ -1,14 +1,14 @@
-<div class="profile-content" *ngIf="!error && data">
+<div class="profile-content" *ngIf="!error && user_obj">
   <mat-card [ngClass]="isOwner()?'profile-card':'user-card'">
     <mat-card-header>
-      <div mat-card-avatar *ngIf="data.image" class="avatar" [style.backgroundImage]="'url('+ data.image +')'"></div>
-      <div mat-card-avatar *ngIf="!data.image"
+      <div mat-card-avatar *ngIf="user_obj.image" class="avatar" [style.backgroundImage]="'url('+ user_obj.image +')'"></div>
+      <div mat-card-avatar *ngIf="!user_obj.image"
            class="avatar" [style.backgroundImage]="'url(\'../../assets/img/profile/default-user.png\')'"></div>
       <mat-card-title>
-        {{ data.username }}
+        {{ user_obj.username }}
       </mat-card-title>
       <mat-card-subtitle>
-        {{ data.email }}
+        {{ user_obj.email }}
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -16,13 +16,13 @@
         <div>
           <mat-divider></mat-divider>
           <mat-list-item>
-            {{ 'USER.FIRST_NAME'|translate }}: {{ data.first_name }}
+            {{ 'USER.FIRST_NAME'|translate }}: {{ user_obj.first_name }}
           </mat-list-item>
         </div>
         <div>
           <mat-divider></mat-divider>
           <mat-list-item>
-            {{ 'USER.LAST_NAME'|translate }}: {{ data.last_name }}
+            {{ 'USER.LAST_NAME'|translate }}: {{ user_obj.last_name }}
           </mat-list-item>
         </div>
         <div *ngIf="isOwner() && isPrimeAccount()">
@@ -34,7 +34,7 @@
         <div>
           <mat-divider></mat-divider>
           <mat-list-item>
-            {{ 'USER.HEIGHT'|translate }}: {{ data.height }}
+            {{ 'USER.HEIGHT'|translate }}: {{ user_obj.height }}
           </mat-list-item>
           <mat-divider></mat-divider>
         </div>
@@ -395,11 +395,11 @@
           {{ 'APP.OPTIONS'|translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <button mat-button (click)="openDialog('addOptions')" *ngIf="data.height">
+      <button mat-button (click)="openDialog('addOptions')" *ngIf="user_obj.height">
         <mat-icon svgIcon="add"></mat-icon>
         {{ 'ACTION.ADD'|translate }} {{ 'APP.OPTIONS'|translate }}
       </button>
-      <span *ngIf="!data.height">
+      <span *ngIf="!user_obj.height">
         {{ 'ACTION.NEED_HEIGHT'|translate }}
       </span>
       <div *ngIf="optionsDataSource.filteredData.length">
@@ -491,7 +491,7 @@
               {{ 'APP.ACTIONS'|translate }}
             </th>
             <td mat-cell *matCellDef="let options">
-              <div *ngIf="data.height; else none">
+              <div *ngIf="user_obj.height; else none">
                 <button mat-button  (click)="openDialog('editOptions', options.id)">
                   <mat-icon svgIcon="edit"></mat-icon>
                 </button>

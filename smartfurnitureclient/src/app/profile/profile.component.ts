@@ -245,21 +245,21 @@ export class ProfileComponent implements OnInit {
       } else if (name === 'editFurniture') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(FurnitureComponent, {user_obj: response});
+            dialogRef = this.dialog.open(FurnitureComponent, {data: response});
             this.closedDialog(dialogRef);
           }
         });
       } else if (name === 'editOptions') {
         this.api.getObj('options', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(OptionsComponent, {user_obj: response});
+            dialogRef = this.dialog.open(OptionsComponent, {data: response});
             this.closedDialog(dialogRef);
           }
         });
       } else if (name === 'settings') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(ApplyOptionsComponent, {user_obj: response});
+            dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
             this.closedDialog(dialogRef);
           }
         });

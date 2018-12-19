@@ -96,14 +96,14 @@ export class FurnitureListComponent implements OnInit {
       if (name === 'editFurniture') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(FurnitureComponent, {furniture_obj: response});
+            dialogRef = this.dialog.open(FurnitureComponent, {data: response});
             this.closedDialog(dialogRef);
           }
         });
       } else if (name === 'settings') {
         this.api.getObj('furniture', id).subscribe((response: any) => {
           if (response) {
-            dialogRef = this.dialog.open(ApplyOptionsComponent, {furniture_obj: response});
+            dialogRef = this.dialog.open(ApplyOptionsComponent, {data: response});
             this.closedDialog(dialogRef);
           }
         });
