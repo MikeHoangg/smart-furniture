@@ -183,7 +183,7 @@ class ApplyOptions(generics.CreateAPIView):
         elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all():
             furniture.current_options.add(options)
             for opts in furniture.current_options.all():
-                if opts.creator == opts.creator:
+                if options.creator == opts.creator and options.id != opts.id:
                     furniture.current_options.remove(opts)
                     break
             if get_language() == 'uk':

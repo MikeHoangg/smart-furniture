@@ -4,7 +4,7 @@ from django.utils import timezone
 from smartfurnitureapi import types
 
 # TODO give permissions each time, the right port
-IOT_PORT = '/dev/ttyUSB1'
+IOT_PORT = '/dev/ttyUSB0'
 
 
 def get_iot_data(furniture):
