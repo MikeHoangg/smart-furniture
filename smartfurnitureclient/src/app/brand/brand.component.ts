@@ -21,7 +21,7 @@ export class BrandComponent implements OnInit {
   furnitureList: any[];
 
   constructor(private api: ApiService,
-              private route: ActivatedRoute, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+              private route: ActivatedRoute) {
     this.title = this.route.snapshot.paramMap.get('brand');
     if (this.api.currentUser) {
       this.user_obj = this.api.currentUser;
@@ -32,8 +32,6 @@ export class BrandComponent implements OnInit {
         user: new FormControl(this.user_obj.id, [Validators.required]),
       });
     }
-    iconRegistry.addSvgIcon('delete',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
   }
 
   ngOnInit() {
@@ -47,9 +45,8 @@ export class BrandComponent implements OnInit {
         this.reviews = response;
         this.getRating();
         this.getTotalUsers();
-      } else {
+      } else
         this.error = this.api.errorLog.pop();
-      }
     });
   }
 

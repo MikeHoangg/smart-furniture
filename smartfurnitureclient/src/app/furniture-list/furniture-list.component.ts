@@ -31,25 +31,17 @@ export interface furniture {
   ],
 })
 export class FurnitureListComponent implements OnInit {
-  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type','is_public'];
+  furnitureDisplayedColumns: string[] = ['code', 'brand', 'type', 'is_public'];
   furnitureDataSource: MatTableDataSource<furniture>;
   expandedElement: furniture | null;
+  prime_types: string[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  prime_types: string[] = [];
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
-              public snackBar: MatSnackBar, public translate: TranslateService,
-              iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('edit',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-edit-24px.svg'));
-    iconRegistry.addSvgIcon('rate',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-star_rate-18px.svg'));
-    iconRegistry.addSvgIcon('settings',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-settings-20px.svg'));
-    iconRegistry.addSvgIcon('delete',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-delete-24px.svg'));
+              public snackBar: MatSnackBar,
+              public translate: TranslateService) {
     for (let type of api.furnitureTypes) {
       if (type.prime_actions)
         this.prime_types.push(type.name)
@@ -78,8 +70,8 @@ export class FurnitureListComponent implements OnInit {
 
   isFurnitureOwner(id) {
     if (this.api.currentUser)
-      for (let furniture of this.api.currentUser.owned_furniture)
-        if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
+      for (let f of this.api.currentUser.owned_furniture)
+        if (f.id === id && f.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
@@ -114,9 +106,8 @@ export class FurnitureListComponent implements OnInit {
 
   closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result)
         this.getFurniture();
-      }
     });
   }
 

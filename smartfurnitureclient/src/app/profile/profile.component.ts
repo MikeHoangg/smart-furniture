@@ -67,10 +67,9 @@ export class ProfileComponent implements OnInit {
               private api: ApiService,
               private route: ActivatedRoute, public translate: TranslateService,
               private router: Router, public snackBar: MatSnackBar) {
-    for (let type of this.api.furnitureTypes) {
-      if (type.prime_actions)
-        this.prime_types.push(type.name)
-    }
+    for (let t of this.api.furnitureTypes)
+      if (t.prime_actions)
+        this.prime_types.push(t.name)
   }
 
   ngOnInit() {
@@ -103,8 +102,8 @@ export class ProfileComponent implements OnInit {
 
   isFurnitureOwner(id) {
     if (this.api.currentUser)
-      for (let furniture of this.api.currentUser.owned_furniture)
-        if (furniture.id === id && furniture.owner.id === this.api.currentUser.id)
+      for (let f of this.api.currentUser.owned_furniture)
+        if (f.id === id && f.owner.id === this.api.currentUser.id)
           return true;
     return false;
   }
@@ -133,11 +132,9 @@ export class ProfileComponent implements OnInit {
 
   get_notifications() {
     let res = [];
-    for (let notification of this.user_obj.received_notifications)
-      if (notification.pending) {
-        res.push(notification);
-      }
-
+    for (let n of this.user_obj.received_notifications)
+      if (n.pending)
+        res.push(n);
     return res;
   }
 
@@ -270,14 +267,13 @@ export class ProfileComponent implements OnInit {
 
   closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result)
         this.api.getCurrentUser().subscribe((response: any) => {
           if (response) {
             this.api.currentUser = response;
             this.getUser();
           }
         });
-      }
     });
   }
 

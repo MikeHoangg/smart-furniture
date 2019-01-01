@@ -11,8 +11,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class FurnitureComponent implements OnInit {
   title: string;
   error: any;
-  furnitureForm: FormGroup;
   types: any;
+  furnitureForm: FormGroup;
 
   constructor(private dialogRef: MatDialogRef<FurnitureComponent>,
               private api: ApiService,

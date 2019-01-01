@@ -36,9 +36,9 @@ export class ApplyOptionsComponent implements OnInit {
     });
     this.options = this.getOptions();
     if (api.furnitureTypes)
-      for (let type of api.furnitureTypes)
-        if (type.prime_actions)
-          this.prime_types.push(type.name)
+      for (let t of api.furnitureTypes)
+        if (t.prime_actions)
+          this.prime_types.push(t.name)
   }
 
   ngOnInit() {
@@ -47,18 +47,18 @@ export class ApplyOptionsComponent implements OnInit {
   getOptions(): any[] {
     let options = [];
     if (this.api.currentUser)
-      for (let option of this.api.currentUser.options_set)
-        if (this.furniture_obj.type === option.type)
-          options.push(option);
+      for (let o of this.api.currentUser.options_set)
+        if (this.furniture_obj.type === o.type)
+          options.push(o);
     return options;
   }
 
   getCurrentOptions(): any {
     if (this.api.currentUser)
-      for (let option of this.api.currentUser.options_set)
-        for (let curr_opts of this.furniture_obj.current_options)
-          if (option.id == curr_opts.id)
-            return option;
+      for (let o of this.api.currentUser.options_set)
+        for (let co of this.furniture_obj.current_options)
+          if (o.id == co.id)
+            return o;
     return null;
   }
 
@@ -146,8 +146,8 @@ export class ApplyOptionsComponent implements OnInit {
   getAvg(attr) {
     if (attr != 'massage' && attr != 'rigidity') {
       let res = 0;
-      for (let option of this.furniture_obj.current_options)
-        res += option[attr];
+      for (let o of this.furniture_obj.current_options)
+        res += o[attr];
       res = res / this.furniture_obj.current_options.length;
       return res.toFixed(2);
     } else if (attr == 'massage') {
@@ -157,8 +157,8 @@ export class ApplyOptionsComponent implements OnInit {
         'medium': 0,
         'rapid': 0
       };
-      for (let option of this.furniture_obj.current_options)
-        res[option[attr]]++;
+      for (let o of this.furniture_obj.current_options)
+        res[o[attr]]++;
       return Object.keys(res).reduce(function (a, b) {
         return res[a] > res[b] ? a : b
       });
@@ -168,8 +168,8 @@ export class ApplyOptionsComponent implements OnInit {
         'medium': 0,
         'solid': 0
       };
-      for (let option of this.furniture_obj.current_options)
-        res[option[attr]]++;
+      for (let o of this.furniture_obj.current_options)
+        res[o[attr]]++;
       return Object.keys(res).reduce(function (a, b) {
         return res[a] > res[b] ? a : b
       });

@@ -11,8 +11,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class OptionsComponent implements OnInit {
   title: string;
   error: any;
-  optionsForm: FormGroup;
   types: any;
+  optionsForm: FormGroup;
   massage_types: any[] = [];
   rigidity_types: any[] = [];
   prime_types: string[] = [];
@@ -36,16 +36,14 @@ export class OptionsComponent implements OnInit {
       creator: new FormControl(api.currentUser.id),
     });
     this.types = api.furnitureTypes;
-    for (let type of api.massageRigidityTypes) {
+    for (let type of api.massageRigidityTypes)
       if (type.type === 'massage')
         this.massage_types.push(type);
       else
         this.rigidity_types.push(type);
-    }
-    for (let type of this.types) {
-      if (type.prime_actions)
-        this.prime_types.push(type.name)
-    }
+    for (let t of this.types)
+      if (t.prime_actions)
+        this.prime_types.push(t.name);
     this.is_prime_type = option_obj ? this.prime_types.includes(option_obj.type) : true;
   }
 
