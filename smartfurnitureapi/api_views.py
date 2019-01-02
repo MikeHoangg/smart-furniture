@@ -3,7 +3,7 @@ import datetime
 import stripe
 
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext as _
 from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -158,7 +158,7 @@ class BrandReviewList(generics.ListAPIView):
 
 class ApplyOptions(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = serializers.FurnitureUserSerializer
+    serializer_class = serializers.FurnitureOptionsSerializer
 
     def create(self, request, *args, **kwargs):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))

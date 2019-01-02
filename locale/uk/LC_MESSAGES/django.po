@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-01 11:08+0000\n"
+"POT-Creation-Date: 2019-01-02 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,60 +29,58 @@ msgstr "Англійська"
 msgid "Ukrainian"
 msgstr "Українська"
 
-#: smartfurnitureapi/api_views.py:125
+#: smartfurnitureapi/api_views.py:121
 msgid "You have already reviewed this piece of furniture"
 msgstr "Ви вже залишили рицензію на ці меблі"
 
-#: smartfurnitureapi/api_views.py:158
+#: smartfurnitureapi/api_views.py:151
 msgid "Not found."
 msgstr "Не знайдено."
 
-#: smartfurnitureapi/api_views.py:174
+#: smartfurnitureapi/api_views.py:167
 msgid ""
 "Couldn't apply options to furniture {} because user limit has been reached."
 msgstr ""
-"Опції не застосовано до меблів {}, тому що меблями ліміт користувачів досягнено."
+"Опції не застосовано до меблів {}, тому що меблями ліміт користувачів "
+"досягнено."
 
-#: smartfurnitureapi/api_views.py:183 smartfurnitureapi/api_views.py:198
+#: smartfurnitureapi/api_views.py:175 smartfurnitureapi/api_views.py:187
 msgid "Options applied to furniture {}."
 msgstr "Опції застосовано до меблів {}."
 
-#: smartfurnitureapi/api_views.py:187
+#: smartfurnitureapi/api_views.py:178
 #, fuzzy
 #| msgid ""
 #| "Couldn't apply options to furniture {} because user limit has been "
 #| "reached."
 msgid "Couldn't apply options to furniture {} because user {} is using it."
-msgstr ""
-"Опції не застосовано до меблів {}, тому що меблями користується {}."
+msgstr "Опції не застосовано до меблів {}, тому що меблями користується {}."
 
-#: smartfurnitureapi/api_views.py:192
+#: smartfurnitureapi/api_views.py:182
 #, fuzzy
 #| msgid ""
 #| "Couldn't apply options to furniture {} because user limit has been "
 #| "reached."
-msgid ""
-"Couldn't apply options to furniture {} because you have no access to it."
-msgstr ""
-"Опції не застосовано до меблів {}, тому що у вас немає доступу."
+msgid "Couldn't apply options to furniture {} because you have no access to it."
+msgstr "Опції не застосовано до меблів {}, тому що у вас немає доступу."
 
-#: smartfurnitureapi/api_views.py:218
+#: smartfurnitureapi/api_views.py:206
 msgid "Options discarded from furniture {}."
 msgstr "Опції зняті з меблів {}."
 
-#: smartfurnitureapi/api_views.py:242
+#: smartfurnitureapi/api_views.py:229
 msgid "User {} is disallowed to use furniture {}."
 msgstr "Користувачу {} не дозволено користуватися меблями {}."
 
-#: smartfurnitureapi/api_views.py:260
+#: smartfurnitureapi/api_views.py:246
 msgid "User {} is allowed to use furniture {}."
 msgstr "Користувачу {} дозволено користуватися меблями {}."
 
-#: smartfurnitureapi/api_views.py:295
+#: smartfurnitureapi/api_views.py:280
 msgid "Successfully upgraded to prime account till {}."
 msgstr "Успішне оновлення до prime облікового запису до {}."
 
-#: smartfurnitureapi/api_views.py:299
+#: smartfurnitureapi/api_views.py:283
 msgid "Your card was declined."
 msgstr "Вашу карту відхилено."
 

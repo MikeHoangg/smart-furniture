@@ -108,9 +108,14 @@ class ReadNotificationSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'date', 'pending', 'receiver', 'sender', 'furniture']
 
 
-class FurnitureUserSerializer(serializers.Serializer):
+class FurnitureOptionsSerializer(serializers.Serializer):
     furniture = serializers.PrimaryKeyRelatedField(queryset=Furniture.objects.all())
     options = serializers.PrimaryKeyRelatedField(queryset=Options.objects.all())
+
+
+class FurnitureUserSerializer(serializers.Serializer):
+    furniture = serializers.PrimaryKeyRelatedField(queryset=Furniture.objects.all())
+    user = serializers.PrimaryKeyRelatedField(queryset=UserModel.objects.all())
 
 
 class PrimeAccountSerializer(serializers.Serializer):
