@@ -102,6 +102,8 @@ class OptionsDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().perform_update(serializer)
 
     def perform_destroy(self, instance):
+        for f in instance.furniture_set.all():
+            f.current_users.remove(instance.creator)
         # for f in instance.furniture_set.all():
         #     get_iot_data(f)
         return super().perform_destroy(instance)
@@ -117,7 +119,7 @@ class LeaveReview(generics.CreateAPIView):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         if models.Review.objects.filter(user=user, furniture=furniture):
             msg = _('You have already reviewed this piece of furniture')
-            return Response({'furniture': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({'detail': msg}, status=status.HTTP_406_NOT_ACCEPTABLE)
         return super().create(request, *args, **kwargs)
 
 
@@ -170,7 +172,7 @@ class ApplyOptions(generics.CreateAPIView):
                 if options.creator == o.creator and options.id != o.id:
                     furniture.current_options.remove(o)
                     break
-            msg = _('Options applied to furniture {}.').fomat(furniture)
+            msg = _('Options applied to furniture {}.').format(furniture)
             stat = status.HTTP_202_ACCEPTED
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
             msg = _('Couldn\'t apply options to furniture {} because user {} is using it.').format(furniture,

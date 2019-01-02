@@ -20,7 +20,7 @@ export class ApiService {
   loadUser() {
     return new Promise((resolve, reject) => {
       let lang = document.cookie.match(/lang=(\w+)/);
-      this.apiUrl = lang ? `http://0.0.0.0:8000/${lang[1]}/api/v1` : 'http://0.0.0.0:8000/en/api/v1';
+      this.apiUrl = lang ? `http://127.0.0.1:8000/${lang[1]}/api/v1` : 'http://127.0.0.1:8000/en/api/v1';
       if (document.cookie.match(/auth_token=(Token \w+)/)) {
         this.getCurrentUser().subscribe((response: any) => {
           resolve();

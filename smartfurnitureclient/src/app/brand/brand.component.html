@@ -1,4 +1,4 @@
-<div class="brand-content" *ngIf="!error || !error.detail">
+<div class="brand-content">
   <div class="reviews">
     <mat-card *ngIf="user_obj;else notAuthorized">
       <mat-card-header>
@@ -100,9 +100,6 @@
       </mat-list>
     </mat-card-content>
   </mat-card>
-</div>
-<div *ngIf="error" class="brand-content">
-  <h3>{{ error.detail }}</h3>
 </div>
 
 

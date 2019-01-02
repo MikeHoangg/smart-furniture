@@ -106,14 +106,23 @@ export class FurnitureListComponent implements OnInit {
 
   closedDialog(dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-      if (result)
+      if (result) {
         this.getFurniture();
+        this.api.getCurrentUser().subscribe((response: any) => {
+          if (response)
+            this.api.currentUser = response;
+        });
+      }
     });
   }
 
   deleteObject(list, id) {
     this.api.deleteObj(list, id).subscribe((response: any) => {
       this.getFurniture();
+       this.api.getCurrentUser().subscribe((response: any) => {
+          if (response)
+            this.api.currentUser = response;
+        });
     });
   }
 

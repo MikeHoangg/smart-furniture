@@ -461,7 +461,7 @@
               {{ 'OPTION.TEMPERATURE'|translate }}
             </th>
             <td mat-cell *matCellDef="let options">
-              <span *ngIf="prime_types.includes(options.type); else none">
+              <span *ngIf="prime_types.includes(options.type) && isPrimeAccount(); else none">
                 {{ options.temperature }}
               </span>
             </td>
@@ -471,7 +471,7 @@
               {{ 'OPTION.MASSAGE'|translate }}
             </th>
             <td mat-cell *matCellDef="let options">
-              <span *ngIf="prime_types.includes(options.type); else none">
+              <span *ngIf="prime_types.includes(options.type) && isPrimeAccount(); else none">
                 {{ 'PRIME_TYPE.' + options.massage|translate }}
               </span>
             </td>
@@ -481,7 +481,7 @@
               {{ 'OPTION.RIGIDITY'|translate }}
             </th>
             <td mat-cell *matCellDef="let options">
-              <span *ngIf="prime_types.includes(options.type); else none">
+              <span *ngIf="prime_types.includes(options.type) && isPrimeAccount(); else none">
                 {{ 'PRIME_TYPE.' + options.massage|translate }}
               </span>
             </td>

@@ -65,8 +65,10 @@ export class ProfileComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private api: ApiService,
-              private route: ActivatedRoute, public translate: TranslateService,
-              private router: Router, public snackBar: MatSnackBar) {
+              private route: ActivatedRoute,
+              private router: Router,
+              public translate: TranslateService,
+              public snackBar: MatSnackBar) {
     for (let t of this.api.furnitureTypes)
       if (t.prime_actions)
         this.prime_types.push(t.name)

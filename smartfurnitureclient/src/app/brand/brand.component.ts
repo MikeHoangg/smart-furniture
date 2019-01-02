@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../api.service";
 import {ActivatedRoute} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatIconRegistry} from "@angular/material";
-import {DomSanitizer} from "@angular/platform-browser";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-brand',
@@ -21,7 +20,8 @@ export class BrandComponent implements OnInit {
   furnitureList: any[];
 
   constructor(private api: ApiService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              public snackBar: MatSnackBar) {
     this.title = this.route.snapshot.paramMap.get('brand');
     if (this.api.currentUser) {
       this.user_obj = this.api.currentUser;
@@ -56,8 +56,13 @@ export class BrandComponent implements OnInit {
         if (response) {
           this.error = null;
           this.getReviews();
-        } else
+        } else {
           this.error = this.api.errorLog.pop();
+          this.snackBar.open(this.error.detail, 'OK', {
+            duration: 5000,
+          });
+        }
+
       });
   }
 
