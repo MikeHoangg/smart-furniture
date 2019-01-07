@@ -224,9 +224,9 @@ class DisallowUser(generics.CreateAPIView):
         for o in furniture.current_options.all():
             if o.creator == user:
                 furniture.current_options.remove(o)
-                # get_iot_data(furniture)
                 break
         msg = _('User {} is disallowed to use furniture {}.').format(user, furniture)
+        # get_iot_data(furniture)
         return Response({'detail': msg},
                         status=status.HTTP_202_ACCEPTED)
 

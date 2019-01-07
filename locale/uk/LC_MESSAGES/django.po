@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-02 08:39+0000\n"
+"POT-Creation-Date: 2019-01-07 13:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,8 @@ msgstr "Опції не застосовано до меблів {}, тому щ
 #| msgid ""
 #| "Couldn't apply options to furniture {} because user limit has been "
 #| "reached."
-msgid "Couldn't apply options to furniture {} because you have no access to it."
+msgid ""
+"Couldn't apply options to furniture {} because you have no access to it."
 msgstr "Опції не застосовано до меблів {}, тому що у вас немає доступу."
 
 #: smartfurnitureapi/api_views.py:206

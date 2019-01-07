@@ -1,142 +1,76 @@
-const int MAX_PARAMS = 6;
+#include <ArduinoJson.h>
+
 const int MASSAGE_LEN = 4;
 const int RIGIDITY_LEN = 3;
-const String MASSAGE[MASSAGE_LEN] = {"none","slow","medium","rapid"};
-const String RIGIDITY[RIGIDITY_LEN] = {"soft","medium","solid"};
+const String MASSAGE[MASSAGE_LEN] = {"none", "slow", "medium", "rapid"};
+const String RIGIDITY[RIGIDITY_LEN] = {"medium", "soft", "solid"};
 
-String param = "";
-String params[MAX_PARAMS];
-int counter = 0;
-int start_idx = 0;
-
-void getParams(String data){
-  for (int i = 0; i < data.length(); i++) {
-    if (data.substring(i, i+1) == ",") {
-      params[counter] = data.substring(start_idx, i);
-      start_idx = i + 1;
-      counter++;
+double getDoubleParam(JsonObject &root, String param){
+  double res = 0;
+  int count = root[param][0];
+  if (count != 0){
+    for (int i = 1; i <= count; ++i){
+      double h = root[param][i];
+      res += h;
     }
-    if (i == data.length() - 1){
-      params[counter] = data.substring(start_idx, i + 1);
-    }
+    res = res/count;
   }
-  counter = 0;
-  start_idx = 0;
-}
-int getIndexByKey(String key, bool is_massage, int len){
-  if (is_massage){
-    for (int i = 0; i < len; i++){
-      if (key.equals(MASSAGE[i])){
-        return i;
-      }
-    }
-  }
-  else{
-    for (int i = 0; i < len; i++){
-      if (key.equals(RIGIDITY[i])){
-        return i;
-      }
-    }
-  }
-  return -1;
+  return res;
 }
 
-int getIndexOfMax(int arr[], int len, bool is_massage){
+int getIndexOfMax(int* counterArr, int len){
   int idx;
-  if (is_massage){
-    idx = 0;
-  }
-  else{
-    idx = 1;
-  }
-  for (int i = 0; i < len; i++){
-    if (arr[i] > arr[idx]){
+  for (int i = 0; i < len; ++i){
+    if (counterArr[i] > counterArr[idx]){
       idx = i;
     }
   }
   return idx;
 }
 
-void getDoubleParam(String data, String param_name){
-  double res = 0;
-  int count = params[0].toInt();
-  if (count != 0){
-    for (int i = 1; i <= count; i++){
-      res += params[i].toDouble();
+int getIndexByKey(String key, String* typeArr, int len){
+  for (int i = 0; i < len; ++i){
+    if (key.equals(typeArr[i])){
+      return i;
     }
-    res = res/count;
   }
-  Serial.print(param_name);
-  if (!count){
-    Serial.println("-");
-  }
-  else{
-    Serial.println(res);
-  }
+  return -1;
 }
 
-void getStringParam(String arr[], int len, String data, bool is_massage, String param_name){
-  int type_counter[len];
-  memset(type_counter,0,sizeof(type_counter));
-  int count = params[0].toInt();
-  for (int i = 1; i <= count; i++){
-    type_counter[getIndexByKey(params[i], is_massage, len)]++;
+String getStringParam(String* typeArr, int len, JsonObject &root, String param){
+  int counterArr[len];
+  memset(counterArr, 0, sizeof(counterArr));
+  int count = root[param][0];
+  for (int i = 1; i <= count; ++i){
+    String s = root[param][i];
+    ++counterArr[getIndexByKey(s, typeArr, len)];
   }
-  Serial.print(param_name);
-  if (!count){
-    Serial.println("-");
-  }
-  else{
-    Serial.println(arr[getIndexOfMax(type_counter, len, is_massage)]);
-  }
+  return typeArr[getIndexOfMax(counterArr, len)];
 }
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial) {
-    ;
-  }
+  while (!Serial) continue;
 }
 
 void loop() {
-  while (Serial.available()) {
-    param = Serial.readStringUntil('\n');
-    if(param.startsWith("height:")){
-      String data = param.substring(7);
-      getParams(data);
-      getDoubleParam(data, "height: ");      
+  while(Serial.available()){
+    DynamicJsonBuffer jsonBuffer(1024);
+    JsonObject& root = jsonBuffer.parseObject(Serial);
+    root["height"] = getDoubleParam(root, "height");
+    root["length"] = getDoubleParam(root, "length");
+    root["width"] = getDoubleParam(root, "width");
+    root["incline"] = getDoubleParam(root, "incline");
+    if (root.containsKey("temperature")){
+      root["temperature"] = getDoubleParam(root, "temperature");
     }
-    else if(param.startsWith("length:")){
-      String data = param.substring(7);
-      getParams(data);
-      getDoubleParam(data, "length: ");      
+    if (root.containsKey("rigidity")){
+      root["rigidity"] = getStringParam(RIGIDITY, RIGIDITY_LEN, root, "rigidity");
     }
-    else if(param.startsWith("width:")){
-      String data = param.substring(6);
-      getParams(data);
-      getDoubleParam(data, "width: ");      
+    if (root.containsKey("massage")){
+      root["massage"] = getStringParam(MASSAGE, MASSAGE_LEN, root, "massage");
     }
-    else if(param.startsWith("incline:")){
-      String data = param.substring(8);
-      getParams(data);
-      getDoubleParam(data, "incline: ");      
-    }
-    else if(param.startsWith("temperature:")){
-      String data = param.substring(12);
-      getParams(data);
-      getDoubleParam(data, "temperature: ");      
-    }
-    else if(param.startsWith("massage:")){
-      String data = param.substring(8);
-      getParams(data);
-      getStringParam(MASSAGE, MASSAGE_LEN, data, true, "massage: ");
-    }
-    else if(param.startsWith("rigidity:")){
-      String data = param.substring(9);
-      getParams(data);
-      getStringParam(RIGIDITY, RIGIDITY_LEN, data, false, "rigidity: ");
-    }
-    else
-      Serial.println(param);
+    root.printTo(Serial);
+    Serial.println();
   }
 }
