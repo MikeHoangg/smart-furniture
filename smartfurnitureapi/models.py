@@ -85,13 +85,17 @@ class Options(models.Model):
                               verbose_name=_("Width"))
     incline = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(180.0)],
                                 default=95,
-                                verbose_name=_("Incline"))
+                                verbose_name=_("Incline"),
+                                null=True,
+                                blank=True)
     rigidity = models.CharField(max_length=32,
                                 choices=types.RIGIDITY,
                                 default='medium',
                                 verbose_name=_("Rigidity"))
     temperature = models.FloatField(verbose_name=_("Temperature"),
-                                    default=36.6)
+                                    default=36.6,
+                                    null=True,
+                                    blank=True)
     massage = models.CharField(max_length=32,
                                choices=types.MASSAGE,
                                verbose_name=_("Massage"),
