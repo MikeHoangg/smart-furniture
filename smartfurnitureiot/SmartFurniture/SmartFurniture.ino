@@ -49,7 +49,7 @@ String getStringParam(String* typeArr, int len, JsonObject &root, String param){
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial) continue;
 }
 
@@ -70,7 +70,9 @@ void loop() {
     if (root.containsKey("massage")){
       root["massage"] = getStringParam(MASSAGE, MASSAGE_LEN, root, "massage");
     }
-    root.printTo(Serial);
-    Serial.println();
+    if (root.containsKey("name")){
+      root.printTo(Serial);
+      Serial.println();
+    }
   }
 }

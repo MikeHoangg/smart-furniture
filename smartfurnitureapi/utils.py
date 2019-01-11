@@ -1,4 +1,5 @@
 import json
+from time import sleep
 
 import serial
 from django.utils import timezone
@@ -6,6 +7,7 @@ from django.utils import timezone
 from smartfurnitureapi import types
 
 # TODO give permissions each time, the right port
+
 IOT_PORT = '/dev/ttyUSB0'
 
 
@@ -19,9 +21,9 @@ def get_iot_data(furniture):
     count = furniture.current_options.count()
     for param in params:
         data[param] = [count] + list(furniture.current_options.values_list(param, flat=True))
-    ser = serial.Serial(port=IOT_PORT, baudrate=115200)
+    ser = serial.Serial(port=IOT_PORT, baudrate=9600, timeout=1)
+    sleep(1.5)
     ser.write(b'%s\n' % json.dumps(data).encode())
     res = json.loads(ser.readline().decode())
     for key, val in res.items():
         print(f"{key}: {val}")
-

@@ -164,7 +164,7 @@ class ApplyOptions(generics.CreateAPIView):
         furniture = models.Furniture.objects.get(id=request.data.get('furniture'))
         options = models.Options.objects.get(id=request.data.get('options'))
         if furniture.current_users.count() >= 5:
-            msg = _('Couldn\'t apply options to furniture {} because user limit has been reached.').format(furniture)
+            msg = _('Couldn\'t apply options to furniture {0} because user limit has been reached.').format(furniture)
             stat = status.HTTP_406_NOT_ACCEPTABLE
         elif options.creator in furniture.current_users.all() and options not in furniture.current_options.all():
             furniture.current_options.add(options)
@@ -172,22 +172,22 @@ class ApplyOptions(generics.CreateAPIView):
                 if options.creator == o.creator and options.id != o.id:
                     furniture.current_options.remove(o)
                     break
-            msg = _('Options applied to furniture {}.').format(furniture)
+            msg = _('Options applied to furniture {0}.').format(furniture)
             stat = status.HTTP_202_ACCEPTED
         elif furniture.type in types.SOLO_FURNITURE_TYPES and furniture.current_users.count():
-            msg = _('Couldn\'t apply options to furniture {} because user {} is using it.').format(furniture,
-                                                                                                   furniture.current_users.first())
+            msg = _('Couldn\'t apply options to furniture {0} because user {1} is using it.').format(furniture,
+                                                                                                     furniture.current_users.first())
             stat = status.HTTP_406_NOT_ACCEPTABLE
         elif not furniture.is_public and options.creator not in furniture.allowed_users.all() and options.creator != furniture.owner:
-            msg = _('Couldn\'t apply options to furniture {} because you have no access to it.').format(furniture)
+            msg = _('Couldn\'t apply options to furniture {0} because you have no access to it.').format(furniture)
             stat = status.HTTP_405_METHOD_NOT_ALLOWED
         else:
             furniture.current_users.add(options.creator)
             furniture.current_options.add(options)
-            msg = _('Options applied to furniture {}.').format(furniture)
+            msg = _('Options applied to furniture {0}.').format(furniture)
             stat = status.HTTP_202_ACCEPTED
-        # if stat == status.HTTP_202_ACCEPTED:
-        #     get_iot_data(furniture)
+        if stat == status.HTTP_202_ACCEPTED:
+            get_iot_data(furniture)
         return Response({'detail': msg}, status=stat)
 
 
@@ -203,8 +203,8 @@ class DiscardOptions(generics.CreateAPIView):
             if o.creator == user:
                 furniture.current_options.remove(o)
                 break
-        msg = _('Options discarded from furniture {}.').format(furniture)
-        # get_iot_data(furniture)
+        msg = _('Options discarded from furniture {0}.').format(furniture)
+        get_iot_data(furniture)
         return Response({'detail': msg}, status=status.HTTP_202_ACCEPTED)
 
 
@@ -225,10 +225,9 @@ class DisallowUser(generics.CreateAPIView):
             if o.creator == user:
                 furniture.current_options.remove(o)
                 break
-        msg = _('User {} is disallowed to use furniture {}.').format(user, furniture)
+        msg = _('User {0} is disallowed to use furniture {1}.').format(user, furniture)
         # get_iot_data(furniture)
-        return Response({'detail': msg},
-                        status=status.HTTP_202_ACCEPTED)
+        return Response({'detail': msg}, status=status.HTTP_202_ACCEPTED)
 
 
 class AllowUser(generics.CreateAPIView):
@@ -243,7 +242,7 @@ class AllowUser(generics.CreateAPIView):
             notification.pending = False
             notification.save()
         furniture.allowed_users.add(user)
-        msg = _('User {} is allowed to use furniture {}.').format(user, furniture)
+        msg = _('User {0} is allowed to use furniture {1}.').format(user, furniture)
         return Response({'detail': msg},
                         status=status.HTTP_202_ACCEPTED)
 
@@ -277,7 +276,7 @@ class SetPrimeAccount(generics.CreateAPIView):
         expiration_date = now + datetime.timedelta(days=calendar.monthrange(now.year, now.month)[1])
         result = self.create_charge(user, stripe_token, price, expiration_date)
         if result:
-            msg = _('Successfully upgraded to prime account till {}.').format(expiration_date)
+            msg = _('Successfully upgraded to prime account till {0}.').format(expiration_date)
             stat = status.HTTP_201_CREATED
         else:
             msg = _('Your card was declined.')
