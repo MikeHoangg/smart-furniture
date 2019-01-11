@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-07 13:23+0000\n"
+"POT-Creation-Date: 2019-01-10 14:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,49 +26,58 @@ msgstr ""
 msgid "Ukrainian"
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:121
+#: smartfurnitureapi/api_views.py:122
 msgid "You have already reviewed this piece of furniture"
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:151
+#: smartfurnitureapi/api_views.py:152
 msgid "Not found."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:167
+#: smartfurnitureapi/api_views.py:168
+#, python-brace-format
 msgid ""
-"Couldn't apply options to furniture {} because user limit has been reached."
+"Couldn't apply options to furniture {0} because user limit has been reached."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:175 smartfurnitureapi/api_views.py:187
-msgid "Options applied to furniture {}."
+#: smartfurnitureapi/api_views.py:176 smartfurnitureapi/api_views.py:188
+#: smartfurnitureapi/api_views.py:192
+#, python-brace-format
+msgid "Options applied to furniture {0}."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:178
-msgid "Couldn't apply options to furniture {} because user {} is using it."
+#: smartfurnitureapi/api_views.py:179 smartfurnitureapi/api_views.py:193
+#, python-brace-format
+msgid "Couldn't apply options to furniture {0} because user {1} is using it."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:182
+#: smartfurnitureapi/api_views.py:183
+#, python-brace-format
 msgid ""
-"Couldn't apply options to furniture {} because you have no access to it."
+"Couldn't apply options to furniture {0} because you have no access to it."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:206
-msgid "Options discarded from furniture {}."
+#: smartfurnitureapi/api_views.py:209
+#, python-brace-format
+msgid "Options discarded from furniture {0}."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:229
-msgid "User {} is disallowed to use furniture {}."
+#: smartfurnitureapi/api_views.py:231
+#, python-brace-format
+msgid "User {0} is disallowed to use furniture {1}."
 msgstr ""
 
-#: smartfurnitureapi/api_views.py:246
-msgid "User {} is allowed to use furniture {}."
-msgstr ""
-
-#: smartfurnitureapi/api_views.py:280
-msgid "Successfully upgraded to prime account till {}."
+#: smartfurnitureapi/api_views.py:249
+#, python-brace-format
+msgid "User {0} is allowed to use furniture {1}."
 msgstr ""
 
 #: smartfurnitureapi/api_views.py:283
+#, python-brace-format
+msgid "Successfully upgraded to prime account till {0}."
+msgstr ""
+
+#: smartfurnitureapi/api_views.py:286
 msgid "Your card was declined."
 msgstr ""
 
@@ -88,7 +97,7 @@ msgstr ""
 msgid "Prime account expiration date"
 msgstr ""
 
-#: smartfurnitureapi/models.py:29 smartfurnitureapi/models.py:119
+#: smartfurnitureapi/models.py:29 smartfurnitureapi/models.py:123
 msgid "User"
 msgstr ""
 
@@ -128,13 +137,13 @@ msgstr ""
 msgid "Allowed users"
 msgstr ""
 
-#: smartfurnitureapi/models.py:58 smartfurnitureapi/models.py:107
-#: smartfurnitureapi/models.py:108
+#: smartfurnitureapi/models.py:58 smartfurnitureapi/models.py:111
+#: smartfurnitureapi/models.py:112
 msgid "Options"
 msgstr ""
 
 #: smartfurnitureapi/models.py:64 smartfurnitureapi/models.py:65
-#: smartfurnitureapi/models.py:122 smartfurnitureapi/models.py:144
+#: smartfurnitureapi/models.py:126 smartfurnitureapi/models.py:148
 msgid "Furniture"
 msgstr ""
 
@@ -154,59 +163,59 @@ msgstr ""
 msgid "Incline"
 msgstr ""
 
-#: smartfurnitureapi/models.py:92
+#: smartfurnitureapi/models.py:94
 msgid "Rigidity"
 msgstr ""
 
-#: smartfurnitureapi/models.py:93
+#: smartfurnitureapi/models.py:95
 msgid "Temperature"
 msgstr ""
 
-#: smartfurnitureapi/models.py:97
+#: smartfurnitureapi/models.py:101
 msgid "Massage"
 msgstr ""
 
-#: smartfurnitureapi/models.py:101
+#: smartfurnitureapi/models.py:105
 msgid "Creator"
 msgstr ""
 
-#: smartfurnitureapi/models.py:112
+#: smartfurnitureapi/models.py:116
 msgid "Content"
 msgstr ""
 
-#: smartfurnitureapi/models.py:115
+#: smartfurnitureapi/models.py:119
 msgid "Rating"
 msgstr ""
 
-#: smartfurnitureapi/models.py:125
+#: smartfurnitureapi/models.py:129
 msgid "Review"
 msgstr ""
 
-#: smartfurnitureapi/models.py:126
+#: smartfurnitureapi/models.py:130
 msgid "Reviews"
 msgstr ""
 
-#: smartfurnitureapi/models.py:131
+#: smartfurnitureapi/models.py:135
 msgid "Date"
 msgstr ""
 
-#: smartfurnitureapi/models.py:133
+#: smartfurnitureapi/models.py:137
 msgid "Pending"
 msgstr ""
 
-#: smartfurnitureapi/models.py:137
+#: smartfurnitureapi/models.py:141
 msgid "Receiver"
 msgstr ""
 
-#: smartfurnitureapi/models.py:141
+#: smartfurnitureapi/models.py:145
 msgid "Sender"
 msgstr ""
 
-#: smartfurnitureapi/models.py:147
+#: smartfurnitureapi/models.py:151
 msgid "Notification"
 msgstr ""
 
-#: smartfurnitureapi/models.py:148
+#: smartfurnitureapi/models.py:152
 msgid "Notifications"
 msgstr ""
 
